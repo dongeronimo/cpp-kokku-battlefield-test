@@ -5,7 +5,7 @@
 using namespace std;
 
 Grid::Grid(int Lines, int Columns)
-    :xLenght(Columns), yLength(Lines)
+    :xLenght(Columns), yLength(Lines)//Inicialização passou a ser aqui pq to usando dimensões constantes. O que não muda deve ser sempre constante
 {
     for (int i = 0; i < Lines; i++)
     {
@@ -22,11 +22,16 @@ Grid::Grid(int Lines, int Columns)
 
 Grid::~Grid() 
 {
-
+    //O código original não tinha dealocação do que foi alocado no ctor.
+    for (auto i : grids) {
+        delete(i);
+    }
 }
 
 void Grid::drawBattlefield()
 {
+    //Usando stringstream pra acumular pra reduzir a qtd de operações
+    //de output e fazer o output todo de uma vez.
     std::stringstream ss;
     for (int i = 0; i < Lines(); i++)
     {

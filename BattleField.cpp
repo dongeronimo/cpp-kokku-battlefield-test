@@ -9,65 +9,64 @@
 
 using namespace std;
 
-BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) {
-    
+BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) 
+{    
     grid = new Grid(lines, rows);
     AllPlayers = new list<Character>();
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
-    Setup();
+    //Setup();
+    CreatePlayerCharacter(playerClassId);
 }
 
-void BattleField::Setup()
-{
-  
-   
-    GetPlayerChoice();
-}
+//void BattleField::Setup()
+//{
+//    GetPlayerChoice();
+//}
 
-void BattleField::GetPlayerChoice()
-{
-    ////asks for the player to choose between for possible classes via console.
-    //printf("Choose Between One of this Classes:\n");
-
-    //printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
-    ////store the player choice in a variable
-    //std::string choice;
-
-    //std::getline(std::cin, choice);
-    //
-    //cin >> choice;
-    //switch ((choice))
-    //{
-    //case "1":
-    //    CreatePlayerCharacter(choice);
-    //    break;
-    //case "2":
-    //    CreatePlayerCharacter(choice);
-    //    break;
-    //case "3":
-    //    CreatePlayerCharacter(choice);
-    //    break;
-    //case "4":
-    //    CreatePlayerCharacter(choice);
-    //    break;
-    //default:
-    //    GetPlayerChoice();
-    //    break;
-    //}
-}
+//void BattleField::GetPlayerChoice(CharacterClass classId)
+//{//    
+//    ////asks for the player to choose between for possible classes via console.
+//    //printf("Choose Between One of this Classes:\n");
+//
+//    //printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
+//    ////store the player choice in a variable
+//    //std::string choice;
+//
+//    //std::getline(std::cin, choice);
+//    //
+//    //cin >> choice;
+//    //switch ((choice))
+//    //{
+//    //case "1":
+//    //    CreatePlayerCharacter(choice);
+//    //    break;
+//    //case "2":
+//    //    CreatePlayerCharacter(choice);
+//    //    break;
+//    //case "3":
+//    //    CreatePlayerCharacter(choice);
+//    //    break;
+//    //case "4":
+//    //    CreatePlayerCharacter(choice);
+//    //    break;
+//    //default:
+//    //    GetPlayerChoice();
+//    //    break;
+//    //}
+//}
 
 void BattleField::CreatePlayerCharacter(int classIndex)
 {
-
-    //Types::CharacterClass* characterClass = (Types::CharacterClass*)classIndex;
-    //printf("Player Class Choice: {characterClass}");
+    //typecast correto.
+    auto characterClass = static_cast<Types::CharacterClass>(classIndex);;
+    //troquei printf por cout pq estou mais acostumado com cout
+    std::cout << "Player Class Choice: " << characterClass;
+    PlayerCharacter = std::make_shared<Character>(characterClass);
     //
-    //PlayerCharacter = std::make_shared<Character>(characterClass);
-    //
-    //PlayerCharacter->Health = 100;
-    //PlayerCharacter->BaseDamage = 20;
-    //PlayerCharacter->PlayerIndex = 0;
+    PlayerCharacter->Health = 100;
+    PlayerCharacter->BaseDamage = 20;
+    PlayerCharacter->PlayerIndex = 0;
 
     //CreateEnemyCharacter();
 
@@ -159,23 +158,23 @@ void BattleField::AlocatePlayers()
 
 void BattleField::AlocatePlayerCharacter()
 {
-    int random = 0;
-    auto l_front = grid->grids.begin();
-    advance(l_front, random);
-    Types::GridBox* RandomLocation = &*l_front;
+    //int random = 0;
+    //auto l_front = grid->grids.begin();
+    //advance(l_front, random);
+    //Types::GridBox* RandomLocation = &*l_front;
 
-    if (!RandomLocation->ocupied)
-    {
-        //Types::GridBox* PlayerCurrentLocation = RandomLocation;
-        PlayerCurrentLocation = &*l_front;
-        l_front->ocupied = true;
-        PlayerCharacter->currentBox = *l_front;
-        AlocateEnemyCharacter();
-    }
-    else
-    {
-        AlocatePlayerCharacter();
-    }
+    //if (!RandomLocation->ocupied)
+    //{
+    //    //Types::GridBox* PlayerCurrentLocation = RandomLocation;
+    //    PlayerCurrentLocation = &*l_front;
+    //    l_front->ocupied = true;
+    //    PlayerCharacter->currentBox = *l_front;
+    //    AlocateEnemyCharacter();
+    //}
+    //else
+    //{
+    //    AlocatePlayerCharacter();
+    //}
 }
 
 void BattleField::AlocateEnemyCharacter()

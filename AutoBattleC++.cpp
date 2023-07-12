@@ -10,7 +10,7 @@ int main()
     GameSetupParameters params = AskForParameters();
     //Não havia necessidade de alocá-lo dinamicamente;
     BattleField battlefield(params.GridLines, params.GridRows, params.PlayerClassId);
-    battlefield.Setup();
+    //battlefield.Setup();
 }
 
 
