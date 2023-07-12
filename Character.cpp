@@ -4,7 +4,7 @@
 #include "Character.h"
 #include <vector>
 #include <algorithm>
-
+#include <iostream>
 using namespace std;
 Character::Character(Types::CharacterClass characterClass)
 {
@@ -40,7 +40,7 @@ void Character::WalkTo(bool CanWalk)
 
 
 void Character::StartTurn(Grid* battlefield) {
-
+    std::cout<<"Start turn"<<std::endl;
     //{
 
     //    if (CheckCloseTargets(battlefield))

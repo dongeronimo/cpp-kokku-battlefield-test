@@ -16,7 +16,6 @@ std::mt19937 rng(rd());
 BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) 
 {    
     grid = new Grid(lines, rows);
-    AllPlayers = new list<Character>();
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
     //Setup();
@@ -103,20 +102,20 @@ void BattleField::StartGame()
     AllPlayers.push_back(EnemyCharacter);
 
     AlocatePlayers();
-    //StartTurn();
+    StartTurn();
 
 }
 
 void BattleField::StartTurn() {
+    //??
+    //if (currentTurn == 0)
+    //{
+    //    //AllPlayers.Sort();  
+    //}
+    auto it = AllPlayers.begin();
 
-    if (currentTurn == 0)
-    {
-        //AllPlayers.Sort();  
-    }
-    std::list<Character>::iterator it;
-
-    for (it = AllPlayers->begin(); it != AllPlayers->end(); ++it) {
-        it->StartTurn(grid);
+    for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
+        (*it)->StartTurn(grid);
     }
 
     currentTurn++;
@@ -125,6 +124,7 @@ void BattleField::StartTurn() {
 
 void BattleField::HandleTurn()
 {
+    cout << "Handle turn" << endl;
     //if (PlayerCharacter->Health == 0)
     //{
     //    return;
