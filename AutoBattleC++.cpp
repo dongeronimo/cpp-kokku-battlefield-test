@@ -8,7 +8,6 @@ using namespace std;
 int main()
 {
     GameSetupParameters params = AskForParameters();
-    std::cout << params.GridLines << std::endl;
     //Não havia necessidade de alocá-lo dinamicamente;
     BattleField battlefield(params.GridLines, params.GridRows, params.PlayerClassId);
     battlefield.Setup();
