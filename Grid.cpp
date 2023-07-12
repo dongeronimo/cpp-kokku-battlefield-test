@@ -1,8 +1,9 @@
 #include "Grid.h"
 #include "Types.h"
 #include <iostream>
-
+#include <sstream>
 using namespace std;
+
 Grid::Grid(int Lines, int Columns)
     :xLenght(Columns), yLength(Lines)
 {
@@ -10,9 +11,9 @@ Grid::Grid(int Lines, int Columns)
     {
         for (int j = 0; j < Columns; j++)
         {
-            Types::GridBox newBox(i, j, false, (Columns * i + j));
+            Types::GridBox* newBox = new Types::GridBox(i, j, false, CalculateIndex(i,j));
             grids.push_back(newBox);
-            cout<<newBox.Index<<endl;
+            cout<<newBox->Index<<endl;
         }
     }
     cout << "the battlefield has been created" << endl;
@@ -26,22 +27,20 @@ Grid::~Grid()
 
 void Grid::drawBattlefield()
 {
-    for (int i = 0; i < yLength; i++)
+    std::stringstream ss;
+    for (int i = 0; i < Lines(); i++)
     {
-        for (int j = 0; j < xLenght; j++)
+        for (int j = 0; j < Columns(); j++)
         {
-            Types::GridBox* currentgrid = new Types::GridBox();
-            if (currentgrid->ocupied)
-            {
-                //if()
-                printf("[X]\t");
+            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
+            if (currentGrid->ocupied) {
+                ss << "[x]";
             }
-            else
-            {
-                printf("[ ]\t");
+            else {
+                ss << "[ ]";
             }
         }
-        printf("\n");
+        ss << endl;
     }
-    printf("\n");
+    std::cout << ss.str() << endl;
 }
