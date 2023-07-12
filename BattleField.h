@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Types.h"
 #include <list>
+#include "Constants.h"
 #include <iostream>
 #include "Grid.h"
 using namespace std;
@@ -9,7 +10,7 @@ class BattleField
 {
 public:
 
-	BattleField();
+	BattleField(int lines, int rows, CharacterClass playerClassId);
 
 	Grid* grid;
 	Types::GridBox* PlayerCurrentLocation;

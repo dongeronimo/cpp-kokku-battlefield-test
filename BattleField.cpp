@@ -9,7 +9,7 @@
 
 using namespace std;
 
-BattleField::BattleField() {
+BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) {
     
     grid = new Grid(5, 5);
     AllPlayers = new list<Character>();
