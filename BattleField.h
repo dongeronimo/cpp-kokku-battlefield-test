@@ -5,6 +5,7 @@
 #include "Constants.h"
 #include <iostream>
 #include "Grid.h"
+#include <random>
 using namespace std;
 
 class BattleField
@@ -16,7 +17,7 @@ public:
 	Grid* grid;
 	Types::GridBox* PlayerCurrentLocation;
 	Types::GridBox* EnemyCurrentLocation;
-	list<Character>* AllPlayers;
+	vector<shared_ptr<Character>> AllPlayers; //Sintaxe estava toda errada aqui. E troquei por vector pq vector tem memória contígua, vão haver poucas inserções e quero acesso random. Nada disso a std::list me dá.
 	shared_ptr<Character> PlayerCharacter;
 
 	shared_ptr<Character> EnemyCharacter;
@@ -42,9 +43,11 @@ public:
 
 	void AlocatePlayers();
 
-	void AlocatePlayerCharacter();
+	void AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution,
+		uniform_int_distribution<int>& colDistribution);
 
-	void AlocateEnemyCharacter();
+	void AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
+		uniform_int_distribution<int>& colDistribution);
 };
 
 

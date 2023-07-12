@@ -4,12 +4,11 @@
 
 class Grid
 {
-private:
-    const int CalculateIndex(int i, int j) const{
+
+public:
+    const int CalculateIndex(int i, int j) const {
         return Columns() * i + j;
     }
-public:
-
     Grid(int Lines, int Columns);
     ~Grid();
     //voltei c vetor de ptrs pra n ter o custo de passagem por valor em 

@@ -96,11 +96,13 @@ void BattleField::CreateEnemyCharacter()
 void BattleField::StartGame()
 {
     ////populates the character variables and targets
-    //EnemyCharacter->target = PlayerCharacter;
-    //PlayerCharacter->target = EnemyCharacter;
-    //AllPlayers->push_back(PlayerCharacter);
-    //AllPlayers->push_back(EnemyCharacter);
-    //AlocatePlayers();
+    EnemyCharacter->target = PlayerCharacter;
+    PlayerCharacter->target = EnemyCharacter;
+    
+    AllPlayers.push_back(PlayerCharacter);
+    AllPlayers.push_back(EnemyCharacter);
+
+    AlocatePlayers();
     //StartTurn();
 
 }
@@ -159,50 +161,43 @@ int BattleField::GetRandomInt(int min, int max)
 
 void BattleField::AlocatePlayers()
 {
-    AlocatePlayerCharacter();
-
+    uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
+    uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
+    AlocatePlayerCharacter(lineDistribution, colDistribution);
+    AlocateEnemyCharacter(lineDistribution, colDistribution);
 }
 
-void BattleField::AlocatePlayerCharacter()
+void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution,
+    uniform_int_distribution<int>& colDistribution)
 {
-    //int random = 0;
-    //auto l_front = grid->grids.begin();
-    //advance(l_front, random);
-    //Types::GridBox* RandomLocation = &*l_front;
-
-    //if (!RandomLocation->ocupied)
-    //{
-    //    //Types::GridBox* PlayerCurrentLocation = RandomLocation;
-    //    PlayerCurrentLocation = &*l_front;
-    //    l_front->ocupied = true;
-    //    PlayerCharacter->currentBox = *l_front;
-    //    AlocateEnemyCharacter();
-    //}
-    //else
-    //{
-    //    AlocatePlayerCharacter();
-    //}
+    int randomLine = lineDistribution(rng);
+    int randomCol = colDistribution(rng);
+    //pega o GridBox escolhido aleatoriamente
+    Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
+    //Não está ocupado, por o player e marcar como ocupado.
+    if (!RandomLocation->ocupied) {
+        PlayerCurrentLocation = RandomLocation;
+        PlayerCharacter->currentBox = RandomLocation;
+        RandomLocation->ocupied = true;
+    }
+    //está ocupado, recursão
+    else {
+        AlocatePlayerCharacter(lineDistribution, colDistribution);
+    }
 }
 
-void BattleField::AlocateEnemyCharacter()
+void BattleField::AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
+    uniform_int_distribution<int>& colDistribution)
 {
-    
-    //int random = 24;
-    //auto l_front = grid->grids.begin();
-    //advance(l_front, random);
-    //Types::GridBox* RandomLocation = &*l_front;
-    //
-    //if (!RandomLocation->ocupied)
-    //{
-    //    EnemyCurrentLocation = &*l_front;
-    //    l_front->ocupied = true;
-    //    EnemyCharacter->currentBox = *l_front;
-    //    grid->drawBattlefield(5, 5);
-    //}
-    //else
-    //{
-    //    AlocateEnemyCharacter();
-    //}
-
-
+    int randomLine = lineDistribution(rng);
+    int randomCol = colDistribution(rng);
+    Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
+    if (!RandomLocation->ocupied) {
+        EnemyCurrentLocation = RandomLocation;
+        EnemyCharacter->currentBox = RandomLocation;
+        RandomLocation->ocupied = true;
+    }
+    else {
+        AlocateEnemyCharacter(lineDistribution, colDistribution);
+    }
 }

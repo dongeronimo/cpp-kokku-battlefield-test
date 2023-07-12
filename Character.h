@@ -28,7 +28,7 @@ public:
     bool IsDead;
     char Icon;
 
-    Types::GridBox currentBox;
+    Types::GridBox* currentBox;
 
     bool TakeDamage(float amount);
 
