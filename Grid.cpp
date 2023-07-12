@@ -1,22 +1,21 @@
 #include "Grid.h"
 #include "Types.h"
+#include <iostream>
 
-
+using namespace std;
 Grid::Grid(int Lines, int Columns)
+    :xLenght(Columns), yLength(Lines)
 {
-    //xLenght = Lines;
-    //yLength = Columns;
-    ////Console.WriteLine("The battle field has been created\n");
-    //for (int i = 0; i < Lines; i++)
-    //{
-
-    //    for (int j = 0; j < Columns; j++)
-    //    {
-    //        Types::GridBox* newBox = new Types::GridBox(i, j, false, (Columns * i + j));
-    //        grids.insert(grids.end(), newBox);
-    //        //Console.Write($"{newBox.Index}\n");
-    //    }
-    //}
+    for (int i = 0; i < Lines; i++)
+    {
+        for (int j = 0; j < Columns; j++)
+        {
+            Types::GridBox newBox(i, j, false, (Columns * i + j));
+            grids.push_back(newBox);
+            cout<<newBox.Index<<endl;
+        }
+    }
+    cout << "the battlefield has been created" << endl;
 	//drawBattlefield(Lines, Columns);
 }
 

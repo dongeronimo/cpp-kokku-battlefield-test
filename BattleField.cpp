@@ -11,7 +11,7 @@ using namespace std;
 
 BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) {
     
-    grid = new Grid(5, 5);
+    grid = new Grid(lines, rows);
     AllPlayers = new list<Character>();
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
