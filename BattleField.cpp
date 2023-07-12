@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include <random>
+#include <conio.h>
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
@@ -125,30 +126,27 @@ void BattleField::StartTurn() {
 void BattleField::HandleTurn()
 {
     cout << "Handle turn" << endl;
-    //if (PlayerCharacter->Health == 0)
-    //{
-    //    return;
-    //}
-    //else if (EnemyCharacter->Health == 0)
-    //{
-    //    printf("\n");
-
-    //    // endgame?
-
-    //    printf("\n");
-
-    //    return;
-    //}
-    //else
-    //{
-    //    printf("\n");
-    //    printf("Click on any key to start the next turn...\n");
-    //    printf("\n");
-
-    //    //TODO
-    //    //ConsoleKeyInfo key = Console.ReadKey();
-    //    StartTurn();
-    //}
+    if (PlayerCharacter->Health == 0)
+    {
+        cout << "TODO: Lidar c a morte do player";
+        return;
+    }
+    else if (EnemyCharacter->Health == 0)
+    {
+        cout << "TODO: Lidar c a vitória";
+        return;
+    }
+    else
+    {
+        cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
+        auto k = _getch();
+        if (k == 27) {
+            return;
+        }
+        else {
+            StartTurn();
+        }
+    }
 }
 
 int BattleField::GetRandomInt(int min, int max)

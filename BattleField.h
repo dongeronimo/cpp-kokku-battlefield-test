@@ -11,7 +11,6 @@ using namespace std;
 class BattleField
 {
 public:
-
 	BattleField(int lines, int rows, CharacterClass playerClassId);
 
 	Grid* grid;
