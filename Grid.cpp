@@ -16,7 +16,7 @@ Grid::Grid(int Lines, int Columns)
         }
     }
     cout << "the battlefield has been created" << endl;
-	//drawBattlefield(Lines, Columns);
+	drawBattlefield();
 }
 
 Grid::~Grid() 
@@ -24,11 +24,11 @@ Grid::~Grid()
 
 }
 
-void Grid::drawBattlefield(int Lines, int Columns)
+void Grid::drawBattlefield()
 {
-    for (int i = 0; i < Lines; i++)
+    for (int i = 0; i < yLength; i++)
     {
-        for (int j = 0; j < Columns; j++)
+        for (int j = 0; j < xLenght; j++)
         {
             Types::GridBox* currentgrid = new Types::GridBox();
             if (currentgrid->ocupied)
