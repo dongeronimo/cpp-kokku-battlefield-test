@@ -1,10 +1,10 @@
 #pragma once
-
+#include "Constants.h"
 /// <summary>
 /// Guarda os parâmetros escolhidos pelo player.
 /// </summary>
 struct GameSetupParameters {
-    int PlayerClassId;
+    CharacterClass PlayerClassId;
     int GridLines;
     int GridRows;
 };

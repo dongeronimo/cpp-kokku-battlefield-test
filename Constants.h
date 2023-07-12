@@ -3,3 +3,5 @@
 #define WARRIOR 2
 #define CLERIC 3
 #define ARCHER 4
+
+typedef int CharacterClass;

@@ -5,6 +5,7 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+
 using namespace std;
 //Obtido de https://stackoverflow.com/questions/216823/how-to-trim-an-stdstring, pq a stl n tem
 // trim de string por default e eu quero trimar a string.
@@ -27,9 +28,20 @@ std::string& rtrim(std::string& s) {
 std::string& trim(std::string& s) {
     return ltrim(rtrim(s));
 }
+/// <summary>
+/// Encapsula o processo de pedir a classe ao player.
+/// </summary>
+/// <returns></returns>
+CharacterClass ChooseClass();
+
 GameSetupParameters AskForParameters() {
-    bool classChoiceIsOk = false;
     GameSetupParameters response;
+    response.PlayerClassId = ChooseClass();
+}
+
+CharacterClass ChooseClass()
+{
+    bool classChoiceIsOk = false;
     while (classChoiceIsOk == false) {
         cout << "Choose Between One of this Classes:" << endl;
         cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
@@ -37,31 +49,29 @@ GameSetupParameters AskForParameters() {
         std::getline(std::cin, choiceAsStr);
         choiceAsStr = trim(choiceAsStr);
         try {
-            int choice = std::stoi(choiceAsStr);
+            CharacterClass choice = std::stoi(choiceAsStr);
             switch (choice) {
-            case 1:
-                response.PlayerClassId = 1;
+            case PALADIN:
                 classChoiceIsOk = true;
                 break;
-            case 2:
-                response.PlayerClassId = 1;
+            case WARRIOR:
                 classChoiceIsOk = true;
                 break;
-            case 3:
-                response.PlayerClassId = 1;
+            case CLERIC:
                 classChoiceIsOk = true;
                 break;
-            case 4:
-                response.PlayerClassId = 1;
+            case ARCHER:
                 classChoiceIsOk = true;
                 break;
             default:
                 throw std::invalid_argument("out of range");
             }
+            return choice;
         }
         catch (std::invalid_argument const& ex) {
             cout << "Invalid value...";
             classChoiceIsOk = false;
         }
     }
+    
 }
