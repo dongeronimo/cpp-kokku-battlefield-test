@@ -33,10 +33,20 @@ std::string& trim(std::string& s) {
 /// </summary>
 /// <returns></returns>
 CharacterClass ChooseClass();
+int ChooseLines();
+int ChooseRows();
 
 GameSetupParameters AskForParameters() {
     GameSetupParameters response;
     response.PlayerClassId = ChooseClass();
+}
+
+int ChooseLines()
+{
+    bool choiceOk = false;
+    while (choiceOk == false) {
+
+    }
 }
 
 CharacterClass ChooseClass()
@@ -50,22 +60,9 @@ CharacterClass ChooseClass()
         choiceAsStr = trim(choiceAsStr);
         try {
             CharacterClass choice = std::stoi(choiceAsStr);
-            switch (choice) {
-            case PALADIN:
-                classChoiceIsOk = true;
-                break;
-            case WARRIOR:
-                classChoiceIsOk = true;
-                break;
-            case CLERIC:
-                classChoiceIsOk = true;
-                break;
-            case ARCHER:
-                classChoiceIsOk = true;
-                break;
-            default:
+            classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
+            if(!classChoiceIsOk)
                 throw std::invalid_argument("out of range");
-            }
             return choice;
         }
         catch (std::invalid_argument const& ex) {
