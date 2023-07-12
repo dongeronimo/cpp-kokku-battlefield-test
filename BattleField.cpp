@@ -6,8 +6,12 @@
 #include "BattleField.h"
 #include <list>
 #include <string>
-
+#include <random>
 using namespace std;
+
+//Gerador de numeros aleatórios da STL
+random_device rd;
+std::mt19937 rng(rd());
 
 BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) 
 {    
@@ -17,6 +21,7 @@ BattleField::BattleField(int lines, int rows, CharacterClass playerClassId)
     int numberOfPossibleTiles = grid->grids.size();
     //Setup();
     CreatePlayerCharacter(playerClassId);
+    CreateEnemyCharacter();
 }
 
 //void BattleField::Setup()
@@ -67,8 +72,8 @@ void BattleField::CreatePlayerCharacter(int classIndex)
     PlayerCharacter->Health = 100;
     PlayerCharacter->BaseDamage = 20;
     PlayerCharacter->PlayerIndex = 0;
-
-    //CreateEnemyCharacter();
+    //não é o correto chamar a criação de inimigos de dentro da criação do 
+    // personagem. Uma coisa é uma coisa, outra coisa é outra coisa.
 
 }
 
@@ -76,13 +81,14 @@ void BattleField::CreateEnemyCharacter()
 {
     ////randomly choose the enemy class and set up vital variables
     //
-    //int randomInteger = GetRandomInt(1, 4);
-    //Types::CharacterClass enemyClass = (Types::CharacterClass)randomInteger;
-    //printf("Enemy Class Choice: {enemyClass}");
-    //EnemyCharacter = new Character(enemyClass);
-    //EnemyCharacter->Health = 100;
-    //PlayerCharacter->BaseDamage = 20;
-    //PlayerCharacter->PlayerIndex = 1;
+    int randomInteger = GetRandomInt(PALADIN, ARCHER);
+    Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
+    cout << "Enemy Class Choice:" << enemyClass<<endl;
+    EnemyCharacter = std::make_shared<Character>(enemyClass);
+    EnemyCharacter->Health = 100;
+    PlayerCharacter->BaseDamage = 20;
+    PlayerCharacter->PlayerIndex = 1;
+    //não é correto chamar startGame aqui. Não é responsabilidade desse método;
     //StartGame();
 
 }
@@ -145,9 +151,10 @@ void BattleField::HandleTurn()
 
 int BattleField::GetRandomInt(int min, int max)
 {
-    
-    int index = GetRandomInt(min, max);
-    return index;
+    //Refeita do zero para usar o gerador de random da stl.
+    uniform_int_distribution<int> uni(min, max);
+    auto randomInteger = uni(rng);
+    return randomInteger;
 }
 
 void BattleField::AlocatePlayers()
