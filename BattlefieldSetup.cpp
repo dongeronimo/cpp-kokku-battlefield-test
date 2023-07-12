@@ -33,25 +33,61 @@ std::string& trim(std::string& s) {
 /// </summary>
 /// <returns></returns>
 CharacterClass ChooseClass();
+/// <summary>
+/// Encapsula o processo de pedir o numero de linhas do mapa
+/// </summary>
+/// <returns></returns>
 int ChooseLines();
+/// <summary>
+/// Encapsula o processo de pedir o numero de colunas do mapa
+/// </summary>
+/// <returns></returns>
 int ChooseRows();
 
 GameSetupParameters AskForParameters() {
     GameSetupParameters response;
     response.PlayerClassId = ChooseClass();
+    response.GridLines = ChooseLines();
+    response.GridRows = ChooseRows();
+    return response;
 }
+int ReadPositiveInt(const std::string& text) {
+    bool choiceOk = false;
+    int result = -1;
+    while (choiceOk == false) {
+        cout << text << endl;
+        std::string choiceAsStr;
+        std::getline(std::cin, choiceAsStr);
+        choiceAsStr = trim(choiceAsStr);
+        try {
+            int choice = std::stoi(choiceAsStr);
+            if (choice > 0) {
+                result = choice;
+                choiceOk = true;
+            }
+            else {
+                throw std::invalid_argument("must be above 0");
+            }
+        }
+        catch (std::invalid_argument const& ex) {
+            cout << "Invalid Value..."<<ex.what() << endl;
+            choiceOk = false;
+        }
+    }
+    return result;
 
+}
 int ChooseLines()
 {
-    bool choiceOk = false;
-    while (choiceOk == false) {
-
-    }
+    return ReadPositiveInt("How many lines?");
 }
-
+int ChooseRows() {
+    return ReadPositiveInt("How many rows?");
+}
 CharacterClass ChooseClass()
 {
     bool classChoiceIsOk = false;
+    CharacterClass result = PALADIN;
     while (classChoiceIsOk == false) {
         cout << "Choose Between One of this Classes:" << endl;
         cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
@@ -63,12 +99,12 @@ CharacterClass ChooseClass()
             classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
             if(!classChoiceIsOk)
                 throw std::invalid_argument("out of range");
-            return choice;
+            result = choice;
         }
         catch (std::invalid_argument const& ex) {
-            cout << "Invalid value...";
+            cout << "Invalid value..." << ex.what() << endl;
             classChoiceIsOk = false;
         }
     }
-    
+    return result;
 }

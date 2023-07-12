@@ -8,8 +8,9 @@ using namespace std;
 int main()
 {
     GameSetupParameters params = AskForParameters();
-    BattleField* battleField = new BattleField();
-    battleField->Setup();
+    std::cout << params.GridLines << std::endl;
+    //BattleField* battleField = new BattleField();
+    //battleField->Setup();
 }
 
 
