@@ -1,7 +1,10 @@
 #pragma once
+#include <vector>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
+
+using namespace std;
 
 class Character
 {

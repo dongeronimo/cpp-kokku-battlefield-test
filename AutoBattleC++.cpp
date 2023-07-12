@@ -5,7 +5,7 @@
 
 int main()
 {
-    BattleField* battleField = new(BattleField);
+    BattleField* battleField = new BattleField();//new(BattleField);
     battleField->Setup();
 }
 
