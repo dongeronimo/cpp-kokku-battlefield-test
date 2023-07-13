@@ -22,3 +22,5 @@ struct GameSetupParameters {
 /// </summary>
 /// <returns>Os parâmetros válidos</returns>
 GameSetupParameters AskForParameters();
+
+bool AskIfWantToPlayAgain();

@@ -8,6 +8,7 @@
 #include <string>
 #include <random>
 #include <conio.h>
+#include "BattlefieldSetup.h"
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
@@ -16,6 +17,16 @@ std::mt19937 rng(rd());
 
 BattleField::BattleField(int lines, int rows, CharacterClass playerClassId) 
 {    
+    Initialization(lines, rows, playerClassId);
+}
+
+void BattleField::Initialization(int lines, int rows, const CharacterClass& playerClassId)
+{
+    AllPlayers.clear();
+    PlayerCharacter.reset();
+    EnemyCharacter.reset();
+    PlayerCurrentLocation = nullptr;
+    EnemyCurrentLocation = nullptr;
     grid = new Grid(lines, rows);
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
@@ -35,6 +46,7 @@ void BattleField::CreatePlayerCharacter(int classIndex)
     PlayerCharacter->Health = 100;
     PlayerCharacter->BaseDamage = 20;
     PlayerCharacter->PlayerIndex = 0;
+    PlayerCharacter->DamageMultiplier = 1.0f;
     //não é o correto chamar a criação de inimigos de dentro da criação do 
     // personagem. Uma coisa é uma coisa, outra coisa é outra coisa.
 
@@ -51,6 +63,7 @@ void BattleField::CreateEnemyCharacter()
     EnemyCharacter->Health = 100;
     EnemyCharacter->BaseDamage = 20;
     EnemyCharacter->PlayerIndex = 1;
+    EnemyCharacter->DamageMultiplier = 1.0f;
     //não é correto chamar startGame aqui. Não é responsabilidade desse método;
     //StartGame();
 
@@ -70,11 +83,26 @@ void BattleField::StartGame()
 
 }
 
-void BattleField::StartTurn() {
+GameResult BattleField::StartTurn() {
     auto it = AllPlayers.begin();
-
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
-        (*it)->StartTurn(grid);
+        auto character = (*it);
+        if (!character->IsDead())
+        {
+            character->StartTurn(grid);
+        }
+        else
+        {
+            //É o player que morreu, game over.
+            if (character->PlayerIndex == PlayerCharacter->PlayerIndex) 
+            {
+                return Defeat;
+            }
+            else//é o inimigo que morreu.
+            {
+                return Victory;
+            }
+        }
     }
     grid->drawBattlefield(PlayerCharacter, EnemyCharacter);
     currentTurn++;
@@ -83,26 +111,22 @@ void BattleField::StartTurn() {
 
 void BattleField::HandleTurn()
 {
-    cout << "Handle turn" << endl;
-    if (PlayerCharacter->Health == 0)
-    {
-        cout << "TODO: Lidar c a morte do player";
+    cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
+    auto k = _getch();
+    if (k == KEY_ESC) {
         return;
     }
-    else if (EnemyCharacter->Health == 0)
-    {
-        cout << "TODO: Lidar c a vitória";
-        return;
-    }
-    else
-    {
-        cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
-        auto k = _getch();
-        if (k == KEY_ESC) {
-            return;
+    else {
+        GameResult result = StartTurn();
+        if (AskIfWantToPlayAgain()) {
+            //Modifica os parâmetros e reinicia o ciclo.
+            GameSetupParameters newParams = AskForParameters();
+            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerClassId);
+            StartGame();
         }
         else {
-            StartTurn();
+            //sai do programa.
+            return;
         }
     }
 }
