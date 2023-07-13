@@ -76,7 +76,7 @@ void BattleField::StartTurn() {
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
         (*it)->StartTurn(grid);
     }
-
+    grid->drawBattlefield(PlayerCharacter, EnemyCharacter);
     currentTurn++;
     HandleTurn();
 }

@@ -1,7 +1,9 @@
 #pragma once
 #include <Vector>
 #include "Types.h"
-
+#include <memory>
+using namespace std;
+class Character;
 class Grid
 {
 
@@ -27,6 +29,7 @@ public:
         return xLenght;
     }
     // prints the matrix that indicates the tiles of the battlefield
-    void drawBattlefield();
+    void drawBattlefield(std::shared_ptr<Character> player = nullptr, 
+        std::shared_ptr<Character> enemy = nullptr);
 };
 

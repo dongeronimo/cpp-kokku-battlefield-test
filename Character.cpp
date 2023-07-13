@@ -67,7 +67,7 @@ void Character::StartTurn(Grid* battlefield) {
             battlefield->CalculateIndex(nextPosition.first, nextPosition.second)];
         currentBox->ocupied = true;
         cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
-        battlefield->drawBattlefield();
+
     }
 }
 
