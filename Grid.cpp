@@ -11,7 +11,7 @@ Grid::Grid(int Lines, int Columns)
     {
         for (int j = 0; j < Columns; j++)
         {
-            Types::GridBox* newBox = new Types::GridBox(i, j, false, CalculateIndex(i,j));
+            Types::GridBox* newBox = new Types::GridBox(j, i, false, CalculateIndex(i,j));
             grids.push_back(newBox);
             cout<<newBox->Index<<endl;
         }

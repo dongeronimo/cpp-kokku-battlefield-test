@@ -29,5 +29,5 @@ bool IsInsideMatrix(int line, int col, int lines, int cols);
 typedef pair<int, int> Pair;
 
 vector<Pair> dijkstraShortestPath(const Grid* battlefield,
-	int sourceLine, int sourceCol,
-	int destLine, int destCol);
+	const int sourceLine, const int sourceCol,
+	const int destLine, const int destCol);
