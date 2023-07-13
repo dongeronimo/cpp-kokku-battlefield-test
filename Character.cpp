@@ -48,7 +48,9 @@ void Character::StartTurn(Grid* battlefield) {
     else {
         // if there is no target close enough, calculates in which direction 
         // this character should move to be closer to a possible target
-        vector<Pair> path = dijkstraShortestPath(battlefield, currentBox-> )
+        vector<Pair> path = dijkstraShortestPath(battlefield, currentBox->Line(), currentBox->Column(),
+            target->currentBox->Line(), target->currentBox->Column());
+        cout << path.size() << endl;
     }
     //{
 
