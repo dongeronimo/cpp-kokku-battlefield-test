@@ -49,8 +49,8 @@ void BattleField::CreateEnemyCharacter()
     cout << "Enemy Class Choice:" << enemyClass<<endl;
     EnemyCharacter = std::make_shared<Character>(enemyClass);
     EnemyCharacter->Health = 100;
-    PlayerCharacter->BaseDamage = 20;
-    PlayerCharacter->PlayerIndex = 1;
+    EnemyCharacter->BaseDamage = 20;
+    EnemyCharacter->PlayerIndex = 1;
     //não é correto chamar startGame aqui. Não é responsabilidade desse método;
     //StartGame();
 

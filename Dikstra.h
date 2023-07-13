@@ -27,7 +27,10 @@ struct Node {
 bool IsInsideMatrix(int line, int col, int lines, int cols);
 
 typedef pair<int, int> Pair;
-
+/// <summary>
+/// Retorna a lista de posições no grid que vão de source (não incluso) até dest (incluso).
+/// Os pares são [linha, coluna], com o first sendo linha e o second sendo coluna.
+/// </summary>
 vector<Pair> dijkstraShortestPath(const Grid* battlefield,
 	const int sourceLine, const int sourceCol,
 	const int destLine, const int destCol);
