@@ -39,17 +39,19 @@ void Grid::drawBattlefield(shared_ptr<Character> player,
     {
         for (int j = 0; j < Columns(); j++)
         {
+            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
             if (player != nullptr) {
                 if (player->currentBox->Line() == i && player->currentBox->Column() == j) {
                     ss << "[A]";//Player por enquanto é alice
+                    continue;
                 }
             }
             if (enemy != nullptr) {
                 if (enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
                     ss << "[B]"; // inimigo, q por enquanto é só 1, é Bob
+                    continue;
                 }
             }
-            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
             if (currentGrid->ocupied) {
                 ss << "[x]";
             }
