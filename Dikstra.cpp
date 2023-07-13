@@ -67,7 +67,9 @@ vector<Pair> dijkstraShortestPath(const Grid* battlefield,
     int col = destCol;
 
     while (line != -1 && col != -1) {
-        if(!(line == sourceLine && col == sourceCol))
+        //não guarda nem onde estou nem onde o target está
+        if(!(line == sourceLine && col == sourceCol) &&
+           !(line == destLine && col == destCol))
             path.push_back({ line, col });
         Pair pred = predecessors[line][col];
         line = pred.first;

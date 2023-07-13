@@ -48,32 +48,46 @@ void Character::StartTurn(Grid* battlefield) {
     else {
         // if there is no target close enough, calculates in which direction 
         // this character should move to be closer to a possible target
+
         vector<Pair> path = dijkstraShortestPath(battlefield,
             currentBox->Line(), currentBox->Column(),
             target->currentBox->Line(), target->currentBox->Column());
-        Pair nextPosition = path[0];
-        string directionWalked = "";
-        if (nextPosition.first == currentBox->Line() - 1)
-            directionWalked = "down";
-        if (nextPosition.first == currentBox->Line() + 1)
-            directionWalked = "up";
-        if (nextPosition.second == currentBox->Column() - 1)
-            directionWalked = "left";
-        if (nextPosition.second == currentBox->Column() + 1)
-            directionWalked = "right";
-        //troca as box
-        currentBox->ocupied = false;
-        currentBox = battlefield->grids[
-            battlefield->CalculateIndex(nextPosition.first, nextPosition.second)];
-        currentBox->ocupied = true;
-        cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
-
+        if (path.size() >= 1) {
+            Pair nextPosition = path[0];
+            string directionWalked = "";
+            if (nextPosition.first == currentBox->Line() - 1)
+                directionWalked = "down";
+            if (nextPosition.first == currentBox->Line() + 1)
+                directionWalked = "up";
+            if (nextPosition.second == currentBox->Column() - 1)
+                directionWalked = "left";
+            if (nextPosition.second == currentBox->Column() + 1)
+                directionWalked = "right";
+            //troca as box
+            currentBox->ocupied = false;
+            currentBox = battlefield->grids[
+                battlefield->CalculateIndex(nextPosition.first, nextPosition.second)];
+            currentBox->ocupied = true;
+            cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
+        }
     }
 }
 
 bool Character::CheckCloseTargets(Grid* battlefield)
 {
-    return false;
+    //está acima
+    auto above = (target->currentBox->Line() == currentBox->Line() &&
+        target->currentBox->Column() == currentBox->Column() - 1);
+    //está abaixo
+    auto below = (target->currentBox->Line() == currentBox->Line() &&
+        target->currentBox->Column() == currentBox->Column() + 1);
+    //esta à esq
+    auto left = (target->currentBox->Line() == currentBox->Line()-1 &&
+        target->currentBox->Column() == currentBox->Column() );
+    //esta à direita
+    auto right = (target->currentBox->Line() == currentBox->Line() + 1 &&
+        target->currentBox->Column() == currentBox->Column());
+    return above || below || left || right;
 }
 
 void Character::Attack(shared_ptr<Character> target)
