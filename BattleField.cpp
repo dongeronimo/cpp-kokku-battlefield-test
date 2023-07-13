@@ -9,6 +9,7 @@
 #include <random>
 #include <conio.h>
 #include "BattlefieldSetup.h"
+#include "Context.h"
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
@@ -114,7 +115,7 @@ void BattleField::HandleTurn()
     cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
     auto k = _getch();
     if (k == KEY_ESC) {
-        return;
+        Quit();
     }
     else {
         GameResult result = StartTurn();
@@ -126,7 +127,7 @@ void BattleField::HandleTurn()
         }
         else {
             //sai do programa.
-            return;
+            Quit();
         }
     }
 }

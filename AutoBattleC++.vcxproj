@@ -143,6 +143,7 @@
     <ClCompile Include="BattleField.cpp" />
     <ClCompile Include="BattlefieldSetup.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Context.cpp" />
     <ClCompile Include="Dikstra.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Types.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="BattlefieldSetup.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Context.h" />
     <ClInclude Include="Dikstra.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Types.h" />
