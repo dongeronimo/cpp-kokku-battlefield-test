@@ -7,7 +7,8 @@
 #include <iostream>
 #include "Dikstra.h"
 using namespace std;
-Character::Character(Types::CharacterClass characterClass)
+Character::Character(Types::CharacterClass characterClass):
+    isDead(false)
 {
 
 }
@@ -19,16 +20,17 @@ Character::~Character()
 
 bool Character::TakeDamage(float amount) 
 {
-	if ((Health -= BaseDamage) <= 0) 
-	{
-		Die();
-		return true;
-	}
-	return false;
+    Health = Health - amount;
+    if (Health <= 0) {
+        Die();
+        return true;
+    }
+    return false;
 }
 
 void Character::Die() 
 {
+    isDead = true;
 	// TODO >> kill
 	//TODO >> end the game?
 }
@@ -41,7 +43,6 @@ void Character::WalkTo(bool CanWalk)
 
 
 void Character::StartTurn(Grid* battlefield) {
-    std::cout<<"Start turn"<<std::endl;
     if (CheckCloseTargets(battlefield)) {
         Attack(target);
     }
@@ -92,6 +93,8 @@ bool Character::CheckCloseTargets(Grid* battlefield)
 
 void Character::Attack(shared_ptr<Character> target)
 {
-    cout << "TODO: Implementar ataque" << std::endl;
+    auto damage = this->BaseDamage * this->DamageMultiplier;
+    cout << "Player " << PlayerIndex << " did " << damage << " to Player " << target->PlayerIndex << endl;
+    target->TakeDamage(damage);
 }
 

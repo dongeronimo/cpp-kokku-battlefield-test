@@ -51,10 +51,34 @@ GameSetupParameters AskForParameters() {
     response.GridRows = ChooseRows();
     return response;
 }
+bool AskIfWantToPlayAgain()
+{
+    bool validChoice = false;
+    bool response = false;
+    while (!validChoice) {
+        cout << "Game is over. Would you like to play again? [y/n] " << endl;
+        string choiceAsStr;
+        std::getline(std::cin, choiceAsStr);
+        choiceAsStr = trim(choiceAsStr);
+        if (choiceAsStr == "y" || choiceAsStr == "Y") {
+            response = true;
+            validChoice = true;
+        }
+        else if (choiceAsStr == "n" || choiceAsStr == "N")
+        {
+            response = false;
+            validChoice = true;
+        }
+        else {
+            cout << "Invalid option:" << choiceAsStr << endl;
+        }
+    }
+    return response;
+}
 int ReadPositiveInt(const std::string& text) {
-    bool choiceOk = false;
+    bool validChoice = false;
     int result = -1;
-    while (choiceOk == false) {
+    while (validChoice == false) {
         cout << text << endl;
         std::string choiceAsStr;
         std::getline(std::cin, choiceAsStr);
@@ -63,7 +87,7 @@ int ReadPositiveInt(const std::string& text) {
             int choice = std::stoi(choiceAsStr);
             if (choice > 0) {
                 result = choice;
-                choiceOk = true;
+                validChoice = true;
             }
             else {
                 throw std::invalid_argument("must be above 0");
@@ -71,7 +95,7 @@ int ReadPositiveInt(const std::string& text) {
         }
         catch (std::invalid_argument const& ex) {
             cout << "Invalid Value..."<<ex.what() << endl;
-            choiceOk = false;
+            validChoice = false;
         }
     }
     return result;

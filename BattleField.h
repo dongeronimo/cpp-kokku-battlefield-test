@@ -7,11 +7,13 @@
 #include "Grid.h"
 #include <random>
 using namespace std;
-
+enum GameResult {Victory, Defeat};
 class BattleField
 {
 public:
 	BattleField(int lines, int rows, CharacterClass playerClassId);
+
+	void Initialization(int lines, int rows, const CharacterClass& playerClassId);
 
 	Grid* grid;
 	Types::GridBox* PlayerCurrentLocation;
@@ -34,7 +36,7 @@ public:
 
 	void StartGame();
 
-	void StartTurn();
+	GameResult StartTurn();
 
 	void HandleTurn();
 
