@@ -9,6 +9,9 @@ public:
         int yIndex;
         bool ocupied;
         int Index;
+        //Normalizando nomenclatura
+        const int Line() const { return yIndex; }
+        const int Column() const { return xIndex; }
         GridBox() {
             xIndex = 0;
             yIndex = 0;

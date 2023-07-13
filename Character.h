@@ -42,7 +42,7 @@ public:
 
     bool CheckCloseTargets(Grid* battlefield);
 
-    void Attack(Character* target);
+    void Attack(shared_ptr<Character> target);
 
 
 };

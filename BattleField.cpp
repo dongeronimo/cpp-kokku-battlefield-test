@@ -24,43 +24,6 @@ BattleField::BattleField(int lines, int rows, CharacterClass playerClassId)
     CreateEnemyCharacter();
 }
 
-//void BattleField::Setup()
-//{
-//    GetPlayerChoice();
-//}
-
-//void BattleField::GetPlayerChoice(CharacterClass classId)
-//{//    
-//    ////asks for the player to choose between for possible classes via console.
-//    //printf("Choose Between One of this Classes:\n");
-//
-//    //printf("[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer");
-//    ////store the player choice in a variable
-//    //std::string choice;
-//
-//    //std::getline(std::cin, choice);
-//    //
-//    //cin >> choice;
-//    //switch ((choice))
-//    //{
-//    //case "1":
-//    //    CreatePlayerCharacter(choice);
-//    //    break;
-//    //case "2":
-//    //    CreatePlayerCharacter(choice);
-//    //    break;
-//    //case "3":
-//    //    CreatePlayerCharacter(choice);
-//    //    break;
-//    //case "4":
-//    //    CreatePlayerCharacter(choice);
-//    //    break;
-//    //default:
-//    //    GetPlayerChoice();
-//    //    break;
-//    //}
-//}
-
 void BattleField::CreatePlayerCharacter(int classIndex)
 {
     //typecast correto.
@@ -108,11 +71,6 @@ void BattleField::StartGame()
 }
 
 void BattleField::StartTurn() {
-    //??
-    //if (currentTurn == 0)
-    //{
-    //    //AllPlayers.Sort();  
-    //}
     auto it = AllPlayers.begin();
 
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
@@ -140,7 +98,7 @@ void BattleField::HandleTurn()
     {
         cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
         auto k = _getch();
-        if (k == 27) {
+        if (k == KEY_ESC) {
             return;
         }
         else {

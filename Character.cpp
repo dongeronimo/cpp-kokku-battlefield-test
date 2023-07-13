@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include "Dikstra.h"
 using namespace std;
 Character::Character(Types::CharacterClass characterClass)
 {
@@ -41,13 +42,19 @@ void Character::WalkTo(bool CanWalk)
 
 void Character::StartTurn(Grid* battlefield) {
     std::cout<<"Start turn"<<std::endl;
+    if (CheckCloseTargets(battlefield)) {
+        Attack(target);
+    }
+    else {
+        // if there is no target close enough, calculates in which direction 
+        // this character should move to be closer to a possible target
+        vector<Pair> path = dijkstraShortestPath(battlefield, currentBox-> )
+    }
     //{
 
     //    if (CheckCloseTargets(battlefield))
     //    {
     //        Attack(Character::target);
-
-
     //        return;
     //    }
     //    else
@@ -114,8 +121,8 @@ bool Character::CheckCloseTargets(Grid* battlefield)
     return false;
 }
 
-void Character::Attack(Character* target) 
+void Character::Attack(shared_ptr<Character> target)
 {
-
+    cout << "TODO: Implementar ataque" << std::endl;
 }
 
