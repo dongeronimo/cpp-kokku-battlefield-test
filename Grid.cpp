@@ -1,48 +1,65 @@
 #include "Grid.h"
 #include "Types.h"
-
+#include <iostream>
+#include <sstream>
+#include "Character.h"
+using namespace std;
 
 Grid::Grid(int Lines, int Columns)
+    :xLenght(Columns), yLength(Lines)//Inicialização passou a ser aqui pq to usando dimensões constantes. O que não muda deve ser sempre constante
 {
-    xLenght = Lines;
-    yLength = Columns;
-    //Console.WriteLine("The battle field has been created\n");
     for (int i = 0; i < Lines; i++)
     {
-
         for (int j = 0; j < Columns; j++)
         {
-            Types::GridBox* newBox = new Types::GridBox(i, j, false, (Columns * i + j));
-            grids.insert(grids.end(), newBox);
-            //Console.Write($"{newBox.Index}\n");
+            Types::GridBox* newBox = new Types::GridBox(j, i, false, CalculateIndex(i,j));
+            grids.push_back(newBox);
+            cout<<newBox->Index<<endl;
         }
     }
-	//drawBattlefield(Lines, Columns);
+    cout << "the battlefield has been created" << endl;
+	drawBattlefield();
 }
 
 Grid::~Grid() 
 {
-
+    //O código original não tinha dealocação do que foi alocado no ctor.
+    for (auto i : grids) {
+        delete(i);
+    }
 }
 
-void Grid::drawBattlefield(int Lines, int Columns)
+void Grid::drawBattlefield(shared_ptr<Character> player, 
+    shared_ptr<Character> enemy)
 {
-    for (int i = 0; i < Lines; i++)
+    //Usando stringstream pra acumular pra reduzir a qtd de operações
+    //de output e fazer o output todo de uma vez.
+    std::stringstream ss;
+    for (int i = 0; i < Lines(); i++)
     {
-        for (int j = 0; j < Columns; j++)
+        for (int j = 0; j < Columns(); j++)
         {
-            Types::GridBox* currentgrid = new Types::GridBox();
-            if (currentgrid->ocupied)
-            {
-                //if()
-                printf("[X]\t");
+            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
+            if (player != nullptr) {
+                if (player->currentBox->Line() == i && player->currentBox->Column() == j) {
+                    ss << "[A]";//Player por enquanto é alice
+                    continue;
+                }
             }
-            else
-            {
-                printf("[ ]\t");
+            if (enemy != nullptr) {
+                if (enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
+                    ss << "[B]"; // inimigo, q por enquanto é só 1, é Bob
+                    continue;
+                }
+            }
+            if (currentGrid->ocupied) {
+                ss << "[x]";
+            }
+            else {
+                ss << "[ ]";
             }
         }
-        printf("\n");
+        ss << endl;
     }
-    printf("\n");
+    std::cout << ss.str() << endl;
 }

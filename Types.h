@@ -9,12 +9,20 @@ public:
         int yIndex;
         bool ocupied;
         int Index;
-
-        GridBox(int x, int y, bool ocupied, int index)
+        //Normalizando nomenclatura
+        const int Line() const { return yIndex; }
+        const int Column() const { return xIndex; }
+        GridBox() {
+            xIndex = 0;
+            yIndex = 0;
+            ocupied = false;
+            Index = 0;
+        }
+        GridBox(int x, int y, bool isOcupied, int index)
         {
             xIndex = x;
             yIndex = y;
-            ocupied = ocupied;
+            ocupied = isOcupied;
             Index = index;
         }
     };

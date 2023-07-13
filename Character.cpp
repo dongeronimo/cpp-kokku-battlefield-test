@@ -4,9 +4,11 @@
 #include "Character.h"
 #include <vector>
 #include <algorithm>
-
+#include <iostream>
+#include "Dikstra.h"
 using namespace std;
-Character::Character(Types::CharacterClass charcaterClass)
+Character::Character(Types::CharacterClass characterClass):
+    isDead(false)
 {
 
 }
@@ -18,16 +20,17 @@ Character::~Character()
 
 bool Character::TakeDamage(float amount) 
 {
-	if ((Health -= BaseDamage) <= 0) 
-	{
-		Die();
-		return true;
-	}
-	return false;
+    Health = Health - amount;
+    if (Health <= 0) {
+        Die();
+        return true;
+    }
+    return false;
 }
 
 void Character::Die() 
 {
+    isDead = true;
 	// TODO >> kill
 	//TODO >> end the game?
 }
@@ -40,82 +43,58 @@ void Character::WalkTo(bool CanWalk)
 
 
 void Character::StartTurn(Grid* battlefield) {
+    if (CheckCloseTargets(battlefield)) {
+        Attack(target);
+    }
+    else {
+        // if there is no target close enough, calculates in which direction 
+        // this character should move to be closer to a possible target
 
-    {
-
-        if (CheckCloseTargets(battlefield))
-        {
-            Attack(Character::target);
-
-
-            return;
-        }
-        else
-        {   // if there is no target close enough, calculates in wich direction this character should move to be closer to a possible target
-            
-            
-            if (currentBox.xIndex > target->currentBox.xIndex)
-            {
-                if(find(battlefield->grids.begin(), battlefield->grids.end(), currentBox.Index - 1) != battlefield->grids.end())
-                
-                {
-                    currentBox.ocupied = false;
-                    battlefield->grids[currentBox.Index] = currentBox;
-
-                    currentBox = (battlefield->grids[currentBox.Index - 1]);
-                    currentBox.ocupied = true;
-                    battlefield->grids[currentBox.Index] = currentBox;
-                    //Console.WriteLine($"Player {PlayerIndex} walked left\n");
-                    battlefield->drawBattlefield(5, 5);
-
-                    return;
-                }
-            }
-            else if (currentBox.xIndex < target->currentBox.xIndex)
-            {
-                currentBox.ocupied = false;
-                battlefield->grids[currentBox.Index] = currentBox;
-                currentBox = (battlefield->grids[currentBox.Index + 1]);
-                return;
-                battlefield->grids[currentBox.Index] = currentBox;
-                //Console.WriteLine($"Player {PlayerIndex} walked right\n");
-                battlefield->drawBattlefield(5, 5);
-            }
-
-            if (currentBox.yIndex > target->currentBox.yIndex)
-            {
-                battlefield->drawBattlefield(5, 5);
-                currentBox.ocupied = false;
-                battlefield->grids[currentBox.Index] = currentBox;
-                currentBox = battlefield->grids[(currentBox.Index - battlefield->xLenght)];
-                currentBox.ocupied = true;
-                battlefield->grids[currentBox.Index] = currentBox;
-                //Console.WriteLine($"PlayerB {PlayerIndex} walked up\n");
-                return;
-            }
-            else if (currentBox.yIndex < target->currentBox.yIndex)
-            {
-                currentBox.ocupied = true;
-                battlefield->grids[currentBox.Index] = currentBox;
-                currentBox = battlefield->grids[currentBox.Index + battlefield->xLenght];
-                currentBox.ocupied = false;
-                battlefield->grids[currentBox.Index] = currentBox;
-                //Console.WriteLine($"Player {PlayerIndex} walked down\n");
-                battlefield->drawBattlefield(5, 5);
-
-                return;
-            }
+        vector<Pair> path = dijkstraShortestPath(battlefield,
+            currentBox->Line(), currentBox->Column(),
+            target->currentBox->Line(), target->currentBox->Column());
+        if (path.size() >= 1) {
+            Pair nextPosition = path[0];
+            string directionWalked = "";
+            if (nextPosition.first == currentBox->Line() - 1)
+                directionWalked = "down";
+            if (nextPosition.first == currentBox->Line() + 1)
+                directionWalked = "up";
+            if (nextPosition.second == currentBox->Column() - 1)
+                directionWalked = "left";
+            if (nextPosition.second == currentBox->Column() + 1)
+                directionWalked = "right";
+            //troca as box
+            currentBox->ocupied = false;
+            currentBox = battlefield->grids[
+                battlefield->CalculateIndex(nextPosition.first, nextPosition.second)];
+            currentBox->ocupied = true;
+            cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
         }
     }
 }
 
 bool Character::CheckCloseTargets(Grid* battlefield)
 {
-
+    //está acima
+    auto above = (target->currentBox->Line() == currentBox->Line() &&
+        target->currentBox->Column() == currentBox->Column() - 1);
+    //está abaixo
+    auto below = (target->currentBox->Line() == currentBox->Line() &&
+        target->currentBox->Column() == currentBox->Column() + 1);
+    //esta à esq
+    auto left = (target->currentBox->Line() == currentBox->Line()-1 &&
+        target->currentBox->Column() == currentBox->Column() );
+    //esta à direita
+    auto right = (target->currentBox->Line() == currentBox->Line() + 1 &&
+        target->currentBox->Column() == currentBox->Column());
+    return above || below || left || right;
 }
 
-void Character::Attack(Character* target) 
+void Character::Attack(shared_ptr<Character> target)
 {
-
+    auto damage = this->BaseDamage * this->DamageMultiplier;
+    cout << "Player " << PlayerIndex << " did " << damage << " to Player " << target->PlayerIndex << endl;
+    target->TakeDamage(damage);
 }
 

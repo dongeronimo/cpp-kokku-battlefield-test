@@ -1,33 +1,46 @@
 #pragma once
+#include <vector>
+#include <memory>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
 
+using namespace std;
+
 class Character
 {
+private:
+    bool isDead;
 public:
 
     Character(Types::CharacterClass charcaterClass);
     ~Character();
-
-    
+    /// <summary>
+    /// Não é responsabilidade do character saber o que fazer com quem
+    /// tá morto mas sim do main loop do jogo, que está em battlefield.
+    /// Isso aqui marca o character como morto pra que o Battlefield faça
+    /// o que tiver que ser feito c ele.
+    /// </summary>
+    /// <returns></returns>
+    const bool IsDead() const { return isDead; }
     float Health;
     float BaseDamage;
     float DamageMultiplier;
-    //public GridBox currentBox;
+
     int PlayerIndex;
-    //public Character Target{ get; set; }
+    //Se eu estou usando shared_ptr não é correto passar a usar naked pointer
+    //em um lugar onde shared_ptr daria na mesma pq n quero arriscar alguém dar
+    //free.
+    shared_ptr<Character> target;
 
-    Character* target;
 
-    bool IsDead;
     char Icon;
 
-    Types::GridBox currentBox;
+    Types::GridBox* currentBox;
 
     bool TakeDamage(float amount);
-
-    int getIndex(vector<Types::GridBox*> v, int index);
+    //n é usada em lugar algum e n vi necessidade de sua existencia.
+    //int getIndex(vector<Types::GridBox*> v, int index);
 
     void Die();
 
@@ -37,7 +50,7 @@ public:
 
     bool CheckCloseTargets(Grid* battlefield);
 
-    void Attack(Character* target);
+    void Attack(shared_ptr<Character> target);
 
 
 };
