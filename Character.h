@@ -6,14 +6,16 @@
 #include "Types.h"
 
 using namespace std;
+class BattleField;
 
 class Character
 {
 private:
     bool isDead;
+    const BattleField* battlefield;
 public:
 
-    Character(Types::CharacterClass charcaterClass);
+    Character(Types::CharacterClass charcaterClass, BattleField* battlefield);
     ~Character();
     /// <summary>
     /// Não é responsabilidade do character saber o que fazer com quem

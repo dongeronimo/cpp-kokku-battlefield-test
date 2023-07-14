@@ -6,9 +6,10 @@
 #include <algorithm>
 #include <iostream>
 #include "Dikstra.h"
+#include "BattleField.h"
 using namespace std;
-Character::Character(Types::CharacterClass characterClass):
-    isDead(false)
+Character::Character(Types::CharacterClass characterClass, BattleField* bf):
+    isDead(false), battlefield(bf)
 {
 
 }
@@ -43,6 +44,13 @@ void Character::WalkTo(bool CanWalk)
 
 
 void Character::StartTurn(Grid* battlefield) {
+    //abandona alvo morto.
+    if (target != nullptr && target->IsDead()) {
+        target = nullptr;
+    }
+    if (target == nullptr) {
+        //battlefield->
+    }
     if (CheckCloseTargets(battlefield)) {
         Attack(target);
     }
