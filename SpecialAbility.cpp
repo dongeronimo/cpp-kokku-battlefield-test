@@ -24,11 +24,14 @@ StrongAttack::StrongAttack(Character& originator)
 {
 }
 
-void StrongAttack::Execute(shared_ptr<Character> target)
+bool StrongAttack::ConditionsAreMet() {
+	return originator.IsDead() == false && originator.target != nullptr;
+}
+void StrongAttack::Execute()
 {
 	cout << "Player " << originator.PlayerIndex << " will do a strong attack!" << endl;
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 2.0f;
-	originator.Attack(target);
+	originator.Attack(originator.target);
 	originator.DamageMultiplier = oldMultiplier;
 }

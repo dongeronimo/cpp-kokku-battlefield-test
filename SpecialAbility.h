@@ -15,11 +15,13 @@ protected:
 public:
 	SpecialAbility(Character& originator, const float proc);
 	bool RollDice();
-	virtual void Execute(shared_ptr<Character> target) = 0;
+	virtual bool ConditionsAreMet() = 0;
+	virtual void Execute() = 0;
 };
 
 class StrongAttack :public SpecialAbility {
 public:
 	StrongAttack(Character& originator);
-	void Execute(shared_ptr<Character> target) override;
+	bool ConditionsAreMet() override;
+	void Execute() override;
 };

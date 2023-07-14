@@ -11,6 +11,7 @@
 #include <cmath>
 #include "SpecialAbility.h"
 using namespace std;
+
 Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t) :
     isDead(false), battlefield(bf), team(t)
 {
@@ -47,13 +48,27 @@ void Character::Die()
 {
     isDead = true;
 }
-
-void Character::StartTurn(Grid* grid) {
-    typedef shared_ptr<Character> PCharacter;
-    //abandona alvo morto.
+void Character::ClearTargetIfDead()
+{
     if (target != nullptr && target->IsDead()) {
         target = nullptr;
     }
+}
+bool Character::RollSpecialAbilities() {
+    for (auto ability : SpecialAbilities) {
+        if (ability->ConditionsAreMet() && ability->RollDice()) {
+            ability->Execute();
+            return true;
+        }
+    }
+    return false;
+}
+void Character::StartTurn(Grid* grid) {
+    typedef shared_ptr<Character> PCharacter;
+    ClearTargetIfDead();
+    if (RollSpecialAbilities())
+        return; //A ação do turno foi uma special ability;
+    
     //se não tem alvo, busca
     if (target == nullptr) {
         //Só me interessa quem n tá morto e for do time inimigo.

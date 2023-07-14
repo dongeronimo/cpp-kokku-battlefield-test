@@ -16,6 +16,17 @@ private:
     const BattleField* battlefield;
     const Team team;
     vector<shared_ptr<SpecialAbility>> SpecialAbilities;
+    /// <summary>
+    /// Abandona o alvo morto.
+    /// </summary>
+    void ClearTargetIfDead();
+    /// <summary>
+    /// Percorre a lista de habilidades especiais e as rola. Se alguma procar
+    /// a executa e retorna true senaõ retorna false. Pára de rodar assim que alguma
+    /// procar.
+    /// </summary>
+    /// <returns></returns>
+    bool RollSpecialAbilities();
 public:
 
     Character(Types::CharacterClass charcaterClass, 
