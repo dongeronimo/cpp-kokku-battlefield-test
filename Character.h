@@ -15,9 +15,12 @@ private:
     bool isDead;
     const BattleField* battlefield;
     const Team team;
+    vector<shared_ptr<SpecialAbility>> SpecialAbilities;
 public:
-    vector<SpecialAbility> SpecialAbilities;
-    Character(Types::CharacterClass charcaterClass, BattleField* battlefield, Team t);
+
+    Character(Types::CharacterClass charcaterClass, 
+        BattleField* battlefield, 
+        Team t);
     ~Character();
     /// <summary>
     /// Não é responsabilidade do character saber o que fazer com quem

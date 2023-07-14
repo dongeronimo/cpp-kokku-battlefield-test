@@ -11,15 +11,15 @@ class SpecialAbility
 private:
 	const float proc;
 protected:
-	const shared_ptr<Character> originator;
+	Character& originator;
 public:
-	SpecialAbility(const shared_ptr<Character> originator, const float proc);
+	SpecialAbility(Character& originator, const float proc);
 	bool RollDice();
 	virtual void Execute(shared_ptr<Character> target) = 0;
 };
 
 class StrongAttack :public SpecialAbility {
 public:
-	StrongAttack(const shared_ptr<Character> originator);
+	StrongAttack(Character& originator);
 	void Execute(shared_ptr<Character> target) override;
 };

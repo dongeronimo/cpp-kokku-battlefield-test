@@ -1,7 +1,6 @@
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
-#include "Character.h"
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -12,10 +11,21 @@
 #include <cmath>
 #include "SpecialAbility.h"
 using namespace std;
-Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t):
+Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t) :
     isDead(false), battlefield(bf), team(t)
 {
-
+    switch (characterClass) {
+    case Types::Archer:
+        break;
+    case Types::Cleric:
+        break;
+    case Types::Paladin:
+        break;
+    case Types::Warrior:
+        auto x = make_shared<StrongAttack>(*this);
+        SpecialAbilities.push_back(x);
+        break;
+    }
 }
 
 Character::~Character() 
