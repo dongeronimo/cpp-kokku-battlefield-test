@@ -16,6 +16,7 @@ struct GameSetupParameters {
     CharacterClass PlayerClassId;
     int GridLines;
     int GridRows;
+    int NumberOfCharactersInEnemyTeam;
     int NumberOfCharactersInPlayerTeam;
     //Não vou ter o sofrimento de lidar com arrays dinâmicas de baixo nível, malloc, calloc, free se eu posso usar uma 
     //estrutura de alto nivel ne? E o custo da passagem por valor é irrelevante já que isso não será usado num loop quente

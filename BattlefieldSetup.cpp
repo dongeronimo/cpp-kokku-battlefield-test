@@ -30,16 +30,17 @@ int AskForNumberOfCharactersInPlayerTeam();
 /// </summary>
 /// <returns></returns>
 CharacterClass ChooseClass();
+/// <summary>
+/// Para cada char no time do player pede a classe.
+/// </summary>
+/// <param name="teamSize"></param>
+/// <returns></returns>
 vector<CharacterClass> AskForPlayerTeamClasses(int teamSize);
-
-vector<CharacterClass> AskForPlayerTeamClasses(int teamSize) {
-	vector<CharacterClass> classes;
-	for (auto i = 0; i < teamSize; i++) {
-		classes.push_back(ChooseClass());
-	}
-	return classes;
-}
-
+/// <summary>
+/// Igual à AskForNumberOfCharactersInPlayerTeam
+/// </summary>
+/// <returns></returns>
+int AskForNumberOfCharactersInEnemyTeam();
 /// <summary>
 /// Encapsula o processo de pedir o numero de linhas do mapa
 /// </summary>
@@ -56,6 +57,7 @@ GameSetupParameters AskForParameters() {
 	GameSetupParameters response;
 	response.NumberOfCharactersInPlayerTeam = AskForNumberOfCharactersInPlayerTeam();
 	response.PlayerTeamClassIds = AskForPlayerTeamClasses(response.NumberOfCharactersInPlayerTeam);
+	response.NumberOfCharactersInEnemyTeam = AskForNumberOfCharactersInEnemyTeam();
 	response.PlayerClassId = ChooseClass();
 	response.GridLines = ChooseLines();
 	response.GridRows = ChooseRows();
@@ -141,27 +143,27 @@ CharacterClass ChooseClass()
 			return PALADIN;
 		}
 	});
-	//bool classChoiceIsOk = false;
-	//CharacterClass result = PALADIN;
-	//while (classChoiceIsOk == false) {
-	//	cout << "Choose Between One of this Classes:" << endl;
-	//	cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
-	//	std::string choiceAsStr;
-	//	std::getline(std::cin, choiceAsStr);
-	//	choiceAsStr = trim(choiceAsStr);
-	//	try {
-	//		CharacterClass choice = std::stoi(choiceAsStr);
-	//		classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
-	//		if (!classChoiceIsOk)
-	//			throw std::invalid_argument("out of range");
-	//		result = choice;
-	//	}
-	//	catch (std::invalid_argument const& ex) {
-	//		cout << "Invalid value..." << ex.what() << endl;
-	//		classChoiceIsOk = false;
-	//	}
-	//}
-	//return result;
+}
+int AskForNumberOfCharactersInEnemyTeam() {
+	return PromptLoop<int>([](bool& validInput)->int
+		{
+			try {
+				cout << "How many characters on the enemy team? " << endl;
+				string choiceAsStr;
+				std::getline(std::cin, choiceAsStr);
+				choiceAsStr = trim(choiceAsStr);
+				int choiceAsNumber = stoi(choiceAsStr);
+				if (choiceAsNumber <= 0)
+					throw std::invalid_argument("Must have at least one character on the team");
+				validInput = true;
+				return choiceAsNumber;
+			}
+			catch (std::invalid_argument const& ex) {
+				cout << "Invalid Value..." << ex.what() << endl;
+				validInput = false;
+				return -1;
+			}
+		});
 }
 int AskForNumberOfCharactersInPlayerTeam() {
 	return PromptLoop<int>([](bool& validInput)->int
@@ -183,4 +185,11 @@ int AskForNumberOfCharactersInPlayerTeam() {
 				return -1;
 			}
 		});
+}
+vector<CharacterClass> AskForPlayerTeamClasses(int teamSize) {
+	vector<CharacterClass> classes;
+	for (auto i = 0; i < teamSize; i++) {
+		classes.push_back(ChooseClass());
+	}
+	return classes;
 }
