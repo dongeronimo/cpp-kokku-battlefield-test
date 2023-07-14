@@ -29,7 +29,7 @@ int AskForNumberOfCharactersInPlayerTeam();
 /// Encapsula o processo de pedir a classe ao player.
 /// </summary>
 /// <returns></returns>
-CharacterClass ChooseClass();
+CharacterClass AskForClass();
 /// <summary>
 /// Para cada char no time do player pede a classe.
 /// </summary>
@@ -45,12 +45,12 @@ int AskForNumberOfCharactersInEnemyTeam();
 /// Encapsula o processo de pedir o numero de linhas do mapa
 /// </summary>
 /// <returns></returns>
-int ChooseLines();
+int AskForNumberOfLines();
 /// <summary>
 /// Encapsula o processo de pedir o numero de colunas do mapa
 /// </summary>
 /// <returns></returns>
-int ChooseRows();
+int AskForNumberOfRows();
 
 
 GameSetupParameters AskForParameters() {
@@ -58,9 +58,8 @@ GameSetupParameters AskForParameters() {
 	response.NumberOfCharactersInPlayerTeam = AskForNumberOfCharactersInPlayerTeam();
 	response.PlayerTeamClassIds = AskForPlayerTeamClasses(response.NumberOfCharactersInPlayerTeam);
 	response.NumberOfCharactersInEnemyTeam = AskForNumberOfCharactersInEnemyTeam();
-	response.PlayerClassId = ChooseClass();
-	response.GridLines = ChooseLines();
-	response.GridRows = ChooseRows();
+	response.GridLines = AskForNumberOfLines();
+	response.GridRows = AskForNumberOfRows();
 	return response;
 }
 
@@ -114,14 +113,14 @@ int ReadPositiveInt(const std::string& text) {
 	return result;
 
 }
-int ChooseLines()
+int AskForNumberOfLines()
 {
 	return ReadPositiveInt("How many lines?");
 }
-int ChooseRows() {
+int AskForNumberOfRows() {
 	return ReadPositiveInt("How many rows?");
 }
-CharacterClass ChooseClass()
+CharacterClass AskForClass()
 {
 	return PromptLoop<CharacterClass>([](bool& validInput)->CharacterClass {
 		cout << "Choose Between One of this Classes:" << endl;
@@ -189,7 +188,7 @@ int AskForNumberOfCharactersInPlayerTeam() {
 vector<CharacterClass> AskForPlayerTeamClasses(int teamSize) {
 	vector<CharacterClass> classes;
 	for (auto i = 0; i < teamSize; i++) {
-		classes.push_back(ChooseClass());
+		classes.push_back(AskForClass());
 	}
 	return classes;
 }

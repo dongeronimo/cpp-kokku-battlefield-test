@@ -13,7 +13,6 @@
 /// Guarda os parâmetros escolhidos pelo player.
 /// </summary>
 struct GameSetupParameters {
-    CharacterClass PlayerClassId;
     int GridLines;
     int GridRows;
     int NumberOfCharactersInEnemyTeam;

@@ -17,7 +17,7 @@ int main()
     try {
         GameSetupParameters params = AskForParameters();
         //Não havia necessidade de alocá-lo dinamicamente;
-        BattleField battlefield(params.GridLines, params.GridRows, params.PlayerClassId);
+        BattleField battlefield(params.GridLines, params.GridRows, params.PlayerTeamClassIds[0]);
         battlefield.StartGame();
     }
     catch (QuitGameSignal& ex) {

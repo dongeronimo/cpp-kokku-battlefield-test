@@ -122,7 +122,7 @@ void BattleField::HandleTurn()
         if (AskIfWantToPlayAgain()) {
             //Modifica os parâmetros e reinicia o ciclo.
             GameSetupParameters newParams = AskForParameters();
-            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerClassId);
+            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds[0]);
             StartGame();
         }
         else {
