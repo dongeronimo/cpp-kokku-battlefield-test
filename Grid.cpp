@@ -18,7 +18,7 @@ Grid::Grid(int Lines, int Columns)
         }
     }
     cout << "the battlefield has been created" << endl;
-	drawBattlefield();
+    drawBattlefield();
 }
 
 Grid::~Grid() 
@@ -28,9 +28,24 @@ Grid::~Grid()
         delete(i);
     }
 }
-
-void Grid::drawBattlefield(shared_ptr<Character> player, 
-    shared_ptr<Character> enemy)
+void Grid::drawBattlefield() {
+    std::stringstream ss;
+    for (int i = 0; i < Lines(); i++) {
+        for (int j = 0; j < Columns(); j++) {
+            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
+            if (currentGrid->ocupied) {
+                ss << "[x]";
+            }
+            else {
+                ss << "[ ]";
+            }
+        }
+        ss << endl;
+    }
+    std::cout << ss.str() << endl;
+}
+void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
+    vector<shared_ptr<Character>>& enemies)
 {
     //Usando stringstream pra acumular pra reduzir a qtd de operações
     //de output e fazer o output todo de uma vez.
@@ -40,23 +55,28 @@ void Grid::drawBattlefield(shared_ptr<Character> player,
         for (int j = 0; j < Columns(); j++)
         {
             Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
-            if (player != nullptr) {
-                if (player->currentBox->Line() == i && player->currentBox->Column() == j) {
+            bool drewPlayerOrEnemy = false;
+            for (auto player : players) {
+                if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
                     ss << "[A]";//Player por enquanto é alice
-                    continue;
+                    drewPlayerOrEnemy = true;
+                    break;
                 }
             }
-            if (enemy != nullptr) {
-                if (enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
-                    ss << "[B]"; // inimigo, q por enquanto é só 1, é Bob
-                    continue;
+            for (auto enemy : enemies) {
+                if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
+                    ss << "[B]";
+                    drewPlayerOrEnemy = true;
+                    break;
                 }
             }
-            if (currentGrid->ocupied) {
-                ss << "[x]";
-            }
-            else {
-                ss << "[ ]";
+            if (!drewPlayerOrEnemy) {
+                if (currentGrid->ocupied) {
+                    ss << "[x]";
+                }
+                else {
+                    ss << "[ ]";
+                }
             }
         }
         ss << endl;
