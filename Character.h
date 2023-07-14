@@ -6,14 +6,17 @@
 #include "Types.h"
 
 using namespace std;
-
+class BattleField;
+enum Team {TeamA, TeamB};
 class Character
 {
 private:
     bool isDead;
+    const BattleField* battlefield;
+    const Team team;
 public:
 
-    Character(Types::CharacterClass charcaterClass);
+    Character(Types::CharacterClass charcaterClass, BattleField* battlefield, Team t);
     ~Character();
     /// <summary>
     /// Não é responsabilidade do character saber o que fazer com quem
@@ -44,11 +47,9 @@ public:
 
     void Die();
 
-    void WalkTo(bool CanWalk);
+    void StartTurn(Grid* grid);
 
-    void StartTurn(Grid* battlefield);
-
-    bool CheckCloseTargets(Grid* battlefield);
+    bool CheckCloseTargets(Grid* grid);
 
     void Attack(shared_ptr<Character> target);
 

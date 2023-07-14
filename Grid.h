@@ -29,7 +29,8 @@ public:
         return xLenght;
     }
     // prints the matrix that indicates the tiles of the battlefield
-    void drawBattlefield(std::shared_ptr<Character> player = nullptr, 
-        std::shared_ptr<Character> enemy = nullptr);
+    void drawBattlefield(vector<shared_ptr<Character>>& player,
+        vector<shared_ptr<Character>>& enemy);
+    void drawBattlefield();
 };
 
