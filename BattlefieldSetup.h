@@ -1,5 +1,6 @@
 #pragma once
 #include "Constants.h"
+#include <vector>
 //Movi o processo de configuração do jogo para fora do Battlefield pq 
 //1) precisava encontrar um ponto por onde puxar o fio da tarefa
 //2) ter o processo de configuração do battlefield dentro do proprio
@@ -15,6 +16,11 @@ struct GameSetupParameters {
     CharacterClass PlayerClassId;
     int GridLines;
     int GridRows;
+    int NumberOfCharactersInPlayerTeam;
+    //Não vou ter o sofrimento de lidar com arrays dinâmicas de baixo nível, malloc, calloc, free se eu posso usar uma 
+    //estrutura de alto nivel ne? E o custo da passagem por valor é irrelevante já que isso não será usado num loop quente
+    //do jogo.
+    std::vector<CharacterClass> PlayerTeamClassIds;
 };
 
 /// <summary>

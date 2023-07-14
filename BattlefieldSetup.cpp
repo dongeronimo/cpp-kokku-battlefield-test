@@ -8,26 +8,38 @@ using namespace std;
 /// Função genérica pra fazer o loop de pedir resultado.
 /// </summary>
 /// <typeparam name="ReturnValue">O tipo do que o prompt retorna</typeparam>
-/// <param name="bar">A função do prompt. Seu bool& deve retornar true se o prompt foi preeenchido c/sucesso
+/// <param name="Prompt">A função do prompt. Seu bool& deve retornar true se o prompt foi preeenchido c/sucesso
 /// ou false caso contrário pq ele é o usado pra continuar o loop ou não</param>
 /// <returns></returns>
 template<typename ReturnValue>
-ReturnValue foo(ReturnValue(*bar)(bool&)) {
+ReturnValue PromptLoop(ReturnValue(*Prompt)(bool&)) {
 	bool validChoice = false;
 	while (!validChoice) {
-		ReturnValue result = bar(validChoice);
+		ReturnValue result = Prompt(validChoice);
 		if (validChoice)
 			return result;
 	}
 }
-
+/// <summary>
+/// Pede o número de characters no time do player.
+/// </summary>
+/// <returns></returns>
 int AskForNumberOfCharactersInPlayerTeam();
-
 /// <summary>
 /// Encapsula o processo de pedir a classe ao player.
 /// </summary>
 /// <returns></returns>
 CharacterClass ChooseClass();
+vector<CharacterClass> AskForPlayerTeamClasses(int teamSize);
+
+vector<CharacterClass> AskForPlayerTeamClasses(int teamSize) {
+	vector<CharacterClass> classes;
+	for (auto i = 0; i < teamSize; i++) {
+		classes.push_back(ChooseClass());
+	}
+	return classes;
+}
+
 /// <summary>
 /// Encapsula o processo de pedir o numero de linhas do mapa
 /// </summary>
@@ -42,7 +54,8 @@ int ChooseRows();
 
 GameSetupParameters AskForParameters() {
 	GameSetupParameters response;
-	int numberOfCharactersInPlayersTeam = AskForNumberOfCharactersInPlayerTeam();
+	response.NumberOfCharactersInPlayerTeam = AskForNumberOfCharactersInPlayerTeam();
+	response.PlayerTeamClassIds = AskForPlayerTeamClasses(response.NumberOfCharactersInPlayerTeam);
 	response.PlayerClassId = ChooseClass();
 	response.GridLines = ChooseLines();
 	response.GridRows = ChooseRows();
@@ -108,9 +121,7 @@ int ChooseRows() {
 }
 CharacterClass ChooseClass()
 {
-	bool classChoiceIsOk = false;
-	CharacterClass result = PALADIN;
-	while (classChoiceIsOk == false) {
+	return PromptLoop<CharacterClass>([](bool& validInput)->CharacterClass {
 		cout << "Choose Between One of this Classes:" << endl;
 		cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
 		std::string choiceAsStr;
@@ -118,25 +129,48 @@ CharacterClass ChooseClass()
 		choiceAsStr = trim(choiceAsStr);
 		try {
 			CharacterClass choice = std::stoi(choiceAsStr);
-			classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
+			bool classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
 			if (!classChoiceIsOk)
 				throw std::invalid_argument("out of range");
-			result = choice;
+			validInput = true;
+			return choice;
 		}
 		catch (std::invalid_argument const& ex) {
 			cout << "Invalid value..." << ex.what() << endl;
-			classChoiceIsOk = false;
+			validInput = false;
+			return PALADIN;
 		}
-	}
-	return result;
+	});
+	//bool classChoiceIsOk = false;
+	//CharacterClass result = PALADIN;
+	//while (classChoiceIsOk == false) {
+	//	cout << "Choose Between One of this Classes:" << endl;
+	//	cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
+	//	std::string choiceAsStr;
+	//	std::getline(std::cin, choiceAsStr);
+	//	choiceAsStr = trim(choiceAsStr);
+	//	try {
+	//		CharacterClass choice = std::stoi(choiceAsStr);
+	//		classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
+	//		if (!classChoiceIsOk)
+	//			throw std::invalid_argument("out of range");
+	//		result = choice;
+	//	}
+	//	catch (std::invalid_argument const& ex) {
+	//		cout << "Invalid value..." << ex.what() << endl;
+	//		classChoiceIsOk = false;
+	//	}
+	//}
+	//return result;
 }
 int AskForNumberOfCharactersInPlayerTeam() {
-	return foo<int>([](bool& validInput)->int
+	return PromptLoop<int>([](bool& validInput)->int
 		{
 			try {
 				cout << "How many characters on your team? " << endl;
 				string choiceAsStr;
 				std::getline(std::cin, choiceAsStr);
+				choiceAsStr = trim(choiceAsStr);
 				int choiceAsNumber = stoi(choiceAsStr);
 				if (choiceAsNumber <= 0)
 					throw std::invalid_argument("Must have at least one character on the team");
