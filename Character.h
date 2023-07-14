@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <string>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
@@ -74,5 +75,7 @@ public:
     void AddEffect(shared_ptr<StatusEffect> effect);
 
     bool HasEffect(const int typeId) const;
+
+    const std::string MoveToTarget();
 };
 

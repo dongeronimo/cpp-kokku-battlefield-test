@@ -22,11 +22,15 @@ Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team
         SpecialAbilities.push_back(make_shared<BowAttack>(*this));
         break;
     case Types::Cleric:
+        SpecialAbilities.push_back(make_shared<Reanimate>(*this));
+        SpecialAbilities.push_back(make_shared<Curse>(*this));
         break;
     case Types::Paladin:
+        SpecialAbilities.push_back(make_shared<Smite>(*this));
         SpecialAbilities.push_back(make_shared <SelfHeal>(*this));
         break;
     case Types::Warrior:
+        SpecialAbilities.push_back(make_shared<Charge>(*this));
         SpecialAbilities.push_back(make_shared<StrongAttack>(*this));
         break;
     }
@@ -121,30 +125,52 @@ void Character::StartTurn(Grid* grid) {
     else if(target!=nullptr) { //É possivel que aqui tenha target null se todos do time inimigo estiverem mortos.
         // if there is no target close enough, calculates in which direction 
         // this character should move to be closer to a possible target
-
-        vector<Pair> path = dijkstraShortestPath(grid,
-            currentBox->Line(), currentBox->Column(),
-            target->currentBox->Line(), target->currentBox->Column());
-        if (path.size() >= 1) {
-            Pair nextPosition = path[0];
-            string directionWalked = "";
-            if (nextPosition.first == currentBox->Line() - 1)
-                directionWalked = "down";
-            if (nextPosition.first == currentBox->Line() + 1)
-                directionWalked = "up";
-            if (nextPosition.second == currentBox->Column() - 1)
-                directionWalked = "left";
-            if (nextPosition.second == currentBox->Column() + 1)
-                directionWalked = "right";
-            //troca as box
-            currentBox->ocupied = false;
-            currentBox = grid->grids[grid->CalculateIndex(nextPosition.first, nextPosition.second)];
-            currentBox->ocupied = true;
+        auto directionWalked = MoveToTarget();
+        //vector<Pair> path = dijkstraShortestPath(grid,
+        //    currentBox->Line(), currentBox->Column(),
+        //    target->currentBox->Line(), target->currentBox->Column());
+        //if (path.size() >= 1) {
+        //    Pair nextPosition = path[0];
+        //    string directionWalked = "";
+        //    if (nextPosition.first == currentBox->Line() - 1)
+        //        directionWalked = "down";
+        //    if (nextPosition.first == currentBox->Line() + 1)
+        //        directionWalked = "up";
+        //    if (nextPosition.second == currentBox->Column() - 1)
+        //        directionWalked = "left";
+        //    if (nextPosition.second == currentBox->Column() + 1)
+        //        directionWalked = "right";
+        //    //troca as box
+        //    currentBox->ocupied = false;
+        //    currentBox = grid->grids[grid->CalculateIndex(nextPosition.first, nextPosition.second)];
+        //    currentBox->ocupied = true;
             cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
-        }
+        //}
     }
 }
-
+const std::string Character::MoveToTarget() {
+    vector<Pair> path = dijkstraShortestPath(battlefield.grid,
+        currentBox->Line(), currentBox->Column(), target->currentBox->Line(),
+        target->currentBox->Column());
+    if (path.size() >= 1) {
+        Pair nextPosition = path[0];
+        string directionWalked = "";
+        if (nextPosition.first == currentBox->Line() - 1)
+            directionWalked = "down";
+        if (nextPosition.first == currentBox->Line() + 1)
+            directionWalked = "up";
+        if (nextPosition.second == currentBox->Column() - 1)
+            directionWalked = "left";
+        if (nextPosition.second == currentBox->Column() + 1)
+            directionWalked = "right";
+        //troca as box
+        currentBox->ocupied = false;
+        currentBox = battlefield.grid->grids[battlefield.grid->CalculateIndex(
+            nextPosition.first, nextPosition.second)];
+        currentBox->ocupied = true;
+        return directionWalked;
+    }
+}
 bool Character::CheckCloseTargets(Grid* grid)
 {
     if (target == nullptr)

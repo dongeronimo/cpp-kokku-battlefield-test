@@ -30,7 +30,9 @@ StrongAttack::StrongAttack(Character& originator)
 }
 
 bool StrongAttack::ConditionsAreMet() {
-	return originator.IsDead() == false && originator.target != nullptr;
+	return originator.IsDead() == false && originator.target != nullptr &&
+		ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
+			originator.target->currentBox->Line(), originator.target->currentBox->Column()) <= 1;
 }
 void StrongAttack::Execute()
 {
@@ -40,6 +42,18 @@ void StrongAttack::Execute()
 	originator.Attack(originator.target);
 	originator.DamageMultiplier = oldMultiplier;
 }
+
+Charge::Charge(Character& originator) :SpecialAbility(originator, CHARGE_PROC_CHANCE) {}
+bool Charge::ConditionsAreMet() {
+	return originator.target != nullptr;
+}
+void Charge::Execute() {
+	cout << "Player " << originator.PlayerIndex << " is charging against " << originator.target->PlayerIndex<<endl;
+	originator.MoveToTarget();
+	originator.MoveToTarget();
+	originator.MoveToTarget();
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)
 {
@@ -66,21 +80,6 @@ void Teleport::Execute()
 	originator.currentBox = emptyGridbox;
 	originator.currentBox->ocupied = true;
 }
-
-
-SelfHeal::SelfHeal(Character& originator):SpecialAbility(originator, SELF_HEAL_PROC_CHANCE){
-}
-
-bool SelfHeal::ConditionsAreMet() {
-	return !originator.HasEffect(Heal::TypeID);
-}
-
-void SelfHeal::Execute() {
-	shared_ptr<Heal> effect = make_shared<Heal>(originator, originator, 25);
-	cout << "Player " << originator.PlayerIndex << " is using self-heal" << endl;
-	originator.AddEffect(effect);
-}
-
 BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
 bool BowAttack::ConditionsAreMet() {
 	if (originator.target == nullptr)
@@ -97,4 +96,44 @@ void BowAttack::Execute() {
 	originator.DamageMultiplier = 0.5f;
 	originator.Attack(originator.target);
 	originator.DamageMultiplier = 1.0f;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+SelfHeal::SelfHeal(Character& originator):SpecialAbility(originator, SELF_HEAL_PROC_CHANCE){
+}
+
+bool SelfHeal::ConditionsAreMet() {
+	return !originator.HasEffect(Heal::TypeID);
+}
+
+void SelfHeal::Execute() {
+	shared_ptr<Heal> effect = make_shared<Heal>(originator, originator, 25);
+	cout << "Player " << originator.PlayerIndex << " is using self-heal" << endl;
+	originator.AddEffect(effect);
+}
+
+
+
+Smite::Smite(Character& originator) :SpecialAbility(originator, SMITE_PROC_CHANCE) {}
+bool Smite::ConditionsAreMet() {
+	return originator.Health <= SMITE_MAX_HP_PROC;
+}
+void Smite::Execute() {
+	
+}
+////////////////////////////////////////////////////////////////////////////////////////
+Curse::Curse(Character& originator) :SpecialAbility(originator, CURSE_PROC_CHANCE) {}
+bool Curse::ConditionsAreMet() {
+	return false;
+}
+void Curse::Execute()
+{
+
+}
+
+Reanimate::Reanimate(Character& originator):SpecialAbility(originator, REANIMATE_PROC_CHANCE){}
+bool Reanimate::ConditionsAreMet() {
+	return false;
+}
+void Reanimate::Execute() {
+
 }
