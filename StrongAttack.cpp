@@ -9,9 +9,7 @@ StrongAttack::StrongAttack(Character& originator)
 }
 
 bool StrongAttack::ConditionsAreMet() {
-	return originator.IsDead() == false && originator.target != nullptr &&
-		ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
-			originator.target->currentBox->Line(), originator.target->currentBox->Column()) <= 1;
+	return originator.IsDead() == false && originator.target != nullptr && MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET <= 1;
 }
 void StrongAttack::Execute()
 {

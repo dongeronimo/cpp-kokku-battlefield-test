@@ -8,11 +8,20 @@ class Grid
 {
 
 public:
+    
+    Grid(int Lines, int Columns);
+    ~Grid();
+    
     const int CalculateIndex(int i, int j) const {
         return Columns() * i + j;
     }
-    Grid(int Lines, int Columns);
-    ~Grid();
+    /// <summary>
+    /// Se está dentro do mapa e está vazio, retorna o gridbox. Senão retorna null
+    /// </summary>
+    /// <param name="i">a linha no grid</param>
+    /// <param name="j">a coluna no gridbox</param>
+    /// <returns>nullptr se i ou j fora do range ou se a gridbox estiver ocupada</returns>
+    Types::GridBox* GetIfEmpty(int i, int j) const;
     //voltei c vetor de ptrs pra n ter o custo de passagem por valor em 
     //drawBattlefield.
     std::vector<Types::GridBox*> grids;

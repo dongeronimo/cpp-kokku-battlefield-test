@@ -14,6 +14,7 @@ enum Team {TeamA, TeamB};
 class Character
 {
 private:
+    typedef shared_ptr<Character> PCharacter;
     bool isDead;
     const Team team;
     vector<shared_ptr<StatusEffect>> StatusEffects;
@@ -29,7 +30,7 @@ private:
     /// </summary>
     /// <returns></returns>
     bool RollSpecialAbilities();
-
+    void ReevaluateTarget();
     void ApplyStatusEffects();
 public:
     Character(Types::CharacterClass charcaterClass, 

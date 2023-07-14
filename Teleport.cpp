@@ -12,8 +12,7 @@ bool Teleport::ConditionsAreMet()
 	if (originator.target == nullptr)
 		return false;
 	else {
-		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
-			originator.target->currentBox->Line(), originator.target->currentBox->Column());
+		const int distanceToTarget = MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET;
 		return distanceToTarget <= TELEPORT_PROC_DISTANCE;
 	}
 }

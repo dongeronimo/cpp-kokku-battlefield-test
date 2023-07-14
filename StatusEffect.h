@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #define HEAL_DURATION 1
+#define STUN_DURATION 3
 using namespace std;
 class Character;
 class StatusEffect
@@ -30,4 +31,12 @@ public:
 	static const int TypeID;
 	Heal(Character& actor, Character& subject, int amount);
 	void Apply()override;
+};
+
+class Stun : public StatusEffect
+{
+public:
+	static const int TypeID;
+	Stun(Character& actor, Character& subject);
+	void Apply() override;
 };

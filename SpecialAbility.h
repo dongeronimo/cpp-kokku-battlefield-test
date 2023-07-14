@@ -17,6 +17,8 @@ using namespace std;
 #define CURSE_PROC_CHANCE 0.33f
 #define CURSE_RANGE 3
 #define REANIMATE_PROC_CHANCE 0.05f
+
+#define MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),originator.target->currentBox->Line(), originator.target->currentBox->Column())
 /// <summary>
 /// Classe base de todas as habilidades especiais. Herdeiros tem que 
 /// implementar ConditionsAreMet e Execute.
@@ -116,6 +118,10 @@ public:
 class Smite : public SpecialAbility {
 public:
 	Smite(Character& originator);
+	/// <summary>
+	/// Tem que estar no corpo-a-corpo e o paladino tem que estar ferido para fazer isso.
+	/// </summary>
+	/// <returns></returns>
 	bool ConditionsAreMet() override;
 	void Execute()override;
 };

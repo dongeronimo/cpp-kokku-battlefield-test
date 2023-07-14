@@ -24,3 +24,14 @@ void Heal::Apply() {
 		cout << "Player " << subject.PlayerIndex << " will heal "<<Amount << endl;
 	}
 }
+
+const int Stun::TypeID = 2;
+Stun::Stun(Character& actor, Character& subject)
+	:StatusEffect(actor, subject, STUN_DURATION,Stun::TypeID){}
+
+void Stun::Apply() {
+	if (!IsFinished()) {
+		Time++;
+		cout << "Player " << subject.PlayerIndex << " is stunned" << endl;
+	}
+}
