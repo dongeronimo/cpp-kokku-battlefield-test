@@ -68,7 +68,7 @@ SelfHeal::SelfHeal(Character& originator):SpecialAbility(originator, SELF_HEAL_P
 }
 
 bool SelfHeal::ConditionsAreMet() {
-	return originator.HasEffect(Heal::TypeID);
+	return !originator.HasEffect(Heal::TypeID);
 }
 
 void SelfHeal::Execute() {
