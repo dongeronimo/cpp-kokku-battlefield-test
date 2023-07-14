@@ -47,9 +47,9 @@ public:
 
     void Die();
 
-    void StartTurn(Grid* battlefield);
+    void StartTurn(Grid* grid);
 
-    bool CheckCloseTargets(Grid* battlefield);
+    bool CheckCloseTargets(Grid* grid);
 
     void Attack(shared_ptr<Character> target);
 

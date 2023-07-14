@@ -7,6 +7,9 @@
 #include <iostream>
 #include "Dikstra.h"
 #include "BattleField.h"
+#include <queue>
+#include <functional>
+#include <cmath>
 using namespace std;
 Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t):
     isDead(false), battlefield(bf), team(t)
@@ -34,22 +37,47 @@ void Character::Die()
     isDead = true;
 }
 
-void Character::StartTurn(Grid* battlefield) {
+void Character::StartTurn(Grid* grid) {
+    typedef shared_ptr<Character> PCharacter;
     //abandona alvo morto.
     if (target != nullptr && target->IsDead()) {
         target = nullptr;
     }
+    //se não tem alvo, busca
     if (target == nullptr) {
-        
+        //Só me interessa quem n tá morto e for do time inimigo.
+        vector<PCharacter> notDead;
+        if (team == TeamA) {
+            std::copy_if(battlefield->EnemyTeam.begin(), battlefield->EnemyTeam.end(), std::back_inserter(notDead),
+                [](auto opponent) {return !opponent->IsDead(); });
+        }
+        if (team == TeamB) {
+            std::copy_if(battlefield->PlayerTeam.begin(), battlefield->PlayerTeam.end(), std::back_inserter(notDead),
+                [](auto opponent) {return !opponent->IsDead(); });
+        }
+        //ordena por distancia
+        priority_queue<PCharacter, vector<PCharacter>, function<bool(PCharacter, PCharacter)>> myEnemiesOrderedByDistance(
+            [this](PCharacter a, PCharacter b) { 
+                int distanceA = std::abs(this->currentBox->Line() - a->currentBox->Line()) + std::abs(this->currentBox->Column() - a->currentBox->Column());
+                int distanceB = std::abs(this->currentBox->Line() - b->currentBox->Line()) + std::abs(this->currentBox->Column() - b->currentBox->Column());
+                return distanceA > distanceB; // priority queue retorna o maior elemento, isso faz o maior ser o menor?
+            }
+        );
+        for (auto alive : notDead) {
+            myEnemiesOrderedByDistance.push(alive);
+        }
+        if (myEnemiesOrderedByDistance.size() > 0) {
+            target = myEnemiesOrderedByDistance.top();
+        }
     }
-    if (CheckCloseTargets(battlefield)) {
+    if (CheckCloseTargets(grid)) {
         Attack(target);
     }
-    else {
+    else if(target!=nullptr) { //É possivel que aqui tenha target null se todos do time inimigo estiverem mortos.
         // if there is no target close enough, calculates in which direction 
         // this character should move to be closer to a possible target
 
-        vector<Pair> path = dijkstraShortestPath(battlefield,
+        vector<Pair> path = dijkstraShortestPath(grid,
             currentBox->Line(), currentBox->Column(),
             target->currentBox->Line(), target->currentBox->Column());
         if (path.size() >= 1) {
@@ -65,16 +93,17 @@ void Character::StartTurn(Grid* battlefield) {
                 directionWalked = "right";
             //troca as box
             currentBox->ocupied = false;
-            currentBox = battlefield->grids[
-                battlefield->CalculateIndex(nextPosition.first, nextPosition.second)];
+            currentBox = grid->grids[grid->CalculateIndex(nextPosition.first, nextPosition.second)];
             currentBox->ocupied = true;
             cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
         }
     }
 }
 
-bool Character::CheckCloseTargets(Grid* battlefield)
+bool Character::CheckCloseTargets(Grid* grid)
 {
+    if (target == nullptr)
+        return false;
     //está acima
     auto above = (target->currentBox->Line() == currentBox->Line() &&
         target->currentBox->Column() == currentBox->Column() - 1);
