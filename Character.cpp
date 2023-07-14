@@ -12,19 +12,19 @@
 #include "SpecialAbility.h"
 using namespace std;
 
-Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t) :
+Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team t) :
     isDead(false), battlefield(bf), team(t)
 {
     switch (characterClass) {
     case Types::Archer:
+        SpecialAbilities.push_back(make_shared<Teleport>(*this));
         break;
     case Types::Cleric:
         break;
     case Types::Paladin:
         break;
     case Types::Warrior:
-        auto x = make_shared<StrongAttack>(*this);
-        SpecialAbilities.push_back(x);
+        SpecialAbilities.push_back(make_shared<StrongAttack>(*this));
         break;
     }
 }
@@ -74,11 +74,11 @@ void Character::StartTurn(Grid* grid) {
         //Só me interessa quem n tá morto e for do time inimigo.
         vector<PCharacter> notDead;
         if (team == TeamA) {
-            std::copy_if(battlefield->EnemyTeam.begin(), battlefield->EnemyTeam.end(), std::back_inserter(notDead),
+            std::copy_if(battlefield.EnemyTeam.begin(), battlefield.EnemyTeam.end(), std::back_inserter(notDead),
                 [](auto opponent) {return !opponent->IsDead(); });
         }
         if (team == TeamB) {
-            std::copy_if(battlefield->PlayerTeam.begin(), battlefield->PlayerTeam.end(), std::back_inserter(notDead),
+            std::copy_if(battlefield.PlayerTeam.begin(), battlefield.PlayerTeam.end(), std::back_inserter(notDead),
                 [](auto opponent) {return !opponent->IsDead(); });
         }
         //ordena por distancia

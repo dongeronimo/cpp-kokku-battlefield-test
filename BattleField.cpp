@@ -45,7 +45,7 @@ void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
         auto characterClass = static_cast<Types::CharacterClass>(classIndex);
         //troquei printf por cout pq estou mais acostumado com cout
         std::cout << "Player Class Choice: " << characterClass;
-        auto PlayerCharacter = std::make_shared<Character>(characterClass, this, TeamA);
+        auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
         PlayerCharacter->PlayerIndex = PlayerTeam.size();
@@ -60,7 +60,7 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
         int randomInteger = GetRandomInt(PALADIN, ARCHER);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
         cout << "Enemy Class Choice:" << enemyClass << endl;
-        auto EnemyCharacter = std::make_shared<Character>(enemyClass, this, TeamB);
+        auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
         EnemyCharacter->PlayerIndex = EnemyTeam.size() + PlayerTeam.size();

@@ -13,7 +13,6 @@ class Character
 {
 private:
     bool isDead;
-    const BattleField* battlefield;
     const Team team;
     vector<shared_ptr<SpecialAbility>> SpecialAbilities;
     /// <summary>
@@ -28,11 +27,11 @@ private:
     /// <returns></returns>
     bool RollSpecialAbilities();
 public:
-
     Character(Types::CharacterClass charcaterClass, 
-        BattleField* battlefield, 
+        BattleField& battlefield, 
         Team t);
     ~Character();
+    BattleField& battlefield;
     /// <summary>
     /// Não é responsabilidade do character saber o que fazer com quem
     /// tá morto mas sim do main loop do jogo, que está em battlefield.

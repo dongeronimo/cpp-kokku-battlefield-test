@@ -35,3 +35,16 @@ void StrongAttack::Execute()
 	originator.Attack(originator.target);
 	originator.DamageMultiplier = oldMultiplier;
 }
+
+Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)
+{
+}
+
+bool Teleport::ConditionsAreMet()
+{
+	return false;
+}
+
+void Teleport::Execute()
+{
+}
