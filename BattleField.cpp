@@ -127,6 +127,15 @@ void BattleField::HandleTurn()
     }
     else {
         GameResult result = StartTurn();
+        switch (result)
+        {
+        case Victory:
+            cout << "VICTORY! All enemies are dead." << endl;
+            break;
+        case Defeat:
+            cout << "DEFEAT! All your characters are dead." << endl;
+            break;
+        }
         if (AskIfWantToPlayAgain()) {
             //Modifica os parâmetros e reinicia o ciclo.
             GameSetupParameters newParams = AskForParameters();
