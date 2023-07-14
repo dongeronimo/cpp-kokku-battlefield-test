@@ -146,6 +146,10 @@ public:
 class Reanimate : public SpecialAbility {
 public:
 	Reanimate(Character& originator);
+	/// <summary>
+	/// Pra reanimar precisa que pelo menos um do seu time esteja morto.
+	/// </summary>
+	/// <returns></returns>
 	bool ConditionsAreMet() override;
 	void Execute()override;
 };

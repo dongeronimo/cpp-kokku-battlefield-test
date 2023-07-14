@@ -46,6 +46,7 @@ public:
     /// </summary>
     /// <returns></returns>
     const bool IsDead() const { return isDead; }
+    void IsDead(bool d) { isDead = false; }
     float Health;
     float BaseDamage;
     float DamageMultiplier;
@@ -78,5 +79,9 @@ public:
     bool HasEffect(const int typeId) const;
 
     const std::string MoveToTarget();
+
+    const Team GetTeam()const {
+        return team;
+    }
 };
 

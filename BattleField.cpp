@@ -16,7 +16,14 @@ using namespace std;
 //Gerador de numeros aleatórios da STL
 random_device rd;
 std::mt19937 rng(rd());
-
+Types::GridBox* BattleField::GetRandomUnocupied() {
+    uniform_int_distribution<int> uni(0, grid->grids.size());
+    auto randomInteger = uni(rng);
+    if (grid->grids[randomInteger]->ocupied == false)
+        return grid->grids[randomInteger];
+    else
+        return GetRandomUnocupied();
+}
 BattleField::BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
 {    
     Initialization(lines, rows, playerClassId, numberOfEnemies);

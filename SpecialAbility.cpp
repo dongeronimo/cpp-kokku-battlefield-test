@@ -78,8 +78,20 @@ bool Curse::ConditionsAreMet() {
 }
 void Curse::Execute()
 {
+	//Quem é amigo e quem é inimigo varia de acordo com o time do character.
+	cout << "Player " << originator.PlayerIndex << " is cursing enemies and blessing friends." << endl;
+	vector<shared_ptr<Character>> enemies;
+	vector<shared_ptr<Character>> allies;
+	if (originator.GetTeam() == TeamA) {
+		enemies = originator.battlefield.EnemyTeam;
+		allies = originator.battlefield.PlayerTeam;
+	}
+	else {
+		enemies = originator.battlefield.PlayerTeam;
+		allies = originator.battlefield.EnemyTeam;
+	}
 	///Pega todos os inimigos no raio
-	for (auto enemy : originator.battlefield.EnemyTeam) {
+	for (auto enemy : enemies) {
 		auto distance = std::abs(originator.currentBox->Line() - enemy->currentBox->Line()) +
 			std::abs(originator.currentBox->Column() - enemy->currentBox->Column());
 		if (distance <= range) {
@@ -89,13 +101,13 @@ void Curse::Execute()
 		}
 	}
 	//Pega todos os aliados no raio
-	for (auto aFriend : originator.battlefield.EnemyTeam) {
-		auto distance = std::abs(originator.currentBox->Line() - aFriend->currentBox->Line()) +
-			std::abs(originator.currentBox->Column() - aFriend->currentBox->Column());
+	for (auto ally : allies) {
+		auto distance = std::abs(originator.currentBox->Line() - ally->currentBox->Line()) +
+			std::abs(originator.currentBox->Column() - ally->currentBox->Column());
 		if (distance <= range) {
 			//Aplica a cura nos amigos
-			shared_ptr<Heal> heal = make_shared<Heal>(originator, *aFriend, 20);
-			aFriend->AddEffect(heal);
+			shared_ptr<Heal> heal = make_shared<Heal>(originator, *ally, 20);
+			ally->AddEffect(heal);
 		}
 	}
 	turnsSinceLastCurse = 0;
@@ -103,8 +115,52 @@ void Curse::Execute()
 
 Reanimate::Reanimate(Character& originator):SpecialAbility(originator, REANIMATE_PROC_CHANCE){}
 bool Reanimate::ConditionsAreMet() {
+	vector<shared_ptr<Character>> allies;
+	if (originator.GetTeam() == TeamA)
+		allies = originator.battlefield.PlayerTeam;
+	else
+		allies = originator.battlefield.EnemyTeam;
+	for (auto ally : allies) {
+		if (ally->IsDead())
+			return true;
+	}
 	return false;
 }
 void Reanimate::Execute() {
-
+	
+	//Escolhe o defunto pra ressussitar
+	vector<shared_ptr<Character>> allies;
+	if (originator.GetTeam() == TeamA)
+		allies = originator.battlefield.PlayerTeam;
+	else
+		allies = originator.battlefield.EnemyTeam;
+	vector<shared_ptr<Character>> deadAllies;
+	std::copy_if(allies.begin(), allies.end(), std::back_inserter(deadAllies),
+		[](auto ally) {
+			return ally->IsDead();
+		});
+	std::shuffle(deadAllies.begin(), deadAllies.end(), randomNumberGenerator);
+	auto chosen = deadAllies[0];
+	//altera os estados dele para ele voltar pra partida
+	chosen->Health = 20;
+	chosen->IsDead(false);
+	//posiciona ele perto do cleric. Se não houver como posicionar perto do cleric posiciona random
+	Types::GridBox* box = nullptr;
+	box = originator.battlefield.grid->GetIfEmpty(originator.currentBox->Line()-1,
+		originator.currentBox->Column());
+	if(!box)
+		box = originator.battlefield.grid->GetIfEmpty(originator.currentBox->Line() + 1,
+			originator.currentBox->Column());
+	if (!box)
+		box = originator.battlefield.grid->GetIfEmpty(originator.currentBox->Line(),
+			originator.currentBox->Column() - 1);
+	if (!box)
+		box = originator.battlefield.grid->GetIfEmpty(originator.currentBox->Line(),
+			originator.currentBox->Column() + 1);
+	if (!box) {
+		box = originator.battlefield.GetRandomUnocupied();
+	}
+	chosen->currentBox = box;
+	box->ocupied = true;
+	cout << "Player " << originator.PlayerIndex << " ressurected "<<chosen->PlayerIndex << endl;
 }
