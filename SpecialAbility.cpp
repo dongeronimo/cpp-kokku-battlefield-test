@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "BattleField.h"
 #include <random>
+#include "StatusEffect.h"
 using namespace std;
 //Gerador de numeros aleatórios da STL
 random_device randomDevice;
@@ -60,4 +61,18 @@ void Teleport::Execute()
 	originator.currentBox->ocupied = false;
 	originator.currentBox = emptyGridbox;
 	originator.currentBox->ocupied = true;
+}
+
+
+SelfHeal::SelfHeal(Character& originator):SpecialAbility(originator, SELF_HEAL_PROC_CHANCE){
+}
+
+bool SelfHeal::ConditionsAreMet() {
+	return originator.HasEffect(Heal::TypeID);
+}
+
+void SelfHeal::Execute() {
+	shared_ptr<Heal> effect = make_shared<Heal>(originator, originator, 25);
+	cout << "Player " << originator.PlayerIndex << " is using self-heal" << endl;
+	originator.AddEffect(effect);
 }

@@ -1,15 +1,16 @@
-#include "Grid.h"
-#include "Character.h"
-#include "Types.h"
+#include <functional>
+#include <cmath>
+#include <queue>
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include "Grid.h"
+#include "Character.h"
+#include "Types.h"
 #include "Dikstra.h"
 #include "BattleField.h"
-#include <queue>
-#include <functional>
-#include <cmath>
 #include "SpecialAbility.h"
+#include "StatusEffect.h"
 using namespace std;
 
 Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team t) :
@@ -22,6 +23,7 @@ Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team
     case Types::Cleric:
         break;
     case Types::Paladin:
+        SpecialAbilities.push_back(make_shared <SelfHeal>(*this));
         break;
     case Types::Warrior:
         SpecialAbilities.push_back(make_shared<StrongAttack>(*this));
@@ -63,9 +65,25 @@ bool Character::RollSpecialAbilities() {
     }
     return false;
 }
+
+void Character::ApplyStatusEffects() {
+    if (IsDead())
+        return;
+    //copia os status q ainda estão ativos para uma lista 
+    vector<shared_ptr<StatusEffect>> activeEffects;
+    std::copy_if(StatusEffects.begin(), StatusEffects.end(), std::back_inserter(activeEffects),
+        [](auto effect) {return effect->IsFinished() == false; });
+    //aplica eles
+    for (auto effect : activeEffects) {
+        effect->Apply();
+    }
+    //atualiza a lista
+    StatusEffects = activeEffects;
+}
 void Character::StartTurn(Grid* grid) {
     typedef shared_ptr<Character> PCharacter;
     ClearTargetIfDead();
+    ApplyStatusEffects();
     if (RollSpecialAbilities())
         return; //A ação do turno foi uma special ability;
     
@@ -152,3 +170,15 @@ void Character::Attack(shared_ptr<Character> target)
     target->TakeDamage(damage);
 }
 
+void Character::AddEffect(shared_ptr<StatusEffect> effect) {
+    StatusEffects.push_back(effect);
+}
+
+bool Character::HasEffect(const int typeId) const
+{
+    for (auto effect : StatusEffects) {
+        if (effect->Type() == typeId)
+            return true;
+    }
+    return false;
+}

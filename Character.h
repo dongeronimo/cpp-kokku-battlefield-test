@@ -8,12 +8,14 @@
 using namespace std;
 class BattleField;
 class SpecialAbility;
+class StatusEffect;
 enum Team {TeamA, TeamB};
 class Character
 {
 private:
     bool isDead;
     const Team team;
+    vector<shared_ptr<StatusEffect>> StatusEffects;
     vector<shared_ptr<SpecialAbility>> SpecialAbilities;
     /// <summary>
     /// Abandona o alvo morto.
@@ -26,6 +28,8 @@ private:
     /// </summary>
     /// <returns></returns>
     bool RollSpecialAbilities();
+
+    void ApplyStatusEffects();
 public:
     Character(Types::CharacterClass charcaterClass, 
         BattleField& battlefield, 
@@ -67,6 +71,8 @@ public:
 
     void Attack(shared_ptr<Character> target);
 
+    void AddEffect(shared_ptr<StatusEffect> effect);
 
+    bool HasEffect(const int typeId) const;
 };
 
