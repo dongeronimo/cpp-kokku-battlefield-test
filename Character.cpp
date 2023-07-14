@@ -23,7 +23,7 @@ Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team
         break;
     case Types::Cleric:
         SpecialAbilities.push_back(make_shared<Reanimate>(*this));
-        SpecialAbilities.push_back(make_shared<Curse>(*this));
+        SpecialAbilities.push_back(make_shared<Curse>(*this, 4, 5));
         break;
     case Types::Paladin:
         SpecialAbilities.push_back(make_shared<Smite>(*this));
@@ -125,59 +125,38 @@ void Character::StartTurn(Grid* grid) {
     
     //se não tem alvo, busca
     ReevaluateTarget();
-    if (target == nullptr) {
-        //Só me interessa quem n tá morto e for do time inimigo.
-        vector<PCharacter> notDead;
-        if (team == TeamA) {
-            std::copy_if(battlefield.EnemyTeam.begin(), battlefield.EnemyTeam.end(), std::back_inserter(notDead),
-                [](auto opponent) {return !opponent->IsDead(); });
-        }
-        if (team == TeamB) {
-            std::copy_if(battlefield.PlayerTeam.begin(), battlefield.PlayerTeam.end(), std::back_inserter(notDead),
-                [](auto opponent) {return !opponent->IsDead(); });
-        }
-        //ordena por distancia
-        priority_queue<PCharacter, vector<PCharacter>, function<bool(PCharacter, PCharacter)>> myEnemiesOrderedByDistance(
-            [this](PCharacter a, PCharacter b) { 
-                int distanceA = std::abs(this->currentBox->Line() - a->currentBox->Line()) + std::abs(this->currentBox->Column() - a->currentBox->Column());
-                int distanceB = std::abs(this->currentBox->Line() - b->currentBox->Line()) + std::abs(this->currentBox->Column() - b->currentBox->Column());
-                return distanceA > distanceB; // priority queue retorna o maior elemento, isso faz o maior ser o menor?
-            }
-        );
-        for (auto alive : notDead) {
-            myEnemiesOrderedByDistance.push(alive);
-        }
-        if (myEnemiesOrderedByDistance.size() > 0) {
-            target = myEnemiesOrderedByDistance.top();
-        }
-    }
+    //if (target == nullptr) {
+    //    //Só me interessa quem n tá morto e for do time inimigo.
+    //    vector<PCharacter> notDead;
+    //    if (team == TeamA) {
+    //        std::copy_if(battlefield.EnemyTeam.begin(), battlefield.EnemyTeam.end(), std::back_inserter(notDead),
+    //            [](auto opponent) {return !opponent->IsDead(); });
+    //    }
+    //    if (team == TeamB) {
+    //        std::copy_if(battlefield.PlayerTeam.begin(), battlefield.PlayerTeam.end(), std::back_inserter(notDead),
+    //            [](auto opponent) {return !opponent->IsDead(); });
+    //    }
+    //    //ordena por distancia
+    //    priority_queue<PCharacter, vector<PCharacter>, function<bool(PCharacter, PCharacter)>> myEnemiesOrderedByDistance(
+    //        [this](PCharacter a, PCharacter b) { 
+    //            int distanceA = std::abs(this->currentBox->Line() - a->currentBox->Line()) + std::abs(this->currentBox->Column() - a->currentBox->Column());
+    //            int distanceB = std::abs(this->currentBox->Line() - b->currentBox->Line()) + std::abs(this->currentBox->Column() - b->currentBox->Column());
+    //            return distanceA > distanceB; // priority queue retorna o maior elemento, isso faz o maior ser o menor?
+    //        }
+    //    );
+    //    for (auto alive : notDead) {
+    //        myEnemiesOrderedByDistance.push(alive);
+    //    }
+    //    if (myEnemiesOrderedByDistance.size() > 0) {
+    //        target = myEnemiesOrderedByDistance.top();
+    //    }
+    //}
     if (CheckCloseTargets(grid)) {
         Attack(target);
     }
     else if(target!=nullptr) { //É possivel que aqui tenha target null se todos do time inimigo estiverem mortos.
-        // if there is no target close enough, calculates in which direction 
-        // this character should move to be closer to a possible target
         auto directionWalked = MoveToTarget();
-        //vector<Pair> path = dijkstraShortestPath(grid,
-        //    currentBox->Line(), currentBox->Column(),
-        //    target->currentBox->Line(), target->currentBox->Column());
-        //if (path.size() >= 1) {
-        //    Pair nextPosition = path[0];
-        //    string directionWalked = "";
-        //    if (nextPosition.first == currentBox->Line() - 1)
-        //        directionWalked = "down";
-        //    if (nextPosition.first == currentBox->Line() + 1)
-        //        directionWalked = "up";
-        //    if (nextPosition.second == currentBox->Column() - 1)
-        //        directionWalked = "left";
-        //    if (nextPosition.second == currentBox->Column() + 1)
-        //        directionWalked = "right";
-        //    //troca as box
-        //    currentBox->ocupied = false;
-        //    currentBox = grid->grids[grid->CalculateIndex(nextPosition.first, nextPosition.second)];
-        //    currentBox->ocupied = true;
-            cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
-        //}
+        cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
     }
 }
 const std::string Character::MoveToTarget() {

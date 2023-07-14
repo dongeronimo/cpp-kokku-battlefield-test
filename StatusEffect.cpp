@@ -35,3 +35,16 @@ void Stun::Apply() {
 		cout << "Player " << subject.PlayerIndex << " is stunned" << endl;
 	}
 }
+
+const int PulsaDinura::TypeID = 3;
+
+PulsaDinura::PulsaDinura(Character & actor, Character & subject)
+	:StatusEffect(actor, subject, CURSE_DURATION, Stun::TypeID) {}
+
+void PulsaDinura::Apply() {
+	if (!IsFinished()) {
+		Time++;
+		cout << "Player " << subject.PlayerIndex << " is burning from curse" << endl;
+		subject.TakeDamage(CURSE_DAMAGE);
+	}
+}

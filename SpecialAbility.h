@@ -130,8 +130,13 @@ public:
 /// todos os aliados proximos do clerigo ganham um efeito de cura ao longo do tempo.
 /// </summary>
 class Curse : public SpecialAbility {
+private:
+	int turnsSinceLastCurse;
+	int turnsToRechargeCurse;
+	int range;
 public:
-	Curse(Character& originator);
+	Curse(Character& originator, 
+		const int turnsToRechargeCurse, const int range);
 	bool ConditionsAreMet() override;
 	void Execute()override;
 };
