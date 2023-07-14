@@ -93,20 +93,29 @@ GameResult BattleField::StartTurn() {
         }
         else
         {
-            //É o player que morreu, game over.
-            if (character->PlayerIndex == PlayerCharacter->PlayerIndex) 
-            {
-                return Defeat;
-            }
-            else//é o inimigo que morreu.
-            {
-                return Victory;
+            //tá morto, libera a casinha.
+            if (character->currentBox) {
+                character->currentBox->ocupied = false;
+                character->currentBox = nullptr;
             }
         }
     }
-    grid->drawBattlefield(PlayerCharacter, EnemyCharacter);
+    //a partida acaba se um dos times estiver todo morto
+    vector<shared_ptr<Character>> deadPlayers, deadEnemies;
+    std::copy_if(PlayerTeam.begin(), PlayerTeam.end(), std::back_inserter(deadPlayers),
+        [](auto character) {return character->IsDead(); });
+    std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
+        [](auto character) {return character->IsDead(); });
+    if (deadPlayers.size() == PlayerTeam.size())
+        return Defeat;
+    if (deadEnemies.size() == EnemyTeam.size())
+        return Victory;
+
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
     currentTurn++;
     HandleTurn();
+    //Devido à recursão não retorna nada aqui pq o retorno da pilha de recursão é quando 
+    //todo mundo de um dos times morreu
 }
 
 void BattleField::HandleTurn()
@@ -144,14 +153,14 @@ void BattleField::AlocatePlayers()
     uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
     uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
     for (auto character : PlayerTeam) {
-        AlocatePlayerCharacter(lineDistribution, colDistribution);
+        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
     }
     for (auto character : EnemyTeam) {
-        AlocateEnemyCharacter(lineDistribution, colDistribution);
+        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
     }
     
 }
-
+//TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
 void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution, 
     uniform_int_distribution<int>& colDistribution, 
     shared_ptr<Character> character)
@@ -167,7 +176,7 @@ void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDist
     }
     //está ocupado, recursão
     else {
-        AlocatePlayerCharacter(lineDistribution, colDistribution);
+        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
     }
 }
 
@@ -179,11 +188,10 @@ void BattleField::AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistr
     int randomCol = colDistribution(rng);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
-        EnemyCurrentLocation = RandomLocation;
-        EnemyCharacter->currentBox = RandomLocation;
+        character->currentBox = RandomLocation;
         RandomLocation->ocupied = true;
     }
     else {
-        AlocateEnemyCharacter(lineDistribution, colDistribution);
+        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
     }
 }
