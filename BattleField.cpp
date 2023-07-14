@@ -1,16 +1,16 @@
-#include "Grid.h"
-#include "BattleField.h"
-#include "Types.h"
-#include "Character.h"
 #include <iostream>
-#include "BattleField.h"
 #include <list>
 #include <string>
 #include <random>
 #include <conio.h>
+#include <algorithm>
 #include "BattlefieldSetup.h"
 #include "Context.h"
-#include <algorithm>
+#include "Grid.h"
+#include "BattleField.h"
+#include "Types.h"
+#include "Character.h"
+
 using namespace std;
 
 //Gerador de numeros aleatórios da STL

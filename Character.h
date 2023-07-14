@@ -7,6 +7,7 @@
 
 using namespace std;
 class BattleField;
+class SpecialAbility;
 enum Team {TeamA, TeamB};
 class Character
 {
@@ -15,7 +16,7 @@ private:
     const BattleField* battlefield;
     const Team team;
 public:
-
+    vector<SpecialAbility> SpecialAbilities;
     Character(Types::CharacterClass charcaterClass, BattleField* battlefield, Team t);
     ~Character();
     /// <summary>

@@ -146,6 +146,7 @@
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Dikstra.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="SpecialAbility.cpp" />
     <ClCompile Include="stringutils.cpp" />
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Dikstra.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="SpecialAbility.h" />
     <ClInclude Include="stringutils.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

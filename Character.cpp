@@ -10,6 +10,7 @@
 #include <queue>
 #include <functional>
 #include <cmath>
+#include "SpecialAbility.h"
 using namespace std;
 Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t):
     isDead(false), battlefield(bf), team(t)
