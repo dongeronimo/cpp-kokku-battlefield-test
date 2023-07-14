@@ -3,16 +3,13 @@
 #include "BattleField.h"
 #include <random>
 #include "StatusEffect.h"
+#include "mathUtils.h"
 using namespace std;
 //Gerador de numeros aleatórios da STL
 random_device randomDevice;
 std::mt19937 randomNumberGenerator(randomDevice());
 std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
-int ManhattanDistance(int a_i, int a_j, int b_i, int b_j) {
-	const int distanceToTarget = std::abs(a_i - b_i) +
-		std::abs(a_j - b_j);
-	return distanceToTarget;
-}
+
 SpecialAbility::SpecialAbility(Character& originator,
 	const float proc) :proc(proc), originator(originator) {
 
@@ -24,35 +21,6 @@ bool SpecialAbility::RollDice()
 	return dice <= proc;
 }
 
-StrongAttack::StrongAttack(Character& originator)
-	:SpecialAbility(originator, STRONG_ATTACK_PROC_CHANCE)
-{
-}
-
-bool StrongAttack::ConditionsAreMet() {
-	return originator.IsDead() == false && originator.target != nullptr &&
-		ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
-			originator.target->currentBox->Line(), originator.target->currentBox->Column()) <= 1;
-}
-void StrongAttack::Execute()
-{
-	cout << "Player " << originator.PlayerIndex << " will do a strong attack!" << endl;
-	auto oldMultiplier = originator.DamageMultiplier;
-	originator.DamageMultiplier = 2.0f;
-	originator.Attack(originator.target);
-	originator.DamageMultiplier = oldMultiplier;
-}
-
-Charge::Charge(Character& originator) :SpecialAbility(originator, CHARGE_PROC_CHANCE) {}
-bool Charge::ConditionsAreMet() {
-	return originator.target != nullptr;
-}
-void Charge::Execute() {
-	cout << "Player " << originator.PlayerIndex << " is charging against " << originator.target->PlayerIndex<<endl;
-	originator.MoveToTarget();
-	originator.MoveToTarget();
-	originator.MoveToTarget();
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)

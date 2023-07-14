@@ -143,12 +143,14 @@
     <ClCompile Include="BattleField.cpp" />
     <ClCompile Include="BattlefieldSetup.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Charge.cpp" />
     <ClCompile Include="Context.cpp" />
     <ClCompile Include="Dikstra.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="SpecialAbility.cpp" />
     <ClCompile Include="StatusEffect.cpp" />
     <ClCompile Include="stringutils.cpp" />
+    <ClCompile Include="StrongAttack.cpp" />
     <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +161,7 @@
     <ClInclude Include="Context.h" />
     <ClInclude Include="Dikstra.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="mathUtils.h" />
     <ClInclude Include="SpecialAbility.h" />
     <ClInclude Include="StatusEffect.h" />
     <ClInclude Include="stringutils.h" />
