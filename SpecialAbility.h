@@ -9,6 +9,8 @@ using namespace std;
 #define TELEPORT_PROC_CHANCE 0.33f
 #define TELEPORT_PROC_DISTANCE 3
 #define SELF_HEAL_PROC_CHANCE 0.33f
+#define BOW_ATTACK_PROC_CHANCE 0.75f
+#define BOW_ATTACK_PROC_MAX_DISTANCE 5 
 class SpecialAbility
 {
 private:
@@ -41,4 +43,11 @@ public:
 	SelfHeal(Character& originator);
 	bool ConditionsAreMet() override;
 	void Execute() override;
+};
+
+class BowAttack : public SpecialAbility {
+public:
+	BowAttack(Character& originator);
+	bool ConditionsAreMet() override;
+	void Execute()override;
 };

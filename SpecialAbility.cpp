@@ -8,7 +8,11 @@ using namespace std;
 random_device randomDevice;
 std::mt19937 randomNumberGenerator(randomDevice());
 std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
-
+int ManhattanDistance(int a_i, int a_j, int b_i, int b_j) {
+	const int distanceToTarget = std::abs(a_i - b_i) +
+		std::abs(a_j - b_j);
+	return distanceToTarget;
+}
 SpecialAbility::SpecialAbility(Character& originator,
 	const float proc) :proc(proc), originator(originator) {
 
@@ -46,8 +50,8 @@ bool Teleport::ConditionsAreMet()
 	if (originator.target == nullptr)
 		return false;
 	else {
-		const int distanceToTarget = std::abs(originator.target->currentBox->Line() - originator.currentBox->Line()) +
-			std::abs(originator.target->currentBox->Column() - originator.currentBox->Column());
+		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
+			originator.target->currentBox->Line(), originator.target->currentBox->Column());
 		return distanceToTarget <= TELEPORT_PROC_DISTANCE;
 	}
 }
@@ -75,4 +79,22 @@ void SelfHeal::Execute() {
 	shared_ptr<Heal> effect = make_shared<Heal>(originator, originator, 25);
 	cout << "Player " << originator.PlayerIndex << " is using self-heal" << endl;
 	originator.AddEffect(effect);
+}
+
+BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
+bool BowAttack::ConditionsAreMet() {
+	if (originator.target == nullptr)
+		return false;
+	else {
+		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
+			originator.target->currentBox->Line(), originator.target->currentBox->Column());
+		return distanceToTarget <= BOW_ATTACK_PROC_MAX_DISTANCE;
+	}
+}
+void BowAttack::Execute() {
+	cout << "Player " << originator.PlayerIndex << " is firing arrows at " << originator.target->PlayerIndex << endl;
+	auto oldMultiplier = originator.DamageMultiplier;
+	originator.DamageMultiplier = 0.5f;
+	originator.Attack(originator.target);
+	originator.DamageMultiplier = 1.0f;
 }

@@ -19,6 +19,7 @@ Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team
     switch (characterClass) {
     case Types::Archer:
         SpecialAbilities.push_back(make_shared<Teleport>(*this));
+        SpecialAbilities.push_back(make_shared<BowAttack>(*this));
         break;
     case Types::Cleric:
         break;
