@@ -10,6 +10,7 @@
 #include <conio.h>
 #include "BattlefieldSetup.h"
 #include "Context.h"
+#include <algorithm>
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
@@ -84,6 +85,7 @@ void BattleField::StartGame()
 }
 
 GameResult BattleField::StartTurn() {
+    std::shuffle(AllPlayers.begin(), AllPlayers.end(), rng);
     auto it = AllPlayers.begin();
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
         auto character = (*it);
