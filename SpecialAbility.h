@@ -7,6 +7,7 @@ class Character;
 using namespace std;
 #define STRONG_ATTACK_PROC_CHANCE 0.33f
 #define TELEPORT_PROC_CHANCE 0.33f
+#define TELEPORT_PROC_DISTANCE 3
 class SpecialAbility
 {
 private:

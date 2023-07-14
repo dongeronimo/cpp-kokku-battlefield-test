@@ -42,9 +42,22 @@ Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_P
 
 bool Teleport::ConditionsAreMet()
 {
-	return false;
+	if (originator.target == nullptr)
+		return false;
+	else {
+		const int distanceToTarget = std::abs(originator.target->currentBox->Line() - originator.currentBox->Line()) +
+			std::abs(originator.target->currentBox->Column() - originator.currentBox->Column());
+		return distanceToTarget <= TELEPORT_PROC_DISTANCE;
+	}
 }
 
 void Teleport::Execute()
 {
+	cout << "Player " << originator.PlayerIndex << " will teleport away!" << endl;
+	//procura um gridbox pra entrar
+	auto emptyGridbox = originator.battlefield.GetEmptyGridbox();
+	//troca a localização do originator
+	originator.currentBox->ocupied = false;
+	originator.currentBox = emptyGridbox;
+	originator.currentBox->ocupied = true;
 }

@@ -27,10 +27,7 @@ void BattleField::Initialization(const int lines, const int rows, const vector<C
     AllPlayers.clear();
     PlayerTeam.clear();
     EnemyTeam.clear();
-    //PlayerCharacter.reset();
-    //EnemyCharacter.reset();
-    //PlayerCurrentLocation = nullptr;
-    //EnemyCurrentLocation = nullptr;
+
     grid = new Grid(lines, rows);
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
@@ -171,6 +168,21 @@ void BattleField::AlocatePlayers()
     }
     
 }
+
+Types::GridBox* BattleField::GetEmptyGridbox() {
+    uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
+    uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
+    int randomLine = lineDistribution(rng);
+    int randomCol = colDistribution(rng);
+    Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
+    if (!RandomLocation->ocupied) {
+        return RandomLocation;
+    }
+    else {
+        return GetEmptyGridbox();
+    }
+}
+
 //TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
 void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution, 
     uniform_int_distribution<int>& colDistribution, 

@@ -15,6 +15,8 @@ public:
 
 	void Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
 
+
+	Types::GridBox* GetEmptyGridbox();
 	Grid* grid;
 	//Types::GridBox* PlayerCurrentLocation;
 	//Types::GridBox* EnemyCurrentLocation;
