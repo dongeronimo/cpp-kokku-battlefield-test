@@ -8,8 +8,8 @@
 #include "Dikstra.h"
 #include "BattleField.h"
 using namespace std;
-Character::Character(Types::CharacterClass characterClass, BattleField* bf):
-    isDead(false), battlefield(bf)
+Character::Character(Types::CharacterClass characterClass, BattleField* bf, Team t):
+    isDead(false), battlefield(bf), team(t)
 {
 
 }
@@ -32,16 +32,7 @@ bool Character::TakeDamage(float amount)
 void Character::Die() 
 {
     isDead = true;
-	// TODO >> kill
-	//TODO >> end the game?
 }
-
-void Character::WalkTo(bool CanWalk) 
-{
-
-}
-
-
 
 void Character::StartTurn(Grid* battlefield) {
     //abandona alvo morto.
@@ -49,7 +40,7 @@ void Character::StartTurn(Grid* battlefield) {
         target = nullptr;
     }
     if (target == nullptr) {
-        //battlefield->
+        
     }
     if (CheckCloseTargets(battlefield)) {
         Attack(target);
