@@ -8,7 +8,9 @@ bool Charge::ConditionsAreMet() {
 }
 void Charge::Execute() {
 	cout << "Player " << originator.PlayerIndex << " is charging against " << originator.target->PlayerIndex << endl;
-	originator.MoveToTarget();
-	originator.MoveToTarget();
-	originator.MoveToTarget();
+	auto result = originator.MoveToTarget();
+	if(result.size() != 0)
+		result = originator.MoveToTarget();
+	if(result.size() != 0)
+		result = originator.MoveToTarget();
 }

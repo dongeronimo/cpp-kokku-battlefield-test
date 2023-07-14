@@ -83,13 +83,34 @@ void Curse::Execute()
 	vector<shared_ptr<Character>> enemies;
 	vector<shared_ptr<Character>> allies;
 	if (originator.GetTeam() == TeamA) {
-		enemies = originator.battlefield.EnemyTeam;
-		allies = originator.battlefield.PlayerTeam;
+		std::copy_if(originator.battlefield.EnemyTeam.begin(),
+			originator.battlefield.EnemyTeam.end(),
+			std::back_inserter(enemies),
+			[](auto e) {
+				return !e->IsDead();
+			});
+		std::copy_if(originator.battlefield.PlayerTeam.begin(),
+			originator.battlefield.PlayerTeam.end(),
+			std::back_inserter(allies),
+			[](auto a) {
+				return !a->IsDead();
+			});
 	}
 	else {
-		enemies = originator.battlefield.PlayerTeam;
-		allies = originator.battlefield.EnemyTeam;
+		std::copy_if(originator.battlefield.EnemyTeam.begin(),
+			originator.battlefield.EnemyTeam.end(),
+			std::back_inserter(allies),
+			[](auto a) {
+				return !a->IsDead();
+			});
+		std::copy_if(originator.battlefield.PlayerTeam.begin(),
+			originator.battlefield.PlayerTeam.end(),
+			std::back_inserter(enemies),
+			[](auto e) {
+				return !e->IsDead();
+			});
 	}
+	
 	///Pega todos os inimigos no raio
 	for (auto enemy : enemies) {
 		auto distance = std::abs(originator.currentBox->Line() - enemy->currentBox->Line()) +

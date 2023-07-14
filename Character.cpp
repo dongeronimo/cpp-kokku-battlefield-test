@@ -181,6 +181,9 @@ const std::string Character::MoveToTarget() {
         currentBox->ocupied = true;
         return directionWalked;
     }
+    else {
+        return "";
+    }
 }
 bool Character::CheckCloseTargets(Grid* grid)
 {
