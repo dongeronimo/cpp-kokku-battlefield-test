@@ -47,7 +47,7 @@ void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
         auto PlayerCharacter = std::make_shared<Character>(characterClass, this);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
-        PlayerCharacter->PlayerIndex = 0;
+        PlayerCharacter->PlayerIndex = PlayerTeam.size();
         PlayerCharacter->DamageMultiplier = 1.0f;
         PlayerTeam.push_back(PlayerCharacter);
     }
@@ -62,7 +62,7 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, this);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
-        EnemyCharacter->PlayerIndex = 1;
+        EnemyCharacter->PlayerIndex = EnemyTeam.size() + PlayerTeam.size();
         EnemyCharacter->DamageMultiplier = 1.0f;
         EnemyTeam.push_back(EnemyCharacter);
     }
