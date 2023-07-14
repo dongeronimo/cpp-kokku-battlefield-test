@@ -23,48 +23,7 @@ bool SpecialAbility::RollDice()
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)
-{
-}
 
-bool Teleport::ConditionsAreMet()
-{
-	if (originator.target == nullptr)
-		return false;
-	else {
-		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
-			originator.target->currentBox->Line(), originator.target->currentBox->Column());
-		return distanceToTarget <= TELEPORT_PROC_DISTANCE;
-	}
-}
-
-void Teleport::Execute()
-{
-	cout << "Player " << originator.PlayerIndex << " will teleport away!"<< endl;
-	//procura um gridbox pra entrar
-	auto emptyGridbox = originator.battlefield.GetEmptyGridbox();
-	//troca a localização do originator
-	originator.currentBox->ocupied = false;
-	originator.currentBox = emptyGridbox;
-	originator.currentBox->ocupied = true;
-}
-BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
-bool BowAttack::ConditionsAreMet() {
-	if (originator.target == nullptr)
-		return false;
-	else {
-		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
-			originator.target->currentBox->Line(), originator.target->currentBox->Column());
-		return distanceToTarget <= BOW_ATTACK_PROC_MAX_DISTANCE;
-	}
-}
-void BowAttack::Execute() {
-	cout << "Player " << originator.PlayerIndex << " is firing arrows at " << originator.target->PlayerIndex << endl;
-	auto oldMultiplier = originator.DamageMultiplier;
-	originator.DamageMultiplier = 0.5f;
-	originator.Attack(originator.target);
-	originator.DamageMultiplier = 1.0f;
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 SelfHeal::SelfHeal(Character& originator):SpecialAbility(originator, SELF_HEAL_PROC_CHANCE){
 }
