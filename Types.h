@@ -48,7 +48,11 @@ public:
         //do jogo.
         std::vector<CharacterClass> PlayerTeamClassIds;
     };
-
+    struct ClassBaseAttributes {
+        float Health;
+        float BaseDamage;
+        float DamageMultiplier;
+    };
 
 };
 

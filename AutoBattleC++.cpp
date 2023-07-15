@@ -15,14 +15,15 @@ int main()
     //pra sair da pilha de recursão e sair de maneira correta do jogo. Se eu simplesmente usasse exit()
     //as variáveis de armazanamento automático n são limpas.
     try {
-        Types::GameSetupParameters params = _UI->AskForParameters();
+        Types::GameSetupParameters params = _UI.AskForParameters();
         //Não havia necessidade de alocá-lo dinamicamente;
         BattleField battlefield(params.GridLines, params.GridRows, params.PlayerTeamClassIds, 
             params.NumberOfCharactersInEnemyTeam);
         battlefield.StartGame();
     }
     catch (QuitGameSignal& ex) {
-        _UI->Goodbye();
+        _UI.Goodbye();
+        CONTEXT.Release();
     }
     return 0;
 }

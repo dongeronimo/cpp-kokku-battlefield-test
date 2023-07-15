@@ -14,10 +14,14 @@ public:
 
 class Context {
 private:
-	static std::shared_ptr<Context> instance;
+	static Context* instance;
+	Context() {}
+	Context(const Context&) {}
+	~Context() {}
 public:
-	static std::shared_ptr<Context> Instance();
+	static Context& Instance();
 	void Quit() { throw QuitGameSignal(); }
+	void Release() { delete instance; }
 	std::mt19937& RNG();
 	const int RandomInteger(const int a, const int b);
 };

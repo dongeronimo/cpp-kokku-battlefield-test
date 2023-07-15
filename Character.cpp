@@ -53,7 +53,7 @@ bool Character::TakeDamage(float amount)
 
 void Character::Die() 
 {
-    _UI->PlayerIsDead(PlayerIndex);
+    _UI.PlayerIsDead(PlayerIndex);
     isDead = true;
 }
 void Character::ClearTargetIfDead()
@@ -129,7 +129,7 @@ void Character::StartTurn(Grid* grid) {
     }
     else if(target!=nullptr) { //É possivel que aqui tenha target null se todos do time inimigo estiverem mortos.
         auto directionWalked = MoveToTarget();
-        _UI->PlayerWalkTo(PlayerIndex, directionWalked);
+        _UI.PlayerWalkTo(PlayerIndex, directionWalked);
     }
 }
 const std::string Character::MoveToTarget() {
@@ -180,7 +180,7 @@ bool Character::CheckCloseTargets(Grid* grid)
 void Character::Attack(shared_ptr<Character> target)
 {
     auto damage = this->BaseDamage * this->DamageMultiplier;
-    _UI->PlayerBaseAttack(PlayerIndex, target->PlayerIndex, damage);
+    _UI.PlayerBaseAttack(PlayerIndex, target->PlayerIndex, damage);
     target->TakeDamage(damage);
 }
 

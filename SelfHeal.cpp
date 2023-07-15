@@ -11,6 +11,6 @@ bool SelfHeal::ConditionsAreMet() {
 
 void SelfHeal::Execute() {
 	shared_ptr<Heal> effect = make_shared<Heal>(originator, originator, 25);
-	_UI->SelfHeal(originator.PlayerIndex);
+	_UI.SelfHeal(originator.PlayerIndex);
 	originator.AddEffect(effect);
 }

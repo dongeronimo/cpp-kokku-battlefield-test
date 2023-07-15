@@ -10,7 +10,9 @@ class Character;
 class UI
 {
 private:
-	static shared_ptr<UI> instance;
+	static UI* instance;
+	UI() {}
+	UI(const UI&) {}
 	int AskForNumberOfCharactersInPlayerTeam();
 	vector<Types::CharacterClass> AskForPlayerTeamClasses(int teamSize);
 	Types::CharacterClass AskForClass();
@@ -20,7 +22,7 @@ private:
 	int ReadPositiveInt(const std::string& text);
 	const int CalculateIndex(int i, int j, int cols)const { return cols * i + j; }
 public:
-	static shared_ptr<UI> Instance();
+	static UI& Instance();
 	Types::GameSetupParameters AskForParameters();
 	bool AskIfWantToPlayAgain()const;
 	void Goodbye()const;

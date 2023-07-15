@@ -9,7 +9,7 @@
 #include "Character.h"
 #define KEY_ESC 27
 using namespace std;
-shared_ptr<UI> UI::instance = make_shared<UI>();
+UI* UI::instance = nullptr;
 
 template<typename ReturnValue>
 ReturnValue PromptLoop(function<ReturnValue(bool&)> Prompt) {
@@ -139,8 +139,11 @@ int UI::ReadPositiveInt(const std::string& text)
 
 }
 
-shared_ptr<UI> UI::Instance() {
-	return instance;
+UI& UI::Instance() {
+	if (instance == nullptr) {
+		instance = new UI();
+	}
+	return *instance;
 }
 
 void UI::PlayerClassChoice(const Types::CharacterClass& classIndex) const
@@ -188,7 +191,7 @@ void UI::NextTurnOrQuitPrompt()
 	cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
 	auto k = _getch();
 	if (k == KEY_ESC) {
-		CONTEXT->Quit();
+		CONTEXT.Quit();
 	}
 }
 

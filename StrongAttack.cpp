@@ -13,7 +13,7 @@ bool StrongAttack::ConditionsAreMet() {
 }
 void StrongAttack::Execute()
 {
-	_UI->StrongAttack(originator.PlayerIndex);
+	_UI.StrongAttack(originator.PlayerIndex);
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 2.0f;
 	originator.Attack(originator.target);

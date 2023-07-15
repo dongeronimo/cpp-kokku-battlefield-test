@@ -9,7 +9,7 @@ bool Charge::ConditionsAreMet() {
 	return originator.target != nullptr;
 }
 void Charge::Execute() {
-	_UI->Charge(originator.PlayerIndex, originator.target->PlayerIndex);
+	_UI.Charge(originator.PlayerIndex, originator.target->PlayerIndex);
 	auto result = originator.MoveToTarget();
 	if (result.size() != 0) {
 		originator.battlefield.DrawBattlefield();

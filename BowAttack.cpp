@@ -13,7 +13,7 @@ bool BowAttack::ConditionsAreMet() {
 	}
 }
 void BowAttack::Execute() {
-	_UI->BowAttack(originator.PlayerIndex, originator.target->PlayerIndex);
+	_UI.BowAttack(originator.PlayerIndex, originator.target->PlayerIndex);
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 0.5f;
 	originator.Attack(originator.target);

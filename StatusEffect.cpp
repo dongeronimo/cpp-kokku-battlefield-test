@@ -21,7 +21,7 @@ void Heal::Apply() {
 	if (!IsFinished()) {
 		Time++;
 		subject.Health += Amount;
-		_UI->HealApply(subject.PlayerIndex, Amount);
+		_UI.HealApply(subject.PlayerIndex, Amount);
 	}
 }
 
@@ -32,7 +32,7 @@ Stun::Stun(Character& actor, Character& subject)
 void Stun::Apply() {
 	if (!IsFinished()) {
 		Time++;
-		_UI->StunApply(subject.PlayerIndex);
+		_UI.StunApply(subject.PlayerIndex);
 	}
 }
 
@@ -44,7 +44,7 @@ PulsaDinura::PulsaDinura(Character & actor, Character & subject)
 void PulsaDinura::Apply() {
 	if (!IsFinished()) {
 		Time++;
-		_UI->PulsaDinuraApply(subject.PlayerIndex);
+		_UI.PulsaDinuraApply(subject.PlayerIndex);
 		subject.TakeDamage(CURSE_DAMAGE);
 	}
 }

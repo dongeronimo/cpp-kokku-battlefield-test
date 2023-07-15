@@ -24,7 +24,7 @@ bool Curse::ConditionsAreMet() {
 void Curse::Execute()
 {
 	//Quem é amigo e quem é inimigo varia de acordo com o time do character.
-	_UI->Curse(originator.PlayerIndex);
+	_UI.Curse(originator.PlayerIndex);
 	vector<shared_ptr<Character>> enemies;
 	vector<shared_ptr<Character>> allies;
 	if (originator.GetTeam() == TeamA) {

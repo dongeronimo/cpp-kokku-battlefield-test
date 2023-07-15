@@ -4,10 +4,14 @@ using namespace std;
 //Gerador de numeros aleatórios da STL
 random_device rd;
 std::mt19937 rng(rd());
+Context* Context::instance = nullptr;
 
-shared_ptr<Context> Context::instance = make_shared<Context>();
-shared_ptr<Context> Context::Instance() {
-	return instance;
+Context& Context::Instance() {
+	if (instance == nullptr) {
+		instance = new Context();
+		
+	}
+	return *instance;
 }
 
 std::mt19937& Context::RNG()

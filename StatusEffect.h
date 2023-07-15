@@ -28,7 +28,7 @@ public:
 class Heal:public StatusEffect
 {
 private:
-	const int Amount;
+	const float Amount;
 public:
 	static const int TypeID;
 	Heal(Character& actor, Character& subject, int amount);

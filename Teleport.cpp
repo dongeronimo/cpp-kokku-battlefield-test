@@ -19,7 +19,7 @@ bool Teleport::ConditionsAreMet()
 
 void Teleport::Execute()
 {
-	_UI->Teleport(originator.PlayerIndex);
+	_UI.Teleport(originator.PlayerIndex);
 	originator.battlefield.DrawBattlefield();
 	
 	//procura um gridbox pra entrar

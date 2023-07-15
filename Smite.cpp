@@ -9,7 +9,7 @@ bool Smite::ConditionsAreMet() {
 }
 void Smite::Execute() {
 	//1) empurra o target para trás se for possivel.
-	_UI->Smite(originator.PlayerIndex, originator.target->PlayerIndex);
+	_UI.Smite(originator.PlayerIndex, originator.target->PlayerIndex);
 
 	originator.battlefield.DrawBattlefield();
 	int dI = originator.currentBox->Line() - originator.target->currentBox->Line();
