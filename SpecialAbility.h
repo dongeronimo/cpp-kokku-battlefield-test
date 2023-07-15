@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-
+#include "mathUtils.h"
 class Battlefield;
 class Character;
 

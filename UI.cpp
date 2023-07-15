@@ -219,6 +219,36 @@ void UI::PlayerWalkTo(const int& playerId, const string& direction) const
 	cout << "Player " << playerId << " walked " << direction << endl;
 }
 
+void UI::PlayerBaseAttack(const int& originator, const int& subject, const float& damage)
+{
+	cout << "Player " << originator << " did " << damage << " to Player " << subject << endl;
+}
+
+void UI::Charge(const int& originatorIndex, const int& targetIndex) const
+{
+	cout << "Player " << originatorIndex << " is charging against " << targetIndex << endl;
+}
+
+void UI::SelfHeal(const int& originatorIndex) const
+{
+	cout << "Player " << originatorIndex << " is using self-heal" << endl;
+}
+
+void UI::Smite(const int& originator, const int& target) const
+{
+	cout << "Player " << originator << " is smiting " << target << endl;
+}
+
+void UI::Curse(const int& originator) const
+{
+	cout << "Player " << originator << " is cursing enemies and blessing friends." << endl;
+}
+
+void UI::Reanimate(const int& originator, const int& chosen) const
+{
+	cout << "Player " << originator << " ressurected " << chosen << endl;
+}
+
 Types::GameSetupParameters UI::AskForParameters()
 {
 	Types::GameSetupParameters response;

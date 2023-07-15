@@ -145,8 +145,12 @@
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Charge.cpp" />
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="Curse.cpp" />
     <ClCompile Include="Dikstra.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Reanimate.cpp" />
+    <ClCompile Include="SelfHeal.cpp" />
+    <ClCompile Include="Smite.cpp" />
     <ClCompile Include="SpecialAbility.cpp" />
     <ClCompile Include="StatusEffect.cpp" />
     <ClCompile Include="stringutils.cpp" />

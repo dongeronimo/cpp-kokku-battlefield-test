@@ -3,7 +3,6 @@
 #include "Types.h"
 #include <list>
 #include "Constants.h"
-#include <iostream>
 #include "Grid.h"
 
 using namespace std;

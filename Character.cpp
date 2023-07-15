@@ -3,7 +3,6 @@
 #include <queue>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"

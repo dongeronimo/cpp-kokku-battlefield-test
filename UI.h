@@ -31,5 +31,10 @@ public:
 	void PlayerIsDead(const int& playerId)const;
 	void PlayerWalkTo(const int& playerId, const string& direction)const;
 	void PlayerBaseAttack(const int& originator, const int& subject, const float& damage);
+	void Charge(const int& originatorIndex, const int& targetIndex) const;
+	void SelfHeal(const int& originatorIndex) const;
+	void Smite(const int& originator, const int& target)const;
+	void Curse(const int& originator)const;
+	void Reanimate(const int& originator, const int& chosen)const;
 };
 

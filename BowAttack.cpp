@@ -1,7 +1,6 @@
 #include "SpecialAbility.h"
 #include "mathUtils.h"
 #include "Character.h"
-#include <iostream>
 #include "UI.h"
 BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
 bool BowAttack::ConditionsAreMet() {
