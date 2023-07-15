@@ -4,13 +4,12 @@
 #include <random>
 #include <conio.h>
 #include <algorithm>
-#include "BattlefieldSetup.h"
 #include "Context.h"
 #include "Grid.h"
 #include "BattleField.h"
 #include "Types.h"
 #include "Character.h"
-
+#include "UI.h"
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
@@ -46,24 +45,9 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 {
     for(Types::CharacterClass classIndex : classes) {
         //typecast correto.
-        auto characterClass = static_cast<Types::CharacterClass>(classIndex);
+        auto characterClass = classIndex;
         //troquei printf por cout pq estou mais acostumado com cout
-        string choice = "";
-        switch (classIndex) {
-        case PALADIN:
-            choice = "Paladin";
-            break;
-        case WARRIOR:
-            choice = "Warrior";
-            break;
-        case ARCHER:
-            choice = "Archer";
-            break;
-        case CLERIC:
-            choice = "Cleric";
-            break;
-        }
-        std::cout << "Player Class Choice: " << choice << endl;
+        _UI->PlayerClassChoice(characterClass);
         auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
@@ -76,24 +60,9 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 {
     for (auto i = 0; i < numberOfEnemies; i++) {
-        int randomInteger = GetRandomInt(PALADIN, ARCHER);
+        int randomInteger = GetRandomInt(Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
-        string choice = "";
-        switch (randomInteger) {
-        case PALADIN:
-            choice = "Paladin";
-            break;
-        case WARRIOR:
-            choice = "Warrior";
-            break;
-        case ARCHER:
-            choice = "Archer";
-            break;
-        case CLERIC:
-            choice = "Cleric";
-            break;
-        }
-        cout << "Enemy Class Choice:" << choice << endl;
+        _UI->EnemyClassChoice(enemyClass);
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
@@ -171,9 +140,9 @@ void BattleField::HandleTurn()
             cout << "DEFEAT! All your characters are dead." << endl;
             break;
         }
-        if (AskIfWantToPlayAgain()) {
+        if (_UI->AskIfWantToPlayAgain()) {
             //Modifica os parâmetros e reinicia o ciclo.
-            Types::GameSetupParameters newParams = AskForParameters();
+            Types::GameSetupParameters newParams = _UI->AskForParameters();
             Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
                 newParams.NumberOfCharactersInEnemyTeam);
             StartGame();
