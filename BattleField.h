@@ -40,17 +40,13 @@ public:
 
 	void HandleTurn();
 
-	int GetRandomInt(int min, int max);
-
 	void AlocatePlayers();
 	//Passando o uniformd_distribution como ref pra n ter nem que criar
 	//um novo a cada execução da recursão nem passar por valor (aliás nem sei se
 	//uniform_distribution aceita passagem por valor).
-	void AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution,
-		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
+	void AlocatePlayerCharacter(shared_ptr<Character> character);
 
-	void AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
-		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
+	void AlocateEnemyCharacter( shared_ptr<Character> character);
 
 	Types::GridBox* GetRandomUnocupied();
 	void DrawBattlefield();

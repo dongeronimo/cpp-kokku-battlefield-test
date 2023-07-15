@@ -1,7 +1,6 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include <random>
 #include <conio.h>
 #include <algorithm>
 #include "Context.h"
@@ -12,12 +11,9 @@
 #include "UI.h"
 using namespace std;
 
-//Gerador de numeros aleatórios da STL
-random_device rd;
-std::mt19937 rng(rd());
+
 Types::GridBox* BattleField::GetRandomUnocupied() {
-    uniform_int_distribution<int> uni(0, grid->grids.size());
-    auto randomInteger = uni(rng);
+    auto randomInteger = CONTEXT->RandomInteger(0, grid->grids.size());
     if (grid->grids[randomInteger]->ocupied == false)
         return grid->grids[randomInteger];
     else
@@ -60,7 +56,7 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 {
     for (auto i = 0; i < numberOfEnemies; i++) {
-        int randomInteger = GetRandomInt(Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
+        int randomInteger = CONTEXT->RandomInteger (Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
         _UI->EnemyClassChoice(enemyClass);
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
@@ -85,7 +81,7 @@ void BattleField::DrawBattlefield() {
     grid->drawBattlefield(PlayerTeam, EnemyTeam);
 }
 GameResult BattleField::StartTurn() {
-    std::shuffle(AllPlayers.begin(), AllPlayers.end(), rng);
+    std::shuffle(AllPlayers.begin(), AllPlayers.end(), CONTEXT->RNG());
     auto it = AllPlayers.begin();
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
         auto character = (*it);
@@ -155,32 +151,22 @@ void BattleField::HandleTurn()
     //}
 }
 
-int BattleField::GetRandomInt(int min, int max)
-{
-    //Refeita do zero para usar o gerador de random da stl.
-    uniform_int_distribution<int> uni(min, max);
-    auto randomInteger = uni(rng);
-    return randomInteger;
-}
-
 void BattleField::AlocatePlayers()
 {
     uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
     uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
     for (auto character : PlayerTeam) {
-        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
+        AlocatePlayerCharacter(character);
     }
     for (auto character : EnemyTeam) {
-        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
+        AlocateEnemyCharacter(character);
     }
     
 }
 
 Types::GridBox* BattleField::GetEmptyGridbox() {
-    uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
-    uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         return RandomLocation;
@@ -191,12 +177,10 @@ Types::GridBox* BattleField::GetEmptyGridbox() {
 }
 
 //TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
-void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution, 
-    uniform_int_distribution<int>& colDistribution, 
-    shared_ptr<Character> character)
+void BattleField::AlocatePlayerCharacter(shared_ptr<Character> character)
 {
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     //pega o GridBox escolhido aleatoriamente
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     //Não está ocupado, por o player e marcar como ocupado.
@@ -206,22 +190,20 @@ void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDist
     }
     //está ocupado, recursão
     else {
-        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
+        AlocatePlayerCharacter(character);
     }
 }
 
-void BattleField::AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
-    uniform_int_distribution<int>& colDistribution, 
-    shared_ptr<Character> character)
+void BattleField::AlocateEnemyCharacter(shared_ptr<Character> character)
 {
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         character->currentBox = RandomLocation;
         RandomLocation->ocupied = true;
     }
     else {
-        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
+        AlocateEnemyCharacter(character);
     }
 }
