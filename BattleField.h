@@ -53,6 +53,7 @@ public:
 		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
 
 	Types::GridBox* GetRandomUnocupied();
+	void DrawBattlefield();
 };
 
 

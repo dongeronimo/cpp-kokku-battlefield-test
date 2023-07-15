@@ -20,10 +20,14 @@ bool Teleport::ConditionsAreMet()
 void Teleport::Execute()
 {
 	cout << "Player " << originator.PlayerIndex << " will teleport away!" << endl;
+	originator.battlefield.DrawBattlefield();
+	
 	//procura um gridbox pra entrar
 	auto emptyGridbox = originator.battlefield.GetEmptyGridbox();
 	//troca a localização do originator
 	originator.currentBox->ocupied = false;
 	originator.currentBox = emptyGridbox;
 	originator.currentBox->ocupied = true;
+
+
 }

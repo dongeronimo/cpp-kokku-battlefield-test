@@ -47,6 +47,7 @@ bool Smite::ConditionsAreMet() {
 void Smite::Execute() {
 	//1) empurra o target para trás se for possivel.
 	cout << "Player " << originator.PlayerIndex << " is smiting " << originator.target->PlayerIndex << endl;
+	originator.battlefield.DrawBattlefield();
 	int dI = originator.currentBox->Line() - originator.target->currentBox->Line();
 	int dJ = originator.currentBox->Column() - originator.target->currentBox->Column();
 	int pushbackI = originator.target->currentBox->Line() - dI; //se A está está a esquerda de B, B será empurrado pra direita
@@ -60,6 +61,7 @@ void Smite::Execute() {
 	//2) aplica o efeito de stun
 	shared_ptr<Stun> stunEffect = std::make_shared<Stun>(originator, *originator.target);
 	originator.target->AddEffect(stunEffect);
+	originator.battlefield.DrawBattlefield();
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 Curse::Curse(Character& originator, const int turnsToRechargeCurse, const int range) : 
@@ -184,4 +186,5 @@ void Reanimate::Execute() {
 	chosen->currentBox = box;
 	box->ocupied = true;
 	cout << "Player " << originator.PlayerIndex << " ressurected "<<chosen->PlayerIndex << endl;
+	originator.battlefield.DrawBattlefield();
 }
