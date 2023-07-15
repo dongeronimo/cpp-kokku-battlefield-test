@@ -1,6 +1,6 @@
 #include "StatusEffect.h"
 #include "Character.h"
-#include <iostream>
+#include "UI.h"
 using namespace std;
 
 
@@ -21,7 +21,7 @@ void Heal::Apply() {
 	if (!IsFinished()) {
 		Time++;
 		subject.Health += Amount;
-		cout << "Player " << subject.PlayerIndex << " will heal "<<Amount << endl;
+		_UI->HealApply(subject.PlayerIndex, Amount);
 	}
 }
 
@@ -32,7 +32,7 @@ Stun::Stun(Character& actor, Character& subject)
 void Stun::Apply() {
 	if (!IsFinished()) {
 		Time++;
-		cout << "Player " << subject.PlayerIndex << " is stunned" << endl;
+		_UI->StunApply(subject.PlayerIndex);
 	}
 }
 
@@ -44,7 +44,7 @@ PulsaDinura::PulsaDinura(Character & actor, Character & subject)
 void PulsaDinura::Apply() {
 	if (!IsFinished()) {
 		Time++;
-		cout << "Player " << subject.PlayerIndex << " is burning from curse" << endl;
+		_UI->PulsaDinuraApply(subject.PlayerIndex);
 		subject.TakeDamage(CURSE_DAMAGE);
 	}
 }

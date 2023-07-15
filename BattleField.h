@@ -3,17 +3,16 @@
 #include "Types.h"
 #include <list>
 #include "Constants.h"
-#include <iostream>
 #include "Grid.h"
-#include <random>
+
 using namespace std;
-enum GameResult {Victory, Defeat};
+
 class BattleField
 {
 public:
-	BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
+	BattleField(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies);
 
-	void Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
+	void Initialization(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies);
 
 
 	Types::GridBox* GetEmptyGridbox();
@@ -27,7 +26,7 @@ public:
 	/// Instancia o time do player, segundo as classes passadas como parâmetro.
 	/// </summary>
 	/// <param name="classes"></param>
-	void CreatePlayerCharacters(vector<CharacterClass> classes);
+	void CreatePlayerCharacters(vector<Types::CharacterClass> classes);
 	/// <summary>
 	/// Cria os inimigos aleatórios.
 	/// </summary>
@@ -36,21 +35,17 @@ public:
 
 	void StartGame();
 
-	GameResult StartTurn();
+	Types::GameResult StartTurn();
 
 	void HandleTurn();
-
-	int GetRandomInt(int min, int max);
 
 	void AlocatePlayers();
 	//Passando o uniformd_distribution como ref pra n ter nem que criar
 	//um novo a cada execução da recursão nem passar por valor (aliás nem sei se
 	//uniform_distribution aceita passagem por valor).
-	void AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution,
-		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
+	void AlocatePlayerCharacter(shared_ptr<Character> character);
 
-	void AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
-		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
+	void AlocateEnemyCharacter( shared_ptr<Character> character);
 
 	Types::GridBox* GetRandomUnocupied();
 	void DrawBattlefield();

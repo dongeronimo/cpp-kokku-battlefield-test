@@ -1,7 +1,7 @@
 #include "SpecialAbility.h"
 #include "mathUtils.h"
 #include "Character.h"
-#include <iostream>
+#include "UI.h"
 #include "BattleField.h"
 Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)
 {
@@ -19,7 +19,7 @@ bool Teleport::ConditionsAreMet()
 
 void Teleport::Execute()
 {
-	cout << "Player " << originator.PlayerIndex << " will teleport away!" << endl;
+	_UI->Teleport(originator.PlayerIndex);
 	originator.battlefield.DrawBattlefield();
 	
 	//procura um gridbox pra entrar

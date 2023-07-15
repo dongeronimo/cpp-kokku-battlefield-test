@@ -1,35 +1,28 @@
-#include <iostream>
 #include <list>
 #include <string>
-#include <random>
-#include <conio.h>
 #include <algorithm>
-#include "BattlefieldSetup.h"
 #include "Context.h"
 #include "Grid.h"
 #include "BattleField.h"
 #include "Types.h"
 #include "Character.h"
-
+#include "UI.h"
 using namespace std;
 
-//Gerador de numeros aleatórios da STL
-random_device rd;
-std::mt19937 rng(rd());
+
 Types::GridBox* BattleField::GetRandomUnocupied() {
-    uniform_int_distribution<int> uni(0, grid->grids.size());
-    auto randomInteger = uni(rng);
+    auto randomInteger = CONTEXT->RandomInteger(0, grid->grids.size());
     if (grid->grids[randomInteger]->ocupied == false)
         return grid->grids[randomInteger];
     else
         return GetRandomUnocupied();
 }
-BattleField::BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
+BattleField::BattleField(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies)
 {    
     Initialization(lines, rows, playerClassId, numberOfEnemies);
 }
 
-void BattleField::Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
+void BattleField::Initialization(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies)
 {
     AllPlayers.clear();
     PlayerTeam.clear();
@@ -42,28 +35,13 @@ void BattleField::Initialization(const int lines, const int rows, const vector<C
     CreateEnemyCharacters(numberOfEnemies);
 }
 
-void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
+void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 {
-    for(CharacterClass classIndex : classes) {
+    for(Types::CharacterClass classIndex : classes) {
         //typecast correto.
-        auto characterClass = static_cast<Types::CharacterClass>(classIndex);
+        auto characterClass = classIndex;
         //troquei printf por cout pq estou mais acostumado com cout
-        string choice = "";
-        switch (classIndex) {
-        case PALADIN:
-            choice = "Paladin";
-            break;
-        case WARRIOR:
-            choice = "Warrior";
-            break;
-        case ARCHER:
-            choice = "Archer";
-            break;
-        case CLERIC:
-            choice = "Cleric";
-            break;
-        }
-        std::cout << "Player Class Choice: " << choice << endl;
+        _UI->PlayerClassChoice(characterClass);
         auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
@@ -76,24 +54,9 @@ void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
 void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 {
     for (auto i = 0; i < numberOfEnemies; i++) {
-        int randomInteger = GetRandomInt(PALADIN, ARCHER);
+        int randomInteger = CONTEXT->RandomInteger (Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
-        string choice = "";
-        switch (randomInteger) {
-        case PALADIN:
-            choice = "Paladin";
-            break;
-        case WARRIOR:
-            choice = "Warrior";
-            break;
-        case ARCHER:
-            choice = "Archer";
-            break;
-        case CLERIC:
-            choice = "Cleric";
-            break;
-        }
-        cout << "Enemy Class Choice:" << choice << endl;
+        _UI->EnemyClassChoice(enemyClass);
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
@@ -115,8 +78,8 @@ void BattleField::StartGame()
 void BattleField::DrawBattlefield() {
     grid->drawBattlefield(PlayerTeam, EnemyTeam);
 }
-GameResult BattleField::StartTurn() {
-    std::shuffle(AllPlayers.begin(), AllPlayers.end(), rng);
+Types::GameResult BattleField::StartTurn() {
+    std::shuffle(AllPlayers.begin(), AllPlayers.end(), CONTEXT->RNG());
     auto it = AllPlayers.begin();
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
         auto character = (*it);
@@ -143,9 +106,9 @@ GameResult BattleField::StartTurn() {
     std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
         [](auto character) {return character->IsDead(); });
     if (deadPlayers.size() == PlayerTeam.size()) 
-        return Defeat;
+        return Types::GameResult::Defeat;
     if (deadEnemies.size() == EnemyTeam.size())
-        return Victory;
+        return Types::GameResult::Victory;
 
     currentTurn++;
     HandleTurn();
@@ -155,41 +118,20 @@ GameResult BattleField::StartTurn() {
 
 void BattleField::HandleTurn()
 {
-    cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
-    auto k = _getch();
-    if (k == KEY_ESC) {
-        Quit();
+    _UI->NextTurnOrQuitPrompt();
+    Types::GameResult result = StartTurn();
+    _UI->VictoryOrDefeat(result);
+    if (_UI->AskIfWantToPlayAgain()) {
+        //Modifica os parâmetros e reinicia o ciclo.
+        Types::GameSetupParameters newParams = _UI->AskForParameters();
+        Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
+            newParams.NumberOfCharactersInEnemyTeam);
+        StartGame();
     }
     else {
-        GameResult result = StartTurn();
-        switch (result)
-        {
-        case Victory:
-            cout << "VICTORY! All enemies are dead." << endl;
-            break;
-        case Defeat:
-            cout << "DEFEAT! All your characters are dead." << endl;
-            break;
-        }
-        if (AskIfWantToPlayAgain()) {
-            //Modifica os parâmetros e reinicia o ciclo.
-            GameSetupParameters newParams = AskForParameters();
-            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, newParams.NumberOfCharactersInEnemyTeam);
-            StartGame();
-        }
-        else {
-            //sai do programa.
-            Quit();
-        }
+        //sai do programa.
+        CONTEXT->Quit();
     }
-}
-
-int BattleField::GetRandomInt(int min, int max)
-{
-    //Refeita do zero para usar o gerador de random da stl.
-    uniform_int_distribution<int> uni(min, max);
-    auto randomInteger = uni(rng);
-    return randomInteger;
 }
 
 void BattleField::AlocatePlayers()
@@ -197,19 +139,17 @@ void BattleField::AlocatePlayers()
     uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
     uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
     for (auto character : PlayerTeam) {
-        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
+        AlocatePlayerCharacter(character);
     }
     for (auto character : EnemyTeam) {
-        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
+        AlocateEnemyCharacter(character);
     }
     
 }
 
 Types::GridBox* BattleField::GetEmptyGridbox() {
-    uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
-    uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         return RandomLocation;
@@ -220,12 +160,10 @@ Types::GridBox* BattleField::GetEmptyGridbox() {
 }
 
 //TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
-void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution, 
-    uniform_int_distribution<int>& colDistribution, 
-    shared_ptr<Character> character)
+void BattleField::AlocatePlayerCharacter(shared_ptr<Character> character)
 {
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     //pega o GridBox escolhido aleatoriamente
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     //Não está ocupado, por o player e marcar como ocupado.
@@ -235,22 +173,20 @@ void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDist
     }
     //está ocupado, recursão
     else {
-        AlocatePlayerCharacter(lineDistribution, colDistribution, character);
+        AlocatePlayerCharacter(character);
     }
 }
 
-void BattleField::AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
-    uniform_int_distribution<int>& colDistribution, 
-    shared_ptr<Character> character)
+void BattleField::AlocateEnemyCharacter(shared_ptr<Character> character)
 {
-    int randomLine = lineDistribution(rng);
-    int randomCol = colDistribution(rng);
+    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         character->currentBox = RandomLocation;
         RandomLocation->ocupied = true;
     }
     else {
-        AlocateEnemyCharacter(lineDistribution, colDistribution, character);
+        AlocateEnemyCharacter(character);
     }
 }

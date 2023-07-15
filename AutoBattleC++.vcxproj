@@ -141,25 +141,27 @@
   <ItemGroup>
     <ClCompile Include="AutoBattleC++.cpp" />
     <ClCompile Include="BattleField.cpp" />
-    <ClCompile Include="BattlefieldSetup.cpp" />
     <ClCompile Include="BowAttack.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Charge.cpp" />
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="Curse.cpp" />
     <ClCompile Include="Dikstra.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Reanimate.cpp" />
+    <ClCompile Include="SelfHeal.cpp" />
+    <ClCompile Include="Smite.cpp" />
     <ClCompile Include="SpecialAbility.cpp" />
     <ClCompile Include="StatusEffect.cpp" />
     <ClCompile Include="stringutils.cpp" />
     <ClCompile Include="StrongAttack.cpp" />
     <ClCompile Include="Teleport.cpp" />
     <ClCompile Include="Types.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleField.h" />
-    <ClInclude Include="BattlefieldSetup.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="Constants.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="Dikstra.h" />
     <ClInclude Include="Grid.h" />
@@ -168,6 +170,7 @@
     <ClInclude Include="StatusEffect.h" />
     <ClInclude Include="stringutils.h" />
     <ClInclude Include="Types.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
