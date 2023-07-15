@@ -28,6 +28,15 @@ Grid::~Grid()
         delete(i);
     }
 }
+Types::GridBox* Grid::GetIfEmpty(int i, int j) const
+{
+    if (i < 0 || i >= Lines() || j < 0 || j >= Columns())
+        return nullptr;
+    else if (grids[CalculateIndex(i, j)]->ocupied)
+        return nullptr;
+    else 
+        return grids[CalculateIndex(i, j)];
+}
 void Grid::drawBattlefield() {
     std::stringstream ss;
     for (int i = 0; i < Lines(); i++) {
@@ -57,15 +66,45 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
             Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
             bool drewPlayerOrEnemy = false;
             for (auto player : players) {
+                if (player->IsDead())
+                    continue;
                 if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
-                    ss << "[A]";//Player por enquanto é alice
+                    switch (player->GetCharacterClass()) {
+                    case Types::Archer:
+                        ss << "[A]";
+                        break;
+                    case Types::Cleric:
+                        ss << "[C]";
+                        break;
+                    case Types::Paladin:
+                        ss << "[P]";
+                        break;
+                    case Types::Warrior:
+                        ss << "[W]";
+                        break;
+                    }
                     drewPlayerOrEnemy = true;
                     break;
                 }
             }
             for (auto enemy : enemies) {
+                if (enemy->IsDead())
+                    continue;
                 if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
-                    ss << "[B]";
+                    switch (enemy->GetCharacterClass()) {
+                    case Types::Archer:
+                        ss << "[a]";
+                        break;
+                    case Types::Cleric:
+                        ss << "[c]";
+                        break;
+                    case Types::Paladin:
+                        ss << "[p]";
+                        break;
+                    case Types::Warrior:
+                        ss << "[w]";
+                        break;
+                    }
                     drewPlayerOrEnemy = true;
                     break;
                 }

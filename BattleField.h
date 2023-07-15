@@ -15,22 +15,14 @@ public:
 
 	void Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
 
+
+	Types::GridBox* GetEmptyGridbox();
 	Grid* grid;
-	//Types::GridBox* PlayerCurrentLocation;
-	//Types::GridBox* EnemyCurrentLocation;
 	vector<shared_ptr<Character>> AllPlayers; //Sintaxe estava toda errada aqui. E troquei por vector pq vector tem memória contígua, vão haver poucas inserções e quero acesso random. Nada disso a std::list me dá.
 	vector<shared_ptr<Character>> PlayerTeam;
 	vector<shared_ptr<Character>> EnemyTeam;
-	//shared_ptr<Character> PlayerCharacter;
-	//shared_ptr<Character> EnemyCharacter;
 	int currentTurn;
 	int numberOfPossibleTiles;
-
-	//Desnecessária depois do meu refactor.
-	//void Setup();
-	//Desnecessária depois do meu refactor.
-	//void GetPlayerChoice(CharacterClass classId);
-
 	/// <summary>
 	/// Instancia o time do player, segundo as classes passadas como parâmetro.
 	/// </summary>
@@ -59,6 +51,9 @@ public:
 
 	void AlocateEnemyCharacter(uniform_int_distribution<int>& lineDistribution,
 		uniform_int_distribution<int>& colDistribution, shared_ptr<Character> character);
+
+	Types::GridBox* GetRandomUnocupied();
+	void DrawBattlefield();
 };
 
 

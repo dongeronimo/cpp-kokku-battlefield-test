@@ -1,22 +1,29 @@
-#include "Grid.h"
-#include "BattleField.h"
-#include "Types.h"
-#include "Character.h"
 #include <iostream>
-#include "BattleField.h"
 #include <list>
 #include <string>
 #include <random>
 #include <conio.h>
+#include <algorithm>
 #include "BattlefieldSetup.h"
 #include "Context.h"
-#include <algorithm>
+#include "Grid.h"
+#include "BattleField.h"
+#include "Types.h"
+#include "Character.h"
+
 using namespace std;
 
 //Gerador de numeros aleatórios da STL
 random_device rd;
 std::mt19937 rng(rd());
-
+Types::GridBox* BattleField::GetRandomUnocupied() {
+    uniform_int_distribution<int> uni(0, grid->grids.size());
+    auto randomInteger = uni(rng);
+    if (grid->grids[randomInteger]->ocupied == false)
+        return grid->grids[randomInteger];
+    else
+        return GetRandomUnocupied();
+}
 BattleField::BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
 {    
     Initialization(lines, rows, playerClassId, numberOfEnemies);
@@ -27,10 +34,7 @@ void BattleField::Initialization(const int lines, const int rows, const vector<C
     AllPlayers.clear();
     PlayerTeam.clear();
     EnemyTeam.clear();
-    //PlayerCharacter.reset();
-    //EnemyCharacter.reset();
-    //PlayerCurrentLocation = nullptr;
-    //EnemyCurrentLocation = nullptr;
+
     grid = new Grid(lines, rows);
     int currentTurn = 0;
     int numberOfPossibleTiles = grid->grids.size();
@@ -44,8 +48,23 @@ void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
         //typecast correto.
         auto characterClass = static_cast<Types::CharacterClass>(classIndex);
         //troquei printf por cout pq estou mais acostumado com cout
-        std::cout << "Player Class Choice: " << characterClass;
-        auto PlayerCharacter = std::make_shared<Character>(characterClass, this, TeamA);
+        string choice = "";
+        switch (classIndex) {
+        case PALADIN:
+            choice = "Paladin";
+            break;
+        case WARRIOR:
+            choice = "Warrior";
+            break;
+        case ARCHER:
+            choice = "Archer";
+            break;
+        case CLERIC:
+            choice = "Cleric";
+            break;
+        }
+        std::cout << "Player Class Choice: " << choice << endl;
+        auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
         PlayerCharacter->PlayerIndex = PlayerTeam.size();
@@ -59,8 +78,23 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
     for (auto i = 0; i < numberOfEnemies; i++) {
         int randomInteger = GetRandomInt(PALADIN, ARCHER);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
-        cout << "Enemy Class Choice:" << enemyClass << endl;
-        auto EnemyCharacter = std::make_shared<Character>(enemyClass, this, TeamB);
+        string choice = "";
+        switch (randomInteger) {
+        case PALADIN:
+            choice = "Paladin";
+            break;
+        case WARRIOR:
+            choice = "Warrior";
+            break;
+        case ARCHER:
+            choice = "Archer";
+            break;
+        case CLERIC:
+            choice = "Cleric";
+            break;
+        }
+        cout << "Enemy Class Choice:" << choice << endl;
+        auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
         EnemyCharacter->PlayerIndex = EnemyTeam.size() + PlayerTeam.size();
@@ -70,12 +104,7 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 }
 
 void BattleField::StartGame()
-{
-    ////populates the character variables and targets
-    //Vai ser populado dinâmicamente
-    //EnemyCharacter->target = PlayerCharacter;
-    //PlayerCharacter->target = EnemyCharacter;
-    
+{   
     AllPlayers.insert(AllPlayers.end(), PlayerTeam.begin(), PlayerTeam.end());
     AllPlayers.insert(AllPlayers.end(), EnemyTeam.begin(), EnemyTeam.end());
 
@@ -83,7 +112,9 @@ void BattleField::StartGame()
     StartTurn();
 
 }
-
+void BattleField::DrawBattlefield() {
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
+}
 GameResult BattleField::StartTurn() {
     std::shuffle(AllPlayers.begin(), AllPlayers.end(), rng);
     auto it = AllPlayers.begin();
@@ -102,18 +133,20 @@ GameResult BattleField::StartTurn() {
             }
         }
     }
+
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
+
     //a partida acaba se um dos times estiver todo morto
     vector<shared_ptr<Character>> deadPlayers, deadEnemies;
     std::copy_if(PlayerTeam.begin(), PlayerTeam.end(), std::back_inserter(deadPlayers),
         [](auto character) {return character->IsDead(); });
     std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
         [](auto character) {return character->IsDead(); });
-    if (deadPlayers.size() == PlayerTeam.size())
+    if (deadPlayers.size() == PlayerTeam.size()) 
         return Defeat;
     if (deadEnemies.size() == EnemyTeam.size())
         return Victory;
 
-    grid->drawBattlefield(PlayerTeam, EnemyTeam);
     currentTurn++;
     HandleTurn();
     //Devido à recursão não retorna nada aqui pq o retorno da pilha de recursão é quando 
@@ -171,6 +204,21 @@ void BattleField::AlocatePlayers()
     }
     
 }
+
+Types::GridBox* BattleField::GetEmptyGridbox() {
+    uniform_int_distribution<int> lineDistribution(0, grid->Lines() - 1);
+    uniform_int_distribution<int> colDistribution(0, grid->Columns() - 1);
+    int randomLine = lineDistribution(rng);
+    int randomCol = colDistribution(rng);
+    Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
+    if (!RandomLocation->ocupied) {
+        return RandomLocation;
+    }
+    else {
+        return GetEmptyGridbox();
+    }
+}
+
 //TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
 void BattleField::AlocatePlayerCharacter(uniform_int_distribution<int>& lineDistribution, 
     uniform_int_distribution<int>& colDistribution, 
