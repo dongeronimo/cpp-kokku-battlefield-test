@@ -191,6 +191,19 @@ void UI::NextTurnOrQuitPrompt()
 	}
 }
 
+void UI::VictoryOrDefeat(const Types::GameResult& result) const
+{
+	switch (result)
+	{
+	case Types::GameResult::Victory:
+		cout << "VICTORY! All enemies are dead." << endl;
+		break;
+	case Types::GameResult::Defeat:
+		cout << "DEFEAT! All your characters are dead." << endl;
+		break;
+	}
+}
+
 Types::GameSetupParameters UI::AskForParameters()
 {
 	Types::GameSetupParameters response;

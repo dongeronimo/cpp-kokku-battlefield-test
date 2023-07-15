@@ -4,7 +4,7 @@ using namespace std;
 class Types
 {
 public:
-
+    enum GameResult { Victory, Defeat };
     struct GridBox
     {
         int xIndex;

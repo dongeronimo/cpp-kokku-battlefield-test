@@ -80,7 +80,7 @@ void BattleField::StartGame()
 void BattleField::DrawBattlefield() {
     grid->drawBattlefield(PlayerTeam, EnemyTeam);
 }
-GameResult BattleField::StartTurn() {
+Types::GameResult BattleField::StartTurn() {
     std::shuffle(AllPlayers.begin(), AllPlayers.end(), CONTEXT->RNG());
     auto it = AllPlayers.begin();
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
@@ -108,9 +108,9 @@ GameResult BattleField::StartTurn() {
     std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
         [](auto character) {return character->IsDead(); });
     if (deadPlayers.size() == PlayerTeam.size()) 
-        return Defeat;
+        return Types::GameResult::Defeat;
     if (deadEnemies.size() == EnemyTeam.size())
-        return Victory;
+        return Types::GameResult::Victory;
 
     currentTurn++;
     HandleTurn();
@@ -121,34 +121,19 @@ GameResult BattleField::StartTurn() {
 void BattleField::HandleTurn()
 {
     _UI->NextTurnOrQuitPrompt();
-    /*cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
-    auto k = _getch();
-    if (k == KEY_ESC) {
-        Quit();
+    Types::GameResult result = StartTurn();
+    _UI->VictoryOrDefeat(result);
+    if (_UI->AskIfWantToPlayAgain()) {
+        //Modifica os parâmetros e reinicia o ciclo.
+        Types::GameSetupParameters newParams = _UI->AskForParameters();
+        Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
+            newParams.NumberOfCharactersInEnemyTeam);
+        StartGame();
     }
-    else {*/
-        GameResult result = StartTurn();
-        switch (result)
-        {
-        case Victory:
-            cout << "VICTORY! All enemies are dead." << endl;
-            break;
-        case Defeat:
-            cout << "DEFEAT! All your characters are dead." << endl;
-            break;
-        }
-        if (_UI->AskIfWantToPlayAgain()) {
-            //Modifica os parâmetros e reinicia o ciclo.
-            Types::GameSetupParameters newParams = _UI->AskForParameters();
-            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
-                newParams.NumberOfCharactersInEnemyTeam);
-            StartGame();
-        }
-        else {
-            //sai do programa.
-            CONTEXT->Quit();
-        }
-    //}
+    else {
+        //sai do programa.
+        CONTEXT->Quit();
+    }
 }
 
 void BattleField::AlocatePlayers()

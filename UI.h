@@ -26,5 +26,6 @@ public:
 	/// Se a tecla for esc lança o sinal de fim de jogo.
 	/// </summary>
 	void NextTurnOrQuitPrompt();
+	void VictoryOrDefeat(const Types::GameResult& result)const;
 };
 

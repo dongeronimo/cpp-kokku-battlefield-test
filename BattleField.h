@@ -5,9 +5,9 @@
 #include "Constants.h"
 #include <iostream>
 #include "Grid.h"
-#include <random>
+
 using namespace std;
-enum GameResult {Victory, Defeat};
+
 class BattleField
 {
 public:
@@ -36,7 +36,7 @@ public:
 
 	void StartGame();
 
-	GameResult StartTurn();
+	Types::GameResult StartTurn();
 
 	void HandleTurn();
 
