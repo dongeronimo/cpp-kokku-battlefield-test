@@ -412,4 +412,5 @@ bool UI::AskIfWantToPlayAgain()const
 
 void UI::Goodbye()const {
 	cout << "Goodbye";
+	delete instance;
 }
