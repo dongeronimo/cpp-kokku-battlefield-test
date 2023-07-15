@@ -48,7 +48,22 @@ void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
         //typecast correto.
         auto characterClass = static_cast<Types::CharacterClass>(classIndex);
         //troquei printf por cout pq estou mais acostumado com cout
-        std::cout << "Player Class Choice: " << characterClass;
+        string choice = "";
+        switch (classIndex) {
+        case PALADIN:
+            choice = "Paladin";
+            break;
+        case WARRIOR:
+            choice = "Warrior";
+            break;
+        case ARCHER:
+            choice = "Archer";
+            break;
+        case CLERIC:
+            choice = "Cleric";
+            break;
+        }
+        std::cout << "Player Class Choice: " << choice << endl;
         auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
         PlayerCharacter->Health = 100;
         PlayerCharacter->BaseDamage = 20;
@@ -63,7 +78,22 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
     for (auto i = 0; i < numberOfEnemies; i++) {
         int randomInteger = GetRandomInt(PALADIN, ARCHER);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
-        cout << "Enemy Class Choice:" << enemyClass << endl;
+        string choice = "";
+        switch (randomInteger) {
+        case PALADIN:
+            choice = "Paladin";
+            break;
+        case WARRIOR:
+            choice = "Warrior";
+            break;
+        case ARCHER:
+            choice = "Archer";
+            break;
+        case CLERIC:
+            choice = "Cleric";
+            break;
+        }
+        cout << "Enemy Class Choice:" << choice << endl;
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
         EnemyCharacter->Health = 100;
         EnemyCharacter->BaseDamage = 20;
