@@ -122,35 +122,7 @@ void Character::StartTurn(Grid* grid) {
         return;
     if (RollSpecialAbilities())
         return; //A ação do turno foi uma special ability;
-    
-    //se não tem alvo, busca
     ReevaluateTarget();
-    //if (target == nullptr) {
-    //    //Só me interessa quem n tá morto e for do time inimigo.
-    //    vector<PCharacter> notDead;
-    //    if (team == TeamA) {
-    //        std::copy_if(battlefield.EnemyTeam.begin(), battlefield.EnemyTeam.end(), std::back_inserter(notDead),
-    //            [](auto opponent) {return !opponent->IsDead(); });
-    //    }
-    //    if (team == TeamB) {
-    //        std::copy_if(battlefield.PlayerTeam.begin(), battlefield.PlayerTeam.end(), std::back_inserter(notDead),
-    //            [](auto opponent) {return !opponent->IsDead(); });
-    //    }
-    //    //ordena por distancia
-    //    priority_queue<PCharacter, vector<PCharacter>, function<bool(PCharacter, PCharacter)>> myEnemiesOrderedByDistance(
-    //        [this](PCharacter a, PCharacter b) { 
-    //            int distanceA = std::abs(this->currentBox->Line() - a->currentBox->Line()) + std::abs(this->currentBox->Column() - a->currentBox->Column());
-    //            int distanceB = std::abs(this->currentBox->Line() - b->currentBox->Line()) + std::abs(this->currentBox->Column() - b->currentBox->Column());
-    //            return distanceA > distanceB; // priority queue retorna o maior elemento, isso faz o maior ser o menor?
-    //        }
-    //    );
-    //    for (auto alive : notDead) {
-    //        myEnemiesOrderedByDistance.push(alive);
-    //    }
-    //    if (myEnemiesOrderedByDistance.size() > 0) {
-    //        target = myEnemiesOrderedByDistance.top();
-    //    }
-    //}
     if (CheckCloseTargets(grid)) {
         Attack(target);
     }

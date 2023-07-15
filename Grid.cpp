@@ -74,7 +74,7 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
             }
             for (auto enemy : enemies) {
                 if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
-                    ss << "[B]";
+                    ss << "[a]";
                     drewPlayerOrEnemy = true;
                     break;
                 }
