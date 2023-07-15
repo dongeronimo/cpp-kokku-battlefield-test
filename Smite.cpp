@@ -25,5 +25,4 @@ void Smite::Execute() {
 	//2) aplica o efeito de stun
 	shared_ptr<Stun> stunEffect = std::make_shared<Stun>(originator, *originator.target);
 	originator.target->AddEffect(stunEffect);
-	originator.battlefield.DrawBattlefield();
 }
