@@ -124,12 +124,13 @@ GameResult BattleField::StartTurn() {
 
 void BattleField::HandleTurn()
 {
-    cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
+    _UI->NextTurnOrQuitPrompt();
+    /*cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
     auto k = _getch();
     if (k == KEY_ESC) {
         Quit();
     }
-    else {
+    else {*/
         GameResult result = StartTurn();
         switch (result)
         {
@@ -149,9 +150,9 @@ void BattleField::HandleTurn()
         }
         else {
             //sai do programa.
-            Quit();
+            CONTEXT->Quit();
         }
-    }
+    //}
 }
 
 int BattleField::GetRandomInt(int min, int max)

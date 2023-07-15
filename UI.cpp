@@ -3,6 +3,10 @@
 #include "stringutils.h"
 #include <functional>
 #include <string>
+#include <conio.h>
+#include "Context.h"
+
+#define KEY_ESC 27
 using namespace std;
 shared_ptr<UI> UI::instance = make_shared<UI>();
 
@@ -176,6 +180,15 @@ void UI::EnemyClassChoice(const Types::CharacterClass& classIndex) const
 		break;
 	}
 	cout << "Enemy Class Choice:" << choice << endl;
+}
+
+void UI::NextTurnOrQuitPrompt()
+{
+	cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
+	auto k = _getch();
+	if (k == KEY_ESC) {
+		CONTEXT->Quit();
+	}
 }
 
 Types::GameSetupParameters UI::AskForParameters()

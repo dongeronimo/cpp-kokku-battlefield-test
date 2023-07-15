@@ -22,5 +22,9 @@ public:
 	void Goodbye()const;
 	void PlayerClassChoice(const Types::CharacterClass& classIndex)const;
 	void EnemyClassChoice(const Types::CharacterClass& classIndex)const;
+	/// <summary>
+	/// Se a tecla for esc lança o sinal de fim de jogo.
+	/// </summary>
+	void NextTurnOrQuitPrompt();
 };
 

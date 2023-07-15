@@ -158,7 +158,6 @@
   <ItemGroup>
     <ClInclude Include="BattleField.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="Constants.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="Dikstra.h" />
     <ClInclude Include="Grid.h" />

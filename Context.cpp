@@ -1,5 +1,8 @@
 #include "Context.h"
+using namespace std;
 
-void Quit() {
-	throw QuitGameSignal();
+shared_ptr<Context> Context::instance = make_shared<Context>();
+shared_ptr<Context> Context::Instance() {
+	return instance;
 }
+
