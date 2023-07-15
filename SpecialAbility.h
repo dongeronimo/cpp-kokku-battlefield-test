@@ -1,22 +1,10 @@
 #pragma once
 #include <memory>
-
+#include "mathUtils.h"
 class Battlefield;
 class Character;
 
 using namespace std;
-#define STRONG_ATTACK_PROC_CHANCE 0.33f
-#define TELEPORT_PROC_CHANCE 0.33f
-#define TELEPORT_PROC_DISTANCE 3
-#define SELF_HEAL_PROC_CHANCE 0.33f
-#define BOW_ATTACK_PROC_CHANCE 0.75f
-#define BOW_ATTACK_PROC_MAX_DISTANCE 5 
-#define SMITE_PROC_CHANCE 0.8f
-#define SMITE_MAX_HP_PROC 60
-#define CHARGE_PROC_CHANCE 0.5f
-#define CURSE_PROC_CHANCE 0.33f
-#define CURSE_RANGE 3
-#define REANIMATE_PROC_CHANCE 0.05f
 
 #define MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),originator.target->currentBox->Line(), originator.target->currentBox->Column())
 /// <summary>

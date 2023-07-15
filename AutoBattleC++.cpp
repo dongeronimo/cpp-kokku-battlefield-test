@@ -1,9 +1,9 @@
 // AutoBattleC++.cpp : Este arquivo contém a função 'main'. A execução do programa começa e termina ali.
 //
 #include "BattleField.h"
-#include <iostream>
 #include "Context.h"
-#include "BattlefieldSetup.h"
+#include "UI.h"
+#include "Types.h"
 using namespace std;
 
 int main()
@@ -15,13 +15,15 @@ int main()
     //pra sair da pilha de recursão e sair de maneira correta do jogo. Se eu simplesmente usasse exit()
     //as variáveis de armazanamento automático n são limpas.
     try {
-        GameSetupParameters params = AskForParameters();
+        Types::GameSetupParameters params = _UI.AskForParameters();
         //Não havia necessidade de alocá-lo dinamicamente;
-        BattleField battlefield(params.GridLines, params.GridRows, params.PlayerTeamClassIds, params.NumberOfCharactersInEnemyTeam);
+        BattleField battlefield(params.GridLines, params.GridRows, params.PlayerTeamClassIds, 
+            params.NumberOfCharactersInEnemyTeam);
         battlefield.StartGame();
     }
     catch (QuitGameSignal& ex) {
-        cout << "Goodbye";
+        _UI.Goodbye();
+        CONTEXT.Release();
     }
     return 0;
 }

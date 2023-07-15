@@ -1,7 +1,8 @@
 #include "Grid.h"
 #include "Types.h"
-#include <iostream>
-#include <sstream>
+#include "UI.h"
+//#include <iostream>
+//#include <sstream>
 #include "Character.h"
 using namespace std;
 
@@ -14,11 +15,11 @@ Grid::Grid(int Lines, int Columns)
         {
             Types::GridBox* newBox = new Types::GridBox(j, i, false, CalculateIndex(i,j));
             grids.push_back(newBox);
-            cout<<newBox->Index<<endl;
+            _UI.PrintInt(newBox->Index);
         }
     }
-    cout << "the battlefield has been created" << endl;
-    drawBattlefield();
+    _UI.BattlefieldCreated();
+    _UI.DrawBattlefield(grids, this->Lines(), this->Columns());
 }
 
 Grid::~Grid() 
@@ -37,28 +38,14 @@ Types::GridBox* Grid::GetIfEmpty(int i, int j) const
     else 
         return grids[CalculateIndex(i, j)];
 }
-void Grid::drawBattlefield() {
-    std::stringstream ss;
-    for (int i = 0; i < Lines(); i++) {
-        for (int j = 0; j < Columns(); j++) {
-            Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
-            if (currentGrid->ocupied) {
-                ss << "[x]";
-            }
-            else {
-                ss << "[ ]";
-            }
-        }
-        ss << endl;
-    }
-    std::cout << ss.str() << endl;
-}
+
 void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
     vector<shared_ptr<Character>>& enemies)
 {
+    _UI.DrawBattlefield(grids, players, enemies, Lines(), Columns());
     //Usando stringstream pra acumular pra reduzir a qtd de operações
     //de output e fazer o output todo de uma vez.
-    std::stringstream ss;
+    /*std::stringstream ss;
     for (int i = 0; i < Lines(); i++)
     {
         for (int j = 0; j < Columns(); j++)
@@ -120,5 +107,5 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
         }
         ss << endl;
     }
-    std::cout << ss.str() << endl;
+    std::cout << ss.str() << endl;*/
 }

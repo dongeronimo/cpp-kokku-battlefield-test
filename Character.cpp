@@ -3,7 +3,6 @@
 #include <queue>
 #include <vector>
 #include <algorithm>
-#include <iostream>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
@@ -11,6 +10,7 @@
 #include "BattleField.h"
 #include "SpecialAbility.h"
 #include "StatusEffect.h"
+#include "UI.h"
 using namespace std;
 
 Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team t) :
@@ -53,7 +53,7 @@ bool Character::TakeDamage(float amount)
 
 void Character::Die() 
 {
-    cout << "Player " << PlayerIndex << " is dead." << endl;
+    _UI.PlayerIsDead(PlayerIndex);
     isDead = true;
 }
 void Character::ClearTargetIfDead()
@@ -129,7 +129,7 @@ void Character::StartTurn(Grid* grid) {
     }
     else if(target!=nullptr) { //É possivel que aqui tenha target null se todos do time inimigo estiverem mortos.
         auto directionWalked = MoveToTarget();
-        cout << "Player " << PlayerIndex << " walked " << directionWalked << endl;
+        _UI.PlayerWalkTo(PlayerIndex, directionWalked);
     }
 }
 const std::string Character::MoveToTarget() {
@@ -180,7 +180,7 @@ bool Character::CheckCloseTargets(Grid* grid)
 void Character::Attack(shared_ptr<Character> target)
 {
     auto damage = this->BaseDamage * this->DamageMultiplier;
-    cout << "Player " << PlayerIndex << " did " << damage << " to Player " << target->PlayerIndex << endl;
+    _UI.PlayerBaseAttack(PlayerIndex, target->PlayerIndex, damage);
     target->TakeDamage(damage);
 }
 

@@ -40,6 +40,6 @@ public:
     // prints the matrix that indicates the tiles of the battlefield
     void drawBattlefield(vector<shared_ptr<Character>>& player,
         vector<shared_ptr<Character>>& enemy);
-    void drawBattlefield();
+
 };
 

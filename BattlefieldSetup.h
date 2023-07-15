@@ -1,32 +1,21 @@
-#pragma once
-#include "Constants.h"
-#include <vector>
-//Movi o processo de configuração do jogo para fora do Battlefield pq 
-//1) precisava encontrar um ponto por onde puxar o fio da tarefa
-//2) ter o processo de configuração do battlefield dentro do proprio
-//battlefield viola a Single Responsability. É o configurador que tem q
-//saber configurar, etc.
-// não é uma classe pq c++ n é java, eu tenho a liberdade de fazer funções
-//e não preciso apertar verbos em substantivos.
-
-/// <summary>
-/// Guarda os parâmetros escolhidos pelo player.
-/// </summary>
-struct GameSetupParameters {
-    int GridLines;
-    int GridRows;
-    int NumberOfCharactersInEnemyTeam;
-    int NumberOfCharactersInPlayerTeam;
-    //Não vou ter o sofrimento de lidar com arrays dinâmicas de baixo nível, malloc, calloc, free se eu posso usar uma 
-    //estrutura de alto nivel ne? E o custo da passagem por valor é irrelevante já que isso não será usado num loop quente
-    //do jogo.
-    std::vector<CharacterClass> PlayerTeamClassIds;
-};
-
-/// <summary>
-/// Pede que o player escolha a classe e o tamanho do mapa.
-/// </summary>
-/// <returns>Os parâmetros válidos</returns>
-GameSetupParameters AskForParameters();
-
-bool AskIfWantToPlayAgain();
+//#pragma once
+//#include "Constants.h"
+//#include <vector>
+//#include "Types.h"
+////Movi o processo de configuração do jogo para fora do Battlefield pq 
+////1) precisava encontrar um ponto por onde puxar o fio da tarefa
+////2) ter o processo de configuração do battlefield dentro do proprio
+////battlefield viola a Single Responsability. É o configurador que tem q
+////saber configurar, etc.
+//// não é uma classe pq c++ n é java, eu tenho a liberdade de fazer funções
+////e não preciso apertar verbos em substantivos.
+//
+//
+//
+///// <summary>
+///// Pede que o player escolha a classe e o tamanho do mapa.
+///// </summary>
+///// <returns>Os parâmetros válidos</returns>
+//Types::GameSetupParameters AskForParameters();
+//
+//bool AskIfWantToPlayAgain();
