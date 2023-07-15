@@ -14,7 +14,7 @@
 using namespace std;
 
 Character::Character(Types::CharacterClass characterClass, BattleField& bf, Team t) :
-    isDead(false), battlefield(bf), team(t)
+    isDead(false), battlefield(bf), team(t), characterClass(characterClass)
 {
     switch (characterClass) {
     case Types::Archer:

@@ -67,14 +67,40 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
             bool drewPlayerOrEnemy = false;
             for (auto player : players) {
                 if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
-                    ss << "[A]";//Player por enquanto é alice
+                    switch (player->GetCharacterClass()) {
+                    case Types::Archer:
+                        ss << "[A]";
+                        break;
+                    case Types::Cleric:
+                        ss << "[C]";
+                        break;
+                    case Types::Paladin:
+                        ss << "[P]";
+                        break;
+                    case Types::Warrior:
+                        ss << "[W]";
+                        break;
+                    }
                     drewPlayerOrEnemy = true;
                     break;
                 }
             }
             for (auto enemy : enemies) {
                 if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
-                    ss << "[a]";
+                    switch (enemy->GetCharacterClass()) {
+                    case Types::Archer:
+                        ss << "[a]";
+                        break;
+                    case Types::Cleric:
+                        ss << "[c]";
+                        break;
+                    case Types::Paladin:
+                        ss << "[p]";
+                        break;
+                    case Types::Warrior:
+                        ss << "[w]";
+                        break;
+                    }
                     drewPlayerOrEnemy = true;
                     break;
                 }

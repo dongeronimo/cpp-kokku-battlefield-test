@@ -32,6 +32,7 @@ private:
     bool RollSpecialAbilities();
     void ReevaluateTarget();
     void ApplyStatusEffects();
+    const Types::CharacterClass characterClass;
 public:
     Character(Types::CharacterClass charcaterClass, 
         BattleField& battlefield, 
@@ -83,5 +84,7 @@ public:
     const Team GetTeam()const {
         return team;
     }
+
+    const Types::CharacterClass GetCharacterClass()const { return characterClass; }
 };
 
