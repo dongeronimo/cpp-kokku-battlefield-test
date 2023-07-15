@@ -20,6 +20,7 @@ private:
 	Context(const Context&);
 	~Context() {}
 	const Types::ClassBaseAttributes PaladinAttrs, WarriorAttrs, ClericAttrs, ArcherAttrs;
+	const Types::AbilitiesAndEffecsAttributes SpecialAbilitiesAttrs;
 public:
 	static Context& Instance();
 	void Quit() { throw QuitGameSignal(); }
@@ -27,4 +28,7 @@ public:
 	std::mt19937& RNG();
 	const int RandomInteger(const int a, const int b);
 	const Types::ClassBaseAttributes GetBaseAttributes(Types::CharacterClass cls);
+	const Types::AbilitiesAndEffecsAttributes GetSpecialAbilitiesAttributes() {
+		return SpecialAbilitiesAttrs;
+	}
 };

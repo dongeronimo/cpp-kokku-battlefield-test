@@ -1,8 +1,11 @@
 #include "StatusEffect.h"
 #include "Character.h"
 #include "UI.h"
+#include "Context.h"
 using namespace std;
-
+const int Heal::TypeID = 1;
+const int Stun::TypeID = 2;
+const int PulsaDinura::TypeID = 3;
 
 StatusEffect::StatusEffect(Character& actor,
 	Character& subject, unsigned int duration, const int type)
@@ -10,13 +13,12 @@ StatusEffect::StatusEffect(Character& actor,
 {
 }
 
-const int Heal::TypeID = 1;
 
-Heal::Heal(Character& actor, Character& subject, int amount)
-	:StatusEffect(actor, subject, HEAL_DURATION, Heal::TypeID), Amount(amount)
+
+Heal::Heal(Character& actor, Character& subject, float amount)
+	:StatusEffect(actor, subject, CONTEXT.GetSpecialAbilitiesAttributes().HEAL_DURATION, Heal::TypeID), Amount(amount)
 {
 }
-
 void Heal::Apply() {
 	if (!IsFinished()) {
 		Time++;
@@ -25,10 +27,9 @@ void Heal::Apply() {
 	}
 }
 
-const int Stun::TypeID = 2;
-Stun::Stun(Character& actor, Character& subject)
-	:StatusEffect(actor, subject, STUN_DURATION,Stun::TypeID){}
 
+Stun::Stun(Character& actor, Character& subject)
+	:StatusEffect(actor, subject, CONTEXT.GetSpecialAbilitiesAttributes().STUN_DURATION,Stun::TypeID){}
 void Stun::Apply() {
 	if (!IsFinished()) {
 		Time++;
@@ -36,15 +37,12 @@ void Stun::Apply() {
 	}
 }
 
-const int PulsaDinura::TypeID = 3;
-
 PulsaDinura::PulsaDinura(Character & actor, Character & subject)
-	:StatusEffect(actor, subject, CURSE_DURATION, Stun::TypeID) {}
-
+	:StatusEffect(actor, subject, CONTEXT.GetSpecialAbilitiesAttributes().CURSE_DURATION, Stun::TypeID) {}
 void PulsaDinura::Apply() {
 	if (!IsFinished()) {
 		Time++;
 		_UI.PulsaDinuraApply(subject.PlayerIndex);
-		subject.TakeDamage(CURSE_DAMAGE);
+		subject.TakeDamage(CONTEXT.GetSpecialAbilitiesAttributes().CURSE_DAMAGE);
 	}
 }

@@ -2,14 +2,16 @@
 #include "mathUtils.h"
 #include "Character.h"
 #include "UI.h"
-BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
+#include "Context.h"
+BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, 
+	CONTEXT.GetSpecialAbilitiesAttributes().BOW_ATTACK_PROC_CHANCE) {}
 bool BowAttack::ConditionsAreMet() {
 	if (originator.target == nullptr)
 		return false;
 	else {
 		const int distanceToTarget = ManhattanDistance(originator.currentBox->Line(), originator.currentBox->Column(),
 			originator.target->currentBox->Line(), originator.target->currentBox->Column());
-		return distanceToTarget <= BOW_ATTACK_PROC_MAX_DISTANCE;
+		return distanceToTarget <= CONTEXT.GetSpecialAbilitiesAttributes().BOW_ATTACK_PROC_MAX_DISTANCE;
 	}
 }
 void BowAttack::Execute() {

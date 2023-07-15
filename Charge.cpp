@@ -4,7 +4,8 @@
 
 #include "BattleField.h"
 #include "UI.h"
-Charge::Charge(Character& originator) :SpecialAbility(originator, CHARGE_PROC_CHANCE) {}
+#include "Context.h"
+Charge::Charge(Character& originator) :SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().CHARGE_PROC_CHANCE) {}
 bool Charge::ConditionsAreMet() {
 	return originator.target != nullptr;
 }

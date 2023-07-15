@@ -2,7 +2,8 @@
 #include "Character.h"
 #include "StatusEffect.h"
 #include "UI.h"
-SelfHeal::SelfHeal(Character& originator) :SpecialAbility(originator, SELF_HEAL_PROC_CHANCE) {
+#include "Context.h"
+SelfHeal::SelfHeal(Character& originator) :SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().SELF_HEAL_PROC_CHANCE) {
 }
 
 bool SelfHeal::ConditionsAreMet() {

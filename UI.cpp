@@ -290,7 +290,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 		{
 			Types::GridBox* currentGrid = grids[CalculateIndex(i, j, cols)];
 			bool drewPlayerOrEnemy = false;
-			for (auto player : players) {
+			for (std::shared_ptr<Character>& player : players) {
 				if (player->IsDead())
 					continue;
 				if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
@@ -312,7 +312,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 					break;
 				}
 			}
-			for (auto enemy : enemies) {
+			for (std::shared_ptr<Character>& enemy : enemies) {
 				if (enemy->IsDead())
 					continue;
 				if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
@@ -348,7 +348,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 	std::cout << ss.str() << endl;
 }
 
-void UI::HealApply(const int& target, const int amount)const
+void UI::HealApply(const int& target, const float amount)const
 {
 	cout << "Player " << target << " will heal " << amount << endl;
 }

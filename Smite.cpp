@@ -3,9 +3,11 @@
 #include "BattleField.h"
 #include "StatusEffect.h"
 #include "UI.h"
-Smite::Smite(Character& originator) :SpecialAbility(originator, SMITE_PROC_CHANCE) {}
+#include "Context.h"
+Smite::Smite(Character& originator) :SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().SMITE_PROC_CHANCE) {}
 bool Smite::ConditionsAreMet() {
-	return originator.target != nullptr && originator.Health <= SMITE_MAX_HP_PROC && MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET <= 1;
+	return originator.target != nullptr && originator.Health <= CONTEXT.GetSpecialAbilitiesAttributes().SMITE_MAX_HP_PROC && 
+		MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET <= 1;
 }
 void Smite::Execute() {
 	//1) empurra o target para trás se for possivel.

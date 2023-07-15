@@ -48,7 +48,7 @@ public:
 	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, const int lines, const int cols)const;
 	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<shared_ptr<Character>>& players,
 		vector<shared_ptr<Character>>& enemies, const int lines, const int cols);
-	void HealApply(const int& target, const int amount)const;
+	void HealApply(const int& target, const float amount)const;
 	void StunApply(const int& target)const;
 	void PulsaDinuraApply(const int& target) const;
 	void StrongAttack(const int& originator)const;

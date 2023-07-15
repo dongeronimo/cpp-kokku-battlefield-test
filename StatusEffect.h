@@ -1,9 +1,6 @@
 #pragma once
 #include <memory>
-#define HEAL_DURATION 2
-#define STUN_DURATION 3
-#define CURSE_DURATION 2
-#define CURSE_DAMAGE 20
+
 using namespace std;
 class Character;
 class StatusEffect
@@ -31,7 +28,7 @@ private:
 	const float Amount;
 public:
 	static const int TypeID;
-	Heal(Character& actor, Character& subject, int amount);
+	Heal(Character& actor, Character& subject, float amount);
 	void Apply()override;
 };
 
