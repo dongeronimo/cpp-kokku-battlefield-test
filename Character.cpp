@@ -53,6 +53,7 @@ bool Character::TakeDamage(float amount)
 
 void Character::Die() 
 {
+    cout << "Player " << PlayerIndex << " is dead." << endl;
     isDead = true;
 }
 void Character::ClearTargetIfDead()
