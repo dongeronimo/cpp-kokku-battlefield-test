@@ -74,12 +74,7 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 }
 
 void BattleField::StartGame()
-{
-    ////populates the character variables and targets
-    //Vai ser populado dinâmicamente
-    //EnemyCharacter->target = PlayerCharacter;
-    //PlayerCharacter->target = EnemyCharacter;
-    
+{   
     AllPlayers.insert(AllPlayers.end(), PlayerTeam.begin(), PlayerTeam.end());
     AllPlayers.insert(AllPlayers.end(), EnemyTeam.begin(), EnemyTeam.end());
 
@@ -112,12 +107,14 @@ GameResult BattleField::StartTurn() {
         [](auto character) {return character->IsDead(); });
     std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
         [](auto character) {return character->IsDead(); });
-    if (deadPlayers.size() == PlayerTeam.size())
+
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
+
+    if (deadPlayers.size() == PlayerTeam.size()) 
         return Defeat;
     if (deadEnemies.size() == EnemyTeam.size())
         return Victory;
 
-    grid->drawBattlefield(PlayerTeam, EnemyTeam);
     currentTurn++;
     HandleTurn();
     //Devido à recursão não retorna nada aqui pq o retorno da pilha de recursão é quando 
