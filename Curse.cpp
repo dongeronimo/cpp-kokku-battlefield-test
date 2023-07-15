@@ -6,9 +6,9 @@
 #include <vector>
 #include <iterator>
 #include "StatusEffect.h"
-
+#include "Context.h"
 Curse::Curse(Character& originator, const int turnsToRechargeCurse, const int range) :
-	SpecialAbility(originator, CURSE_PROC_CHANCE),
+	SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().CURSE_PROC_CHANCE),
 	turnsSinceLastCurse(0), range(range),
 	turnsToRechargeCurse(turnsToRechargeCurse)
 {}
@@ -24,7 +24,7 @@ bool Curse::ConditionsAreMet() {
 void Curse::Execute()
 {
 	//Quem é amigo e quem é inimigo varia de acordo com o time do character.
-	_UI->Curse(originator.PlayerIndex);
+	_UI.Curse(originator.PlayerIndex);
 	vector<shared_ptr<Character>> enemies;
 	vector<shared_ptr<Character>> allies;
 	if (originator.GetTeam() == TeamA) {

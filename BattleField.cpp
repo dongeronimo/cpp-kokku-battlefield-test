@@ -11,7 +11,7 @@ using namespace std;
 
 
 Types::GridBox* BattleField::GetRandomUnocupied() {
-    auto randomInteger = CONTEXT->RandomInteger(0, grid->grids.size());
+    auto randomInteger = CONTEXT.RandomInteger(0, grid->grids.size());
     if (grid->grids[randomInteger]->ocupied == false)
         return grid->grids[randomInteger];
     else
@@ -41,12 +41,13 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
         //typecast correto.
         auto characterClass = classIndex;
         //troquei printf por cout pq estou mais acostumado com cout
-        _UI->PlayerClassChoice(characterClass);
+        _UI.PlayerClassChoice(characterClass);
         auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
-        PlayerCharacter->Health = 100;
-        PlayerCharacter->BaseDamage = 20;
+        auto attrs = CONTEXT.GetBaseAttributes(characterClass);
+        PlayerCharacter->Health = attrs.Health;
+        PlayerCharacter->BaseDamage = attrs.BaseDamage;
         PlayerCharacter->PlayerIndex = PlayerTeam.size();
-        PlayerCharacter->DamageMultiplier = 1.0f;
+        PlayerCharacter->DamageMultiplier = attrs.DamageMultiplier;
         PlayerTeam.push_back(PlayerCharacter);
     }
 }
@@ -54,14 +55,15 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
 {
     for (auto i = 0; i < numberOfEnemies; i++) {
-        int randomInteger = CONTEXT->RandomInteger (Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
+        int randomInteger = CONTEXT.RandomInteger (Types::CharacterClass::Paladin, Types::CharacterClass::Archer);
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
-        _UI->EnemyClassChoice(enemyClass);
+        _UI.EnemyClassChoice(enemyClass);
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
-        EnemyCharacter->Health = 100;
-        EnemyCharacter->BaseDamage = 20;
+        auto attrs = CONTEXT.GetBaseAttributes(enemyClass);
+        EnemyCharacter->Health = attrs.Health;
+        EnemyCharacter->BaseDamage = attrs.BaseDamage;
         EnemyCharacter->PlayerIndex = EnemyTeam.size() + PlayerTeam.size();
-        EnemyCharacter->DamageMultiplier = 1.0f;
+        EnemyCharacter->DamageMultiplier = attrs.DamageMultiplier;
         EnemyTeam.push_back(EnemyCharacter);
     }
 }
@@ -79,7 +81,7 @@ void BattleField::DrawBattlefield() {
     grid->drawBattlefield(PlayerTeam, EnemyTeam);
 }
 Types::GameResult BattleField::StartTurn() {
-    std::shuffle(AllPlayers.begin(), AllPlayers.end(), CONTEXT->RNG());
+    std::shuffle(AllPlayers.begin(), AllPlayers.end(), CONTEXT.RNG());
     auto it = AllPlayers.begin();
     for (it = AllPlayers.begin(); it != AllPlayers.end(); ++it) {
         auto character = (*it);
@@ -118,19 +120,19 @@ Types::GameResult BattleField::StartTurn() {
 
 void BattleField::HandleTurn()
 {
-    _UI->NextTurnOrQuitPrompt();
+    _UI.NextTurnOrQuitPrompt();
     Types::GameResult result = StartTurn();
-    _UI->VictoryOrDefeat(result);
-    if (_UI->AskIfWantToPlayAgain()) {
+    _UI.VictoryOrDefeat(result);
+    if (_UI.AskIfWantToPlayAgain()) {
         //Modifica os parâmetros e reinicia o ciclo.
-        Types::GameSetupParameters newParams = _UI->AskForParameters();
+        Types::GameSetupParameters newParams = _UI.AskForParameters();
         Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
             newParams.NumberOfCharactersInEnemyTeam);
         StartGame();
     }
     else {
         //sai do programa.
-        CONTEXT->Quit();
+        CONTEXT.Quit();
     }
 }
 
@@ -148,8 +150,8 @@ void BattleField::AlocatePlayers()
 }
 
 Types::GridBox* BattleField::GetEmptyGridbox() {
-    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
-    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
+    int randomLine = CONTEXT.RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT.RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         return RandomLocation;
@@ -162,8 +164,8 @@ Types::GridBox* BattleField::GetEmptyGridbox() {
 //TODO: Fundir essas duas fn em uma só pq fazem a mesma coisa
 void BattleField::AlocatePlayerCharacter(shared_ptr<Character> character)
 {
-    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
-    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
+    int randomLine = CONTEXT.RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT.RandomInteger(0, grid->Columns() - 1);
     //pega o GridBox escolhido aleatoriamente
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     //Não está ocupado, por o player e marcar como ocupado.
@@ -179,8 +181,8 @@ void BattleField::AlocatePlayerCharacter(shared_ptr<Character> character)
 
 void BattleField::AlocateEnemyCharacter(shared_ptr<Character> character)
 {
-    int randomLine = CONTEXT->RandomInteger(0, grid->Lines() - 1);
-    int randomCol = CONTEXT->RandomInteger(0, grid->Columns() - 1);
+    int randomLine = CONTEXT.RandomInteger(0, grid->Lines() - 1);
+    int randomCol = CONTEXT.RandomInteger(0, grid->Columns() - 1);
     Types::GridBox* RandomLocation = grid->grids[grid->CalculateIndex(randomLine, randomCol)];
     if (!RandomLocation->ocupied) {
         character->currentBox = RandomLocation;

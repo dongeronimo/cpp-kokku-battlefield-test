@@ -6,7 +6,8 @@
 #include <algorithm>
 #include "Context.h"
 #include "UI.h"
-Reanimate::Reanimate(Character& originator) :SpecialAbility(originator, REANIMATE_PROC_CHANCE) {}
+#include "Context.h"
+Reanimate::Reanimate(Character& originator) :SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().REANIMATE_PROC_CHANCE) {}
 bool Reanimate::ConditionsAreMet() {
 	vector<shared_ptr<Character>> allies;
 	if (originator.GetTeam() == TeamA)
@@ -32,7 +33,7 @@ void Reanimate::Execute() {
 		[](auto ally) {
 			return ally->IsDead();
 		});
-	std::shuffle(deadAllies.begin(), deadAllies.end(), CONTEXT->RNG());
+	std::shuffle(deadAllies.begin(), deadAllies.end(), CONTEXT.RNG());
 	auto chosen = deadAllies[0];
 	//altera os estados dele para ele voltar pra partida
 	chosen->Health = 20;
@@ -55,6 +56,6 @@ void Reanimate::Execute() {
 	}
 	chosen->currentBox = box;
 	box->ocupied = true;
-	_UI->Reanimate(originator.PlayerIndex, chosen->PlayerIndex);
+	_UI.Reanimate(originator.PlayerIndex, chosen->PlayerIndex);
 	originator.battlefield.DrawBattlefield();
 }

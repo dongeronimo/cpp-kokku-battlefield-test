@@ -48,7 +48,29 @@ public:
         //do jogo.
         std::vector<CharacterClass> PlayerTeamClassIds;
     };
-
+    struct ClassBaseAttributes {
+        float Health;
+        float BaseDamage;
+        float DamageMultiplier;
+    };
+    struct AbilitiesAndEffecsAttributes {
+        float STRONG_ATTACK_PROC_CHANCE = 0.33f;
+        float TELEPORT_PROC_CHANCE = 0.33f;
+        float TELEPORT_PROC_DISTANCE = 3;
+        float SELF_HEAL_PROC_CHANCE = 0.33f;
+        float BOW_ATTACK_PROC_CHANCE = 0.75f;
+        float BOW_ATTACK_PROC_MAX_DISTANCE = 5 
+;       float SMITE_PROC_CHANCE = 0.8f;
+        float SMITE_MAX_HP_PROC = 60;
+        float CHARGE_PROC_CHANCE = 0.5f;
+        float CURSE_PROC_CHANCE = 0.33f;
+        float CURSE_RANGE = 3;
+        float REANIMATE_PROC_CHANCE = 0.05f;
+        int HEAL_DURATION =2;
+        int STUN_DURATION =3;
+        int  CURSE_DURATION =2;
+        float CURSE_DAMAGE = 20;
+    };
 
 };
 

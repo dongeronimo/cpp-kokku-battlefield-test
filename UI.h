@@ -10,7 +10,10 @@ class Character;
 class UI
 {
 private:
-	static shared_ptr<UI> instance;
+	static UI* instance;
+	UI() {}
+	UI(const UI&) {}
+	~UI() {}
 	int AskForNumberOfCharactersInPlayerTeam();
 	vector<Types::CharacterClass> AskForPlayerTeamClasses(int teamSize);
 	Types::CharacterClass AskForClass();
@@ -20,7 +23,7 @@ private:
 	int ReadPositiveInt(const std::string& text);
 	const int CalculateIndex(int i, int j, int cols)const { return cols * i + j; }
 public:
-	static shared_ptr<UI> Instance();
+	static UI& Instance();
 	Types::GameSetupParameters AskForParameters();
 	bool AskIfWantToPlayAgain()const;
 	void Goodbye()const;
@@ -45,7 +48,7 @@ public:
 	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, const int lines, const int cols)const;
 	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<shared_ptr<Character>>& players,
 		vector<shared_ptr<Character>>& enemies, const int lines, const int cols);
-	void HealApply(const int& target, const int amount)const;
+	void HealApply(const int& target, const float amount)const;
 	void StunApply(const int& target)const;
 	void PulsaDinuraApply(const int& target) const;
 	void StrongAttack(const int& originator)const;

@@ -3,7 +3,9 @@
 #include "Character.h"
 #include "UI.h"
 #include "BattleField.h"
-Teleport::Teleport(Character& originator) :SpecialAbility(originator, TELEPORT_PROC_CHANCE)
+#include "Context.h"
+Teleport::Teleport(Character& originator) :SpecialAbility(originator, 
+	CONTEXT.GetSpecialAbilitiesAttributes().TELEPORT_PROC_CHANCE)
 {
 }
 
@@ -13,13 +15,13 @@ bool Teleport::ConditionsAreMet()
 		return false;
 	else {
 		const int distanceToTarget = MANHATTAN_DISTANCE_BETWEEN_ORIGINATOR_AND_TARGET;
-		return distanceToTarget <= TELEPORT_PROC_DISTANCE;
+		return distanceToTarget <= CONTEXT.GetSpecialAbilitiesAttributes().TELEPORT_PROC_DISTANCE;
 	}
 }
 
 void Teleport::Execute()
 {
-	_UI->Teleport(originator.PlayerIndex);
+	_UI.Teleport(originator.PlayerIndex);
 	originator.battlefield.DrawBattlefield();
 	
 	//procura um gridbox pra entrar

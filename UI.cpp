@@ -9,7 +9,7 @@
 #include "Character.h"
 #define KEY_ESC 27
 using namespace std;
-shared_ptr<UI> UI::instance = make_shared<UI>();
+UI* UI::instance = nullptr;
 
 template<typename ReturnValue>
 ReturnValue PromptLoop(function<ReturnValue(bool&)> Prompt) {
@@ -139,8 +139,11 @@ int UI::ReadPositiveInt(const std::string& text)
 
 }
 
-shared_ptr<UI> UI::Instance() {
-	return instance;
+UI& UI::Instance() {
+	if (instance == nullptr) {
+		instance = new UI();
+	}
+	return *instance;
 }
 
 void UI::PlayerClassChoice(const Types::CharacterClass& classIndex) const
@@ -188,7 +191,7 @@ void UI::NextTurnOrQuitPrompt()
 	cout << endl << "Click on any key to start the next turn or Esc to quit..." << endl;
 	auto k = _getch();
 	if (k == KEY_ESC) {
-		CONTEXT->Quit();
+		CONTEXT.Quit();
 	}
 }
 
@@ -287,7 +290,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 		{
 			Types::GridBox* currentGrid = grids[CalculateIndex(i, j, cols)];
 			bool drewPlayerOrEnemy = false;
-			for (auto player : players) {
+			for (std::shared_ptr<Character>& player : players) {
 				if (player->IsDead())
 					continue;
 				if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
@@ -309,7 +312,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 					break;
 				}
 			}
-			for (auto enemy : enemies) {
+			for (std::shared_ptr<Character>& enemy : enemies) {
 				if (enemy->IsDead())
 					continue;
 				if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
@@ -345,7 +348,7 @@ void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<share
 	std::cout << ss.str() << endl;
 }
 
-void UI::HealApply(const int& target, const int amount)const
+void UI::HealApply(const int& target, const float amount)const
 {
 	cout << "Player " << target << " will heal " << amount << endl;
 }
@@ -409,4 +412,5 @@ bool UI::AskIfWantToPlayAgain()const
 
 void UI::Goodbye()const {
 	cout << "Goodbye";
+	delete instance;
 }

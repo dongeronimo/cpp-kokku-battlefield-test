@@ -2,9 +2,10 @@
 #include "mathUtils.h"
 #include "Character.h"
 #include "UI.h"
+#include "Context.h"
 using namespace std;
 StrongAttack::StrongAttack(Character& originator)
-	:SpecialAbility(originator, STRONG_ATTACK_PROC_CHANCE)
+	:SpecialAbility(originator, CONTEXT.GetSpecialAbilitiesAttributes().STRONG_ATTACK_PROC_CHANCE)
 {
 }
 
@@ -13,7 +14,7 @@ bool StrongAttack::ConditionsAreMet() {
 }
 void StrongAttack::Execute()
 {
-	_UI->StrongAttack(originator.PlayerIndex);
+	_UI.StrongAttack(originator.PlayerIndex);
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 2.0f;
 	originator.Attack(originator.target);

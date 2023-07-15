@@ -15,11 +15,11 @@ Grid::Grid(int Lines, int Columns)
         {
             Types::GridBox* newBox = new Types::GridBox(j, i, false, CalculateIndex(i,j));
             grids.push_back(newBox);
-            _UI->PrintInt(newBox->Index);
+            _UI.PrintInt(newBox->Index);
         }
     }
-    _UI->BattlefieldCreated();
-    _UI->DrawBattlefield(grids, this->Lines(), this->Columns());
+    _UI.BattlefieldCreated();
+    _UI.DrawBattlefield(grids, this->Lines(), this->Columns());
 }
 
 Grid::~Grid() 
@@ -42,7 +42,7 @@ Types::GridBox* Grid::GetIfEmpty(int i, int j) const
 void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
     vector<shared_ptr<Character>>& enemies)
 {
-    _UI->DrawBattlefield(grids, players, enemies, Lines(), Columns());
+    _UI.DrawBattlefield(grids, players, enemies, Lines(), Columns());
     //Usando stringstream pra acumular pra reduzir a qtd de operações
     //de output e fazer o output todo de uma vez.
     /*std::stringstream ss;
