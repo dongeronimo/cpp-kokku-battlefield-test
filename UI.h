@@ -13,6 +13,7 @@ private:
 	static UI* instance;
 	UI() {}
 	UI(const UI&) {}
+	~UI() {}
 	int AskForNumberOfCharactersInPlayerTeam();
 	vector<Types::CharacterClass> AskForPlayerTeamClasses(int teamSize);
 	Types::CharacterClass AskForClass();

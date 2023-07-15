@@ -43,10 +43,11 @@ void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
         //troquei printf por cout pq estou mais acostumado com cout
         _UI.PlayerClassChoice(characterClass);
         auto PlayerCharacter = std::make_shared<Character>(characterClass, *this, TeamA);
-        PlayerCharacter->Health = 100;
-        PlayerCharacter->BaseDamage = 20;
+        auto attrs = CONTEXT.GetBaseAttributes(characterClass);
+        PlayerCharacter->Health = attrs.Health;
+        PlayerCharacter->BaseDamage = attrs.BaseDamage;
         PlayerCharacter->PlayerIndex = PlayerTeam.size();
-        PlayerCharacter->DamageMultiplier = 1.0f;
+        PlayerCharacter->DamageMultiplier = attrs.DamageMultiplier;
         PlayerTeam.push_back(PlayerCharacter);
     }
 }
@@ -58,10 +59,11 @@ void BattleField::CreateEnemyCharacters(const int numberOfEnemies)
         Types::CharacterClass enemyClass = static_cast<Types::CharacterClass>(randomInteger);
         _UI.EnemyClassChoice(enemyClass);
         auto EnemyCharacter = std::make_shared<Character>(enemyClass, *this, TeamB);
-        EnemyCharacter->Health = 100;
-        EnemyCharacter->BaseDamage = 20;
+        auto attrs = CONTEXT.GetBaseAttributes(enemyClass);
+        EnemyCharacter->Health = attrs.Health;
+        EnemyCharacter->BaseDamage = attrs.BaseDamage;
         EnemyCharacter->PlayerIndex = EnemyTeam.size() + PlayerTeam.size();
-        EnemyCharacter->DamageMultiplier = 1.0f;
+        EnemyCharacter->DamageMultiplier = attrs.DamageMultiplier;
         EnemyTeam.push_back(EnemyCharacter);
     }
 }
