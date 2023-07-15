@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <string>
 #include "Grid.h"
 #include "Character.h"
 #include "Types.h"
@@ -8,12 +9,15 @@
 using namespace std;
 class BattleField;
 class SpecialAbility;
+class StatusEffect;
 enum Team {TeamA, TeamB};
 class Character
 {
 private:
+    typedef shared_ptr<Character> PCharacter;
     bool isDead;
     const Team team;
+    vector<shared_ptr<StatusEffect>> StatusEffects;
     vector<shared_ptr<SpecialAbility>> SpecialAbilities;
     /// <summary>
     /// Abandona o alvo morto.
@@ -26,6 +30,8 @@ private:
     /// </summary>
     /// <returns></returns>
     bool RollSpecialAbilities();
+    void ReevaluateTarget();
+    void ApplyStatusEffects();
 public:
     Character(Types::CharacterClass charcaterClass, 
         BattleField& battlefield, 
@@ -40,6 +46,7 @@ public:
     /// </summary>
     /// <returns></returns>
     const bool IsDead() const { return isDead; }
+    void IsDead(bool d) { isDead = false; }
     float Health;
     float BaseDamage;
     float DamageMultiplier;
@@ -67,6 +74,14 @@ public:
 
     void Attack(shared_ptr<Character> target);
 
+    void AddEffect(shared_ptr<StatusEffect> effect);
 
+    bool HasEffect(const int typeId) const;
+
+    const std::string MoveToTarget();
+
+    const Team GetTeam()const {
+        return team;
+    }
 };
 

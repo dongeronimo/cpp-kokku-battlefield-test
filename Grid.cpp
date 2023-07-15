@@ -28,6 +28,15 @@ Grid::~Grid()
         delete(i);
     }
 }
+Types::GridBox* Grid::GetIfEmpty(int i, int j) const
+{
+    if (i < 0 || i >= Lines() || j < 0 || j >= Columns())
+        return nullptr;
+    else if (grids[CalculateIndex(i, j)]->ocupied)
+        return nullptr;
+    else 
+        return grids[CalculateIndex(i, j)];
+}
 void Grid::drawBattlefield() {
     std::stringstream ss;
     for (int i = 0; i < Lines(); i++) {
