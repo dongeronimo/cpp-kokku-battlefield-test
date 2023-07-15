@@ -66,6 +66,8 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
             Types::GridBox* currentGrid = grids[CalculateIndex(i, j)];
             bool drewPlayerOrEnemy = false;
             for (auto player : players) {
+                if (player->IsDead())
+                    continue;
                 if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
                     switch (player->GetCharacterClass()) {
                     case Types::Archer:
@@ -86,6 +88,8 @@ void Grid::drawBattlefield(vector<shared_ptr<Character>>& players,
                 }
             }
             for (auto enemy : enemies) {
+                if (enemy->IsDead())
+                    continue;
                 if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
                     switch (enemy->GetCharacterClass()) {
                     case Types::Archer:

@@ -82,7 +82,9 @@ void BattleField::StartGame()
     StartTurn();
 
 }
-
+void BattleField::DrawBattlefield() {
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
+}
 GameResult BattleField::StartTurn() {
     std::shuffle(AllPlayers.begin(), AllPlayers.end(), rng);
     auto it = AllPlayers.begin();
@@ -101,15 +103,15 @@ GameResult BattleField::StartTurn() {
             }
         }
     }
+
+    grid->drawBattlefield(PlayerTeam, EnemyTeam);
+
     //a partida acaba se um dos times estiver todo morto
     vector<shared_ptr<Character>> deadPlayers, deadEnemies;
     std::copy_if(PlayerTeam.begin(), PlayerTeam.end(), std::back_inserter(deadPlayers),
         [](auto character) {return character->IsDead(); });
     std::copy_if(EnemyTeam.begin(), EnemyTeam.end(), std::back_inserter(deadEnemies),
         [](auto character) {return character->IsDead(); });
-
-    grid->drawBattlefield(PlayerTeam, EnemyTeam);
-
     if (deadPlayers.size() == PlayerTeam.size()) 
         return Defeat;
     if (deadEnemies.size() == EnemyTeam.size())
