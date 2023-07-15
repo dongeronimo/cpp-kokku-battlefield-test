@@ -27,5 +27,9 @@ public:
 	/// </summary>
 	void NextTurnOrQuitPrompt();
 	void VictoryOrDefeat(const Types::GameResult& result)const;
+	void BowAttack(const int& originatorIndex, const int& targetIndex) const;
+	void PlayerIsDead(const int& playerId)const;
+	void PlayerWalkTo(const int& playerId, const string& direction)const;
+	void PlayerBaseAttack(const int& originator, const int& subject, const float& damage);
 };
 

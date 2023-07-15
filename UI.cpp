@@ -204,6 +204,21 @@ void UI::VictoryOrDefeat(const Types::GameResult& result) const
 	}
 }
 
+void UI::BowAttack(const int& originatorIndex, const int& targetIndex) const
+{
+	cout << "Player " << originatorIndex << " is firing arrows at " << targetIndex << endl;
+}
+
+void UI::PlayerIsDead(const int& playerId) const
+{
+	cout << "Player " << playerId << " is dead." << endl;
+}
+
+void UI::PlayerWalkTo(const int& playerId, const string& direction) const
+{
+	cout << "Player " << playerId << " walked " << direction << endl;
+}
+
 Types::GameSetupParameters UI::AskForParameters()
 {
 	Types::GameSetupParameters response;

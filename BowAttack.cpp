@@ -2,7 +2,7 @@
 #include "mathUtils.h"
 #include "Character.h"
 #include <iostream>
-
+#include "UI.h"
 BowAttack::BowAttack(Character& originator) :SpecialAbility(originator, BOW_ATTACK_PROC_CHANCE) {}
 bool BowAttack::ConditionsAreMet() {
 	if (originator.target == nullptr)
@@ -14,7 +14,7 @@ bool BowAttack::ConditionsAreMet() {
 	}
 }
 void BowAttack::Execute() {
-	cout << "Player " << originator.PlayerIndex << " is firing arrows at " << originator.target->PlayerIndex << endl;
+	_UI->BowAttack(originator.PlayerIndex, originator.target->PlayerIndex);
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 0.5f;
 	originator.Attack(originator.target);
