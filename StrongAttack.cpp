@@ -1,7 +1,7 @@
 #include "SpecialAbility.h"
 #include "mathUtils.h"
 #include "Character.h"
-#include <iostream>
+#include "UI.h"
 using namespace std;
 StrongAttack::StrongAttack(Character& originator)
 	:SpecialAbility(originator, STRONG_ATTACK_PROC_CHANCE)
@@ -13,7 +13,7 @@ bool StrongAttack::ConditionsAreMet() {
 }
 void StrongAttack::Execute()
 {
-	cout << "Player " << originator.PlayerIndex << " will do a strong attack!" << endl;
+	_UI->StrongAttack(originator.PlayerIndex);
 	auto oldMultiplier = originator.DamageMultiplier;
 	originator.DamageMultiplier = 2.0f;
 	originator.Attack(originator.target);

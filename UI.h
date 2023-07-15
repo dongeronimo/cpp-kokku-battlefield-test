@@ -1,8 +1,11 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <vector>
 #include "Types.h"
 using namespace std;
+struct GridBox;
+class Character;
 #define _UI UI::Instance()
 class UI
 {
@@ -15,6 +18,7 @@ private:
 	int AskForNumberOfLines();
 	int AskForNumberOfRows();
 	int ReadPositiveInt(const std::string& text);
+	const int CalculateIndex(int i, int j, int cols)const { return cols * i + j; }
 public:
 	static shared_ptr<UI> Instance();
 	Types::GameSetupParameters AskForParameters();
@@ -36,5 +40,15 @@ public:
 	void Smite(const int& originator, const int& target)const;
 	void Curse(const int& originator)const;
 	void Reanimate(const int& originator, const int& chosen)const;
+	void PrintInt(const int& someInt)const;
+	void BattlefieldCreated()const;
+	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, const int lines, const int cols)const;
+	void DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<shared_ptr<Character>>& players,
+		vector<shared_ptr<Character>>& enemies, const int lines, const int cols);
+	void HealApply(const int& target, const int amount)const;
+	void StunApply(const int& target)const;
+	void PulsaDinuraApply(const int& target) const;
+	void StrongAttack(const int& originator)const;
+	void Teleport(const int& originator)const;
 };
 

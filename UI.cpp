@@ -5,7 +5,8 @@
 #include <string>
 #include <conio.h>
 #include "Context.h"
-
+#include <sstream>
+#include "Character.h"
 #define KEY_ESC 27
 using namespace std;
 shared_ptr<UI> UI::instance = make_shared<UI>();
@@ -247,6 +248,126 @@ void UI::Curse(const int& originator) const
 void UI::Reanimate(const int& originator, const int& chosen) const
 {
 	cout << "Player " << originator << " ressurected " << chosen << endl;
+}
+
+void UI::PrintInt(const int& someInt) const
+{
+	cout << someInt << endl;
+}
+
+void UI::BattlefieldCreated() const
+{
+	cout << "the battlefield has been created" << endl;
+}
+
+void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, const int lines, const int cols) const
+{
+	stringstream ss;
+	for (int i = 0; i < lines; i++) {
+		for (int j = 0; j < cols; j++) {
+			Types::GridBox* currentGrid = grids[CalculateIndex(i, j, cols)];
+			if (currentGrid->ocupied) {
+				ss << "[x]";
+			}
+			else {
+				ss << "[ ]";
+			}
+		}
+		ss << endl;
+	}
+	std::cout << ss.str() << endl;
+}
+
+void UI::DrawBattlefield(const std::vector<Types::GridBox*>& grids, vector<shared_ptr<Character>>& players, vector<shared_ptr<Character>>& enemies, const int lines, const int cols)
+{
+	std::stringstream ss;
+	for (int i = 0; i < lines; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			Types::GridBox* currentGrid = grids[CalculateIndex(i, j, cols)];
+			bool drewPlayerOrEnemy = false;
+			for (auto player : players) {
+				if (player->IsDead())
+					continue;
+				if (player->currentBox && player->currentBox->Line() == i && player->currentBox->Column() == j) {
+					switch (player->GetCharacterClass()) {
+					case Types::Archer:
+						ss << "[A]";
+						break;
+					case Types::Cleric:
+						ss << "[C]";
+						break;
+					case Types::Paladin:
+						ss << "[P]";
+						break;
+					case Types::Warrior:
+						ss << "[W]";
+						break;
+					}
+					drewPlayerOrEnemy = true;
+					break;
+				}
+			}
+			for (auto enemy : enemies) {
+				if (enemy->IsDead())
+					continue;
+				if (enemy->currentBox && enemy->currentBox->Line() == i && enemy->currentBox->Column() == j) {
+					switch (enemy->GetCharacterClass()) {
+					case Types::Archer:
+						ss << "[a]";
+						break;
+					case Types::Cleric:
+						ss << "[c]";
+						break;
+					case Types::Paladin:
+						ss << "[p]";
+						break;
+					case Types::Warrior:
+						ss << "[w]";
+						break;
+					}
+					drewPlayerOrEnemy = true;
+					break;
+				}
+			}
+			if (!drewPlayerOrEnemy) {
+				if (currentGrid->ocupied) {
+					ss << "[x]";
+				}
+				else {
+					ss << "[ ]";
+				}
+			}
+		}
+		ss << endl;
+	}
+	std::cout << ss.str() << endl;
+}
+
+void UI::HealApply(const int& target, const int amount)const
+{
+	cout << "Player " << target << " will heal " << amount << endl;
+}
+
+void UI::StunApply(const int& target) const
+{
+	cout << "Player " << target << " is stunned" << endl;
+}
+
+void UI::PulsaDinuraApply(const int& target) const
+{
+	cout << "Player " << target << " is burning from curse" << endl;
+}
+
+void UI::StrongAttack(const int& originator) const
+{
+	cout << "Player " << originator << " will do a strong attack!" << endl;
+}
+
+void UI::Teleport(const int& originator) const
+{
+	cout << "Player " << originator << " will teleport away!" << endl;
 }
 
 Types::GameSetupParameters UI::AskForParameters()

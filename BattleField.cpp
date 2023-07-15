@@ -1,7 +1,5 @@
-
 #include <list>
 #include <string>
-#include <conio.h>
 #include <algorithm>
 #include "Context.h"
 #include "Grid.h"
