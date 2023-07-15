@@ -29,13 +29,13 @@ int AskForNumberOfCharactersInPlayerTeam();
 /// Encapsula o processo de pedir a classe ao player.
 /// </summary>
 /// <returns></returns>
-CharacterClass AskForClass();
+Types::CharacterClass AskForClass();
 /// <summary>
 /// Para cada char no time do player pede a classe.
 /// </summary>
 /// <param name="teamSize"></param>
 /// <returns></returns>
-vector<CharacterClass> AskForPlayerTeamClasses(int teamSize);
+vector<Types::CharacterClass> AskForPlayerTeamClasses(int teamSize);
 /// <summary>
 /// Igual à AskForNumberOfCharactersInPlayerTeam
 /// </summary>
@@ -53,8 +53,8 @@ int AskForNumberOfLines();
 int AskForNumberOfRows();
 
 
-GameSetupParameters AskForParameters() {
-	GameSetupParameters response;
+Types::GameSetupParameters AskForParameters() {
+	Types::GameSetupParameters response;
 	response.NumberOfCharactersInPlayerTeam = AskForNumberOfCharactersInPlayerTeam();
 	response.PlayerTeamClassIds = AskForPlayerTeamClasses(response.NumberOfCharactersInPlayerTeam);
 	response.NumberOfCharactersInEnemyTeam = AskForNumberOfCharactersInEnemyTeam();
@@ -120,16 +120,16 @@ int AskForNumberOfLines()
 int AskForNumberOfRows() {
 	return ReadPositiveInt("How many rows?");
 }
-CharacterClass AskForClass()
+Types::CharacterClass AskForClass()
 {
-	return PromptLoop<CharacterClass>([](bool& validInput)->CharacterClass {
+	return PromptLoop<Types::CharacterClass>([](bool& validInput)->Types::CharacterClass {
 		cout << "Choose Between One of this Classes:" << endl;
 		cout << "[1] Paladin, [2] Warrior, [3] Cleric, [4] Archer " << endl;
 		std::string choiceAsStr;
 		std::getline(std::cin, choiceAsStr);
 		choiceAsStr = trim(choiceAsStr);
 		try {
-			CharacterClass choice = std::stoi(choiceAsStr);
+			Types::CharacterClass choice = static_cast<Types::CharacterClass>( std::stoi(choiceAsStr) );
 			bool classChoiceIsOk = (choice == PALADIN || choice == WARRIOR || choice == CLERIC || choice == ARCHER);
 			if (!classChoiceIsOk)
 				throw std::invalid_argument("out of range");
@@ -139,7 +139,7 @@ CharacterClass AskForClass()
 		catch (std::invalid_argument const& ex) {
 			cout << "Invalid value..." << ex.what() << endl;
 			validInput = false;
-			return PALADIN;
+			return Types::CharacterClass::Paladin;
 		}
 	});
 }
@@ -185,8 +185,8 @@ int AskForNumberOfCharactersInPlayerTeam() {
 			}
 		});
 }
-vector<CharacterClass> AskForPlayerTeamClasses(int teamSize) {
-	vector<CharacterClass> classes;
+vector<Types::CharacterClass> AskForPlayerTeamClasses(int teamSize) {
+	vector<Types::CharacterClass> classes;
 	for (auto i = 0; i < teamSize; i++) {
 		classes.push_back(AskForClass());
 	}

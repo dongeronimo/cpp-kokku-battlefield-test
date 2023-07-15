@@ -11,9 +11,9 @@ enum GameResult {Victory, Defeat};
 class BattleField
 {
 public:
-	BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
+	BattleField(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies);
 
-	void Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies);
+	void Initialization(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies);
 
 
 	Types::GridBox* GetEmptyGridbox();
@@ -27,7 +27,7 @@ public:
 	/// Instancia o time do player, segundo as classes passadas como parâmetro.
 	/// </summary>
 	/// <param name="classes"></param>
-	void CreatePlayerCharacters(vector<CharacterClass> classes);
+	void CreatePlayerCharacters(vector<Types::CharacterClass> classes);
 	/// <summary>
 	/// Cria os inimigos aleatórios.
 	/// </summary>

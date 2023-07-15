@@ -24,12 +24,12 @@ Types::GridBox* BattleField::GetRandomUnocupied() {
     else
         return GetRandomUnocupied();
 }
-BattleField::BattleField(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
+BattleField::BattleField(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies)
 {    
     Initialization(lines, rows, playerClassId, numberOfEnemies);
 }
 
-void BattleField::Initialization(const int lines, const int rows, const vector<CharacterClass> playerClassId, const int numberOfEnemies)
+void BattleField::Initialization(const int lines, const int rows, const vector<Types::CharacterClass> playerClassId, const int numberOfEnemies)
 {
     AllPlayers.clear();
     PlayerTeam.clear();
@@ -42,9 +42,9 @@ void BattleField::Initialization(const int lines, const int rows, const vector<C
     CreateEnemyCharacters(numberOfEnemies);
 }
 
-void BattleField::CreatePlayerCharacters(vector<CharacterClass> classes)
+void BattleField::CreatePlayerCharacters(vector<Types::CharacterClass> classes)
 {
-    for(CharacterClass classIndex : classes) {
+    for(Types::CharacterClass classIndex : classes) {
         //typecast correto.
         auto characterClass = static_cast<Types::CharacterClass>(classIndex);
         //troquei printf por cout pq estou mais acostumado com cout
@@ -173,8 +173,9 @@ void BattleField::HandleTurn()
         }
         if (AskIfWantToPlayAgain()) {
             //Modifica os parâmetros e reinicia o ciclo.
-            GameSetupParameters newParams = AskForParameters();
-            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, newParams.NumberOfCharactersInEnemyTeam);
+            Types::GameSetupParameters newParams = AskForParameters();
+            Initialization(newParams.GridLines, newParams.GridRows, newParams.PlayerTeamClassIds, 
+                newParams.NumberOfCharactersInEnemyTeam);
             StartGame();
         }
         else {
